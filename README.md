@@ -2,7 +2,7 @@
 
 Free Mac disk cleaner. Finds caches and leftover files, then lets you move them to Trash.
 
-Official repo for the Mac app, marketing site, API, and Supabase schema.
+Official repo for the Mac app, marketing site, and Supabase schema.
 
 ## Repo layout
 
@@ -10,8 +10,11 @@ Official repo for the Mac app, marketing site, API, and Supabase schema.
 |------|------------|
 | `mac/` | Native macOS app sources + build scripts + `dist/iClearer.dmg` |
 | `website/` | Vite + React landing page (download, feedback, install) |
-| `backend/` | Small Flask API for download/feedback (optional; site talks to Supabase directly) |
 | `supabase/` | SQL to create `iclearer_downloads` on the **company** Supabase project |
+
+## Architecture
+
+The website talks to Supabase directly for download counts, leads, and feedback. No Python backend.
 
 ## Supabase (company project)
 
@@ -55,15 +58,6 @@ Build:
 cd website && npm run build
 ```
 
-## Backend (optional)
-
-```bash
-cd backend
-python3 -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt
-cp ../.env.example ../.env   # set SUPABASE_* keys
-python app.py
-```
 
 ## Mac app
 
@@ -80,5 +74,4 @@ Ship `mac/dist/iClearer.dmg` (also mirrored under `website/public/downloads/`).
 Next deploys should come from this repo:
 
 - **Site**: deploy `website/` (static Vite build) with `VITE_SUPABASE_*` pointed at company Supabase
-- **API**: deploy `backend/` if you want server-side stats
 - **DB**: keep `iclearer_downloads` on the company Supabase project
