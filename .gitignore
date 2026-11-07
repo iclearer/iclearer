@@ -1,0 +1,26 @@
+.DS_Store
+.env
+.env.local
+*.swp
+.idea/
+.vscode/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Node / Vite
+node_modules/
+website/dist/
+website/.vite/
+
+# Mac build junk
+mac/.build/
+mac/icon.iconset/
+*.app/
+*.zip
+
+# Local exports
+supabase/_export_clearaer_downloads.json
