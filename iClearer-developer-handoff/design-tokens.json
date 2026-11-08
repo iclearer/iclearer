@@ -1,0 +1,16 @@
+{
+  "note": "Values extracted from the HTML prototypes. Treat as the design source of truth for look and feel. Not production code.",
+  "brand": {"name": "iClearer", "tagline": "Clear space. Keep control."},
+  "colors": {"clearBlue": "#3B7CB0", "sky": "#7FB8E6", "glass": "#DCE8F2", "night": "#1C2733", "safeGreen": "#3FA877", "ink": "#1D1D1F", "mist": "#F5F7FA", "amberAskFirst": "#F2B34D"},
+  "appLight": {"text": "#14202B", "muted": "#667585", "separator": "rgba(20,40,60,0.10)", "content": "#FFFFFF", "contentAlt": "#F2F5F9", "accent": "#2F6FA6", "onAccent": "#FFFFFF", "safeText": "#1F8A5B", "safeFill": "rgba(63,168,119,0.16)", "askText": "#A35A00", "askFill": "rgba(242,179,77,0.24)"},
+  "appDark": {"text": "#F2F5F8", "muted": "#9AA8B6", "separator": "rgba(255,255,255,0.12)", "content": "#1C2733", "contentAlt": "#232B34", "accent": "#7FB8E6", "onAccent": "#06131F", "safeText": "#6FD0A2", "safeFill": "rgba(111,208,162,0.16)", "askText": "#F2B34D", "askFill": "rgba(242,179,77,0.20)"},
+  "accentChoices": {"blue": {"light": "#2F6FA6", "dark": "#7FB8E6"}, "green": {"light": "#1F8A5B", "dark": "#6FD0A2"}, "graphite": {"light": "#4A5560", "dark": "#C3CCD6"}},
+  "sectionIconGradients": {"overview": ["#5FA6DA", "#2D6DA4"], "clean": ["#7FCBE6", "#2F95C4"], "storageMap": ["#58C193", "#2A8F63"], "largeFiles": ["#F6C36B", "#D9902B"], "apps": ["#8AA0C4", "#556E99"], "builders": ["#6B8197", "#34465A"], "startupItems": ["#F19A8E", "#D1544A"], "privacyCheck": ["#9A8AE0", "#5D4FC2"], "history": ["#5FD0C8", "#2A8F8F"], "duplicates": ["#F3A6C8", "#C9578F"], "maintenance": ["#B4BCC6", "#6F7B88"]},
+  "mapColors": {"apps": "#5563C9", "developer": "#34465A", "photosMedia": "#3FA877", "documents": "#D9902B", "system": "#6B7885", "iCloudDrive": "#2F95C4", "other": "#A9B4BE", "free": "#9FB2C4"},
+  "radii": {"window": 28, "contentPanel": 20, "card": 20, "row": 14, "iconSquare": 7, "pill": 999, "sheet": 26},
+  "spacing": {"windowPadding": 10, "contentPadding": [20, 22], "rowPadding": [10, 12], "sidebarWidth": 240, "inspectorWidth": 292},
+  "type": {"family": "System font (SF Pro). Landing page falls back to Inter.", "windowTitle": "23 / 700 / -0.025em", "rowTitle": "14 / 600", "body": "13 / 400", "caption": "12.5 / 400 muted", "sectionLabel": "11-12 / 600 uppercase, tracking 0.06-0.08em", "heroNumber": "60 / 700 / -0.05em"},
+  "glass": {"windowBlur": 50, "windowSaturation": 1.7, "sidebarMaterial": "translucent, shows desktop through", "note": "The landing page exposes a Clear to Frosted slider. In the native app use the system material and respect the user's system Liquid Glass setting."},
+  "motion": {"sheet": "fade and slight scale, 0.3s", "toast": "slide up, 0.35s", "reducedMotion": "respect the system setting and remove animation"},
+  "plans": {"freeCleanupLifetimeMB": 500, "pricesUsdForTesting": {"monthly": [4.99, 7.99, 12.99], "yearly": [29.99, 44.99, 74.99], "oneTimeV1": [79.99, 119.99, 189.99], "macs": [1, 2, 5]}}
+}

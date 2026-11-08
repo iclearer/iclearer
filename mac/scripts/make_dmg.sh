@@ -2,47 +2,50 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-APP="$ROOT/Clearaer.app"
-DMG="$ROOT/Clearaer.dmg"
+APP="$ROOT/iClearer.app"
+DMG="$ROOT/iClearer.dmg"
 STAGE="$ROOT/.dmg-stage"
-RW="$ROOT/.clearaer-rw.dmg"
 
 if [[ ! -d "$APP" ]]; then
   echo "Build the app first: ./build.sh" >&2
   exit 1
 fi
 
-rm -rf "$STAGE" "$RW" "$DMG"
+rm -rf "$STAGE" "$DMG"
 mkdir -p "$STAGE"
-cp -R "$APP" "$STAGE/Clearaer.app"
+cp -R "$APP" "$STAGE/iClearer.app"
 ln -s /Applications "$STAGE/Applications"
-cp "$ROOT/scripts/Open Clearaer.command" "$STAGE/Open Clearaer.command"
-chmod +x "$STAGE/Open Clearaer.command"
-cat > "$STAGE/Install Clearaer.txt" <<'EOF'
-Install Clearaer
+
+if [[ -f "$ROOT/scripts/Open iClearer.command" ]]; then
+  cp "$ROOT/scripts/Open iClearer.command" "$STAGE/Open iClearer.command"
+  chmod +x "$STAGE/Open iClearer.command"
+elif [[ -f "$ROOT/scripts/Open Clearaer.command" ]]; then
+  cp "$ROOT/scripts/Open Clearaer.command" "$STAGE/Open iClearer.command"
+  chmod +x "$STAGE/Open iClearer.command"
+fi
+
+cat > "$STAGE/Install iClearer.txt" <<'EOF'
+Install iClearer
 ================
-1. Drag Clearaer into the Applications folder.
+1. Drag iClearer into the Applications folder.
 2. Apple will warn you the first time. That is normal.
    Do not click Move to Trash.
 
 Easiest:
-  Right-click Clearaer → Open → Open.
+  Right-click iClearer → Open → Open.
 
-If you already saw “Clearaer Not Opened”:
+If you already saw “iClearer Not Opened”:
   Click Done.
   Open System Settings → Privacy & Security.
   Scroll down and click Open Anyway.
 
-Or double-click “Open Clearaer.command” in this window.
-  That copies the app to Applications and clears the warning.
-
 Terminal:
-  xattr -dr com.apple.quarantine /Applications/Clearaer.app
+  xattr -dr com.apple.quarantine /Applications/iClearer.app
 EOF
 
 echo "Creating installer disk image…"
 hdiutil create \
-  -volname "Install Clearaer" \
+  -volname "Install iClearer" \
   -srcfolder "$STAGE" \
   -ov \
   -format UDZO \

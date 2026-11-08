@@ -2,7 +2,7 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")" && pwd)"
-APP="$ROOT/Clearaer.app"
+APP="$ROOT/iClearer.app"
 MACOS="$APP/Contents/MacOS"
 RES="$APP/Contents/Resources"
 SDK="$(xcrun --show-sdk-path --sdk macosx)"
@@ -17,12 +17,12 @@ python3 "$ROOT/scripts/make_icon.py" "$RES"
 
 compile() {
   local arch="$1"
-  echo "Compiling Clearaer ($arch)…"
+  echo "Compiling iClearer ($arch)…"
   swiftc \
     -O \
     -target "${arch}-apple-macosx${MINOS}" \
     -sdk "$SDK" \
-    -o "$WORK/Clearaer-${arch}" \
+    -o "$WORK/iClearer-${arch}" \
     "$ROOT"/Sources/*.swift
 }
 
@@ -31,13 +31,30 @@ compile x86_64
 
 echo "Creating universal binary (Intel + Apple Silicon)…"
 lipo -create \
-  -output "$MACOS/Clearaer" \
-  "$WORK/Clearaer-arm64" \
-  "$WORK/Clearaer-x86_64"
-lipo -info "$MACOS/Clearaer"
+  -output "$MACOS/iClearer" \
+  "$WORK/iClearer-arm64" \
+  "$WORK/iClearer-x86_64"
+lipo -info "$MACOS/iClearer"
 rm -rf "$WORK"
 
 cp "$ROOT/Resources/Info.plist" "$APP/Contents/Info.plist"
+# Unlock modal / brand mark (glass light).
+for f in iclearer-icon-glass-light.svg iclearer-icon-glass-light.png; do
+  if [[ -f "$ROOT/Resources/$f" ]]; then
+    cp "$ROOT/Resources/$f" "$RES/"
+  elif [[ -f "$ROOT/../$f" ]]; then
+    cp "$ROOT/../$f" "$RES/"
+  fi
+done
+# Prefer the 1024 glass-light master for crisp Unlock / dock icons.
+if [[ -f "$ROOT/../website/public/assets/png/icon-glass-light-1024.png" ]]; then
+  cp "$ROOT/../website/public/assets/png/icon-glass-light-1024.png" "$RES/iclearer-icon-glass-light.png"
+elif [[ ! -f "$RES/iclearer-icon-glass-light.png" && -f "$ROOT/../website/public/assets/png/icon-glass-light-180.png" ]]; then
+  cp "$ROOT/../website/public/assets/png/icon-glass-light-180.png" "$RES/iclearer-icon-glass-light.png"
+fi
+if [[ ! -f "$RES/iclearer-icon-glass-light.svg" && -f "$ROOT/../iclearer-icon-glass-light.svg" ]]; then
+  cp "$ROOT/../iclearer-icon-glass-light.svg" "$RES/iclearer-icon-glass-light.svg"
+fi
 echo -n "APPL????" > "$APP/Contents/PkgInfo"
 
 if [[ -d "$RES/AppIcon.iconset" ]]; then
@@ -45,9 +62,9 @@ if [[ -d "$RES/AppIcon.iconset" ]]; then
   rm -rf "$RES/AppIcon.iconset"
 fi
 
-chmod +x "$MACOS/Clearaer"
+chmod +x "$MACOS/iClearer"
 codesign --force --deep -s - "$APP" >/dev/null
 echo "Built $APP"
 "$ROOT/scripts/make_dmg.sh"
 echo "Open with:  open \"$APP\""
-echo "Install image: $ROOT/Clearaer.dmg"
+echo "Install image: $ROOT/iClearer.dmg"

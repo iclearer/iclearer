@@ -5,17 +5,17 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>Clearaer</string>
+	<string>iClearer</string>
 	<key>CFBundleExecutable</key>
-	<string>Clearaer</string>
+	<string>iClearer</string>
 	<key>CFBundleIconFile</key>
 	<string>AppIcon</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.clearaer.app</string>
+	<string>com.iclearer.app</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>Clearaer</string>
+	<string>iClearer</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
@@ -29,6 +29,8 @@
 	<key>NSHighResolutionCapable</key>
 	<true/>
 	<key>NSHumanReadableCopyright</key>
-	<string>Clearaer</string>
+	<string>iClearer — Clear space. Keep control.</string>
+	<key>NSAppleEventsUsageDescription</key>
+	<string>iClearer asks Finder for the size of your Pictures folder so Photos matches System Settings.</string>
 </dict>
 </plist>
