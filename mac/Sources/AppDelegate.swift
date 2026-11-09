@@ -8,18 +8,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         // Ship dark by default (prototype default); Settings can later follow system.
         NSApp.appearance = NSAppearance(named: .darkAqua)
 
-        // Match prototype Overview (Free · 500 MB). Activate a YEARLY/ONCE key to unlock Pro.
-        LicenseStore.update {
-            if $0.email.isEmpty { $0.email = LicenseState.testEmail }
-            $0.onboardingComplete = true
-            if $0.key.isEmpty || $0.key == LicenseState.testKey {
-                $0.plan = .free
-                $0.key = ""
-                $0.usedCleanupBytes = 0
-            }
-        }
-
-
         buildMenus()
         let controller = MainViewController()
         mainController = controller
@@ -39,10 +27,14 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         window.minSize = NSSize(width: 980, height: 640)
         window.contentViewController = controller
         window.center()
+        // Avoid macOS “unexpectedly quit / reopen windows?” after a crash.
+        window.isRestorable = false
         window.makeKeyAndOrderFront(nil)
         NSApp.activate(ignoringOtherApps: true)
         self.window = window
     }
+
+    func applicationSupportsSecureRestorableState(_ app: NSApplication) -> Bool { false }
 
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
         true

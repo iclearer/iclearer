@@ -47,23 +47,35 @@ final class SheetPresenter {
         case .settings, .account: height = 600; width = 860
         case .rules: height = 540; width = 560
         case .upgrade: height = 560; width = 560
+        case .onboarding: height = 340; width = 440
+        case .signIn: height = 360; width = 440
         default: height = 440; width = 460
         }
-        _ = content.view // force load
-        content.view.frame = NSRect(x: 0, y: 0, width: width, height: height)
+        _ = content.view // force load (onboarding/sign-in hug their content)
+        let size: NSSize = {
+            if kind == .onboarding || kind == .signIn {
+                let fitted = content.view.frame.size
+                if fitted.width >= 1, fitted.height >= 1 { return fitted }
+            }
+            let fallback = NSSize(width: width, height: height)
+            if kind != .onboarding && kind != .signIn {
+                content.view.frame = NSRect(origin: .zero, size: fallback)
+            }
+            return fallback
+        }()
         let sheet: NSWindow
-        if kind == .settings || kind == .account {
+        if kind == .settings || kind == .account || kind == .onboarding || kind == .signIn {
             // Modal only — no extra title bar / no background blur chrome.
-            sheet = makePlainSheet(size: NSSize(width: width, height: height), content: content)
+            sheet = makePlainSheet(size: size, content: content)
         } else {
             sheet = NSWindow(
-                contentRect: NSRect(x: 0, y: 0, width: width, height: height),
+                contentRect: NSRect(origin: .zero, size: size),
                 styleMask: [.titled],
                 backing: .buffered,
                 defer: false
             )
             sheet.contentViewController = content
-            sheet.setContentSize(NSSize(width: width, height: height))
+            sheet.setContentSize(size)
         }
         current = sheet
         window.beginSheet(sheet) { [weak self] _ in
@@ -145,12 +157,89 @@ final class SheetPresenter {
     }
 }
 
-private func sheetRoot() -> NSView {
-    let view = NSView(frame: NSRect(x: 0, y: 0, width: 440, height: 420))
+private func sheetRoot(width: CGFloat = 520, height: CGFloat = 520) -> NSView {
+    // Prototype `.sh` card: --cd dark #1A2027, radius 26.
+    let view = NSView(frame: NSRect(x: 0, y: 0, width: width, height: height))
     view.wantsLayer = true
-    view.layer?.backgroundColor = Theme.Colors.content.cgColor
+    view.layer?.backgroundColor = NSColor(srgbRed: 0x1A / 255, green: 0x20 / 255, blue: 0x27 / 255, alpha: 1).cgColor
     view.layer?.cornerRadius = 26
+    view.layer?.masksToBounds = true
     return view
+}
+
+private func brandSheetIcon(size: CGFloat = 88) -> NSImageView {
+    let icon = NSImageView()
+    icon.image = sheetBrandImage(size: size)
+    icon.imageScaling = .scaleProportionallyUpOrDown
+    icon.wantsLayer = true
+    icon.layer?.cornerRadius = size * 0.22
+    icon.layer?.masksToBounds = true
+    icon.translatesAutoresizingMaskIntoConstraints = false
+    NSLayoutConstraint.activate([
+        icon.widthAnchor.constraint(equalToConstant: size),
+        icon.heightAnchor.constraint(equalToConstant: size)
+    ])
+    return icon
+}
+
+private func sheetBrandImage(size: CGFloat) -> NSImage {
+    let candidates: [URL?] = [
+        Bundle.main.url(forResource: "iclearer-icon-glass-light", withExtension: "png"),
+        Bundle.main.url(forResource: "iclearer-icon-glass-light", withExtension: "svg"),
+        URL(fileURLWithPath: "/Users/daniel/PycharmProjects/iclearer/mac/Resources/iclearer-icon-glass-light.png"),
+        URL(fileURLWithPath: "/Users/daniel/PycharmProjects/iclearer/website/public/assets/png/icon-glass-light-1024.png")
+    ]
+    for url in candidates.compactMap({ $0 }) {
+        if let img = NSImage(contentsOf: url) {
+            img.size = NSSize(width: size, height: size)
+            return img
+        }
+    }
+    return NSApp.applicationIconImage ?? NSImage(size: NSSize(width: size, height: size))
+}
+
+/// Prototype `.in` field — rounded dark chrome with inset text.
+private func makeSheetInput(placeholder: String, value: String = "") -> (wrap: NSView, field: NSTextField) {
+    let field = NSTextField()
+    field.placeholderString = placeholder
+    field.stringValue = value
+    field.font = .systemFont(ofSize: 14)
+    field.isBordered = false
+    field.isBezeled = false
+    field.drawsBackground = false
+    field.focusRingType = .none
+    field.textColor = NSColor(srgbRed: 0xF2 / 255, green: 0xF5 / 255, blue: 0xF8 / 255, alpha: 1)
+    field.translatesAutoresizingMaskIntoConstraints = false
+
+    let wrap = NSView()
+    wrap.wantsLayer = true
+    wrap.layer?.cornerRadius = 12
+    wrap.layer?.backgroundColor = NSColor(srgbRed: 0x23 / 255, green: 0x2B / 255, blue: 0x34 / 255, alpha: 1).cgColor
+    wrap.layer?.borderWidth = 1.5
+    wrap.layer?.borderColor = NSColor.white.withAlphaComponent(0.12).cgColor
+    wrap.translatesAutoresizingMaskIntoConstraints = false
+    wrap.addSubview(field)
+    NSLayoutConstraint.activate([
+        wrap.heightAnchor.constraint(equalToConstant: 44),
+        field.leadingAnchor.constraint(equalTo: wrap.leadingAnchor, constant: 14),
+        field.trailingAnchor.constraint(equalTo: wrap.trailingAnchor, constant: -14),
+        field.centerYAnchor.constraint(equalTo: wrap.centerYAnchor)
+    ])
+    return (wrap, field)
+}
+
+private func makeGlossBead(size: CGFloat = 14) -> NSView {
+    let bead = NSView()
+    bead.wantsLayer = true
+    bead.layer?.cornerRadius = size / 2
+    // Prototype lock / bullet radial: #E3F2FC → #82BCE7 → #3B7CB0
+    bead.layer?.backgroundColor = NSColor(srgbRed: 0x82 / 255, green: 0xBC / 255, blue: 0xE7 / 255, alpha: 1).cgColor
+    bead.translatesAutoresizingMaskIntoConstraints = false
+    NSLayoutConstraint.activate([
+        bead.widthAnchor.constraint(equalToConstant: size),
+        bead.heightAnchor.constraint(equalToConstant: size)
+    ])
+    return bead
 }
 
 func dismissSheet(from view: NSView) {
@@ -161,115 +250,289 @@ func dismissSheet(from view: NSView) {
     parent.endSheet(window)
 }
 
-// MARK: Onboarding
+// MARK: Onboarding — Welcome → Email → Full Disk Access
 
 final class OnboardingController: NSViewController {
     private var step = 0
-    private let emailField = NSTextField()
-    private let errorLabel = makeLabel("", size: 12, weight: .medium, color: NSColor.systemRed)
+    private var emailField: NSTextField!
+    private let errorLabel = makeLabel("", size: 12.5, weight: .medium, color: NSColor(srgbRed: 0xD0 / 255, green: 0x45 / 255, blue: 0x3F / 255, alpha: 1))
     private var marketing = false
     private var fdaAllowed = false
+    private var startButton: PillButton?
+    private let tx = NSColor(srgbRed: 0xF2 / 255, green: 0xF5 / 255, blue: 0xF8 / 255, alpha: 1)
+    private let mu = NSColor(srgbRed: 0x9A / 255, green: 0xA8 / 255, blue: 0xB6 / 255, alpha: 1)
+
+    /// Compact card — content edge-to-edge with prototype `.sh` padding 28.
+    private let cardW: CGFloat = 440
+    private let edgePad: CGFloat = 28
+    private var contentW: CGFloat { cardW - edgePad * 2 }
 
     override func loadView() {
-        view = sheetRoot()
+        view = sheetRoot(width: cardW, height: 320)
         render()
     }
 
     private func render() {
         view.subviews.forEach { $0.removeFromSuperview() }
+
+        // Full-width content column; sheet height hugs stack (equal pad top/bottom).
+        let column = NSView()
+        column.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(column)
+
         let stack = NSStackView()
         stack.orientation = .vertical
         stack.alignment = .centerX
-        stack.spacing = 12
+        stack.spacing = 8
         stack.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(stack)
+        column.addSubview(stack)
 
         switch step {
-        case 0:
-            let title = makeLabel("Welcome to iClearer", size: 22, weight: .bold, color: Theme.ink, align: .center)
-            let tag = makeLabel("Clear space. Keep control.", size: 14, weight: .medium, color: Theme.muted, align: .center)
-            let bullets = makeMultilineLabel("• See everything before anything moves\n• Everything goes to the Trash, with Undo\n• Keychain and accounts can never be touched", size: 13, weight: .regular, color: Theme.ink)
-            let next = makeAccentButton("Continue")
-            next.target = self
-            next.action = #selector(goEmail)
-            [title, tag, bullets, next].forEach { stack.addArrangedSubview($0) }
-        case 1:
-            let title = makeLabel("What’s your email?", size: 22, weight: .bold, color: Theme.ink, align: .center)
-            let body = makeMultilineLabel("We use it for your license, receipts and security notices, and to restore your plan on a new Mac.", size: 13, weight: .regular, color: Theme.muted)
-            body.alignment = .center
-            emailField.placeholderString = "you@example.com"
-            // Prefill test account so QA can pass the email step quickly.
-            let existing = LicenseStore.current.email
-            emailField.stringValue = existing.isEmpty ? LicenseState.testEmail : existing
-            emailField.font = .systemFont(ofSize: 14)
-            emailField.translatesAutoresizingMaskIntoConstraints = false
-            emailField.widthAnchor.constraint(equalToConstant: 300).isActive = true
-            let market = NSButton(checkboxWithTitle: "Email me about updates and new products", target: self, action: #selector(toggleMarket))
-            market.state = marketing ? .on : .off
-            market.translatesAutoresizingMaskIntoConstraints = false
-            let next = makeAccentButton("Continue")
-            next.target = self
-            next.action = #selector(goFDA)
-            let signIn = NSButton(title: "Already have a license? Sign in or activate", target: self, action: #selector(openSignIn))
-            signIn.isBordered = false
-            signIn.font = .systemFont(ofSize: 12.5)
-            signIn.contentTintColor = Theme.accent
-            [title, body, emailField, errorLabel, market, next, signIn].forEach { stack.addArrangedSubview($0) }
-        default:
-            let title = makeLabel("Allow Full Disk Access", size: 22, weight: .bold, color: Theme.ink, align: .center)
-            let body = makeMultilineLabel("To find hidden files, iClearer needs Full Disk Access. It only reads names and sizes, and moves things to the Trash when you say so.", size: 13, weight: .regular, color: Theme.muted)
-            body.alignment = .center
-            let toggle = NSButton(checkboxWithTitle: "I opened System Settings / will grant access", target: self, action: #selector(toggleFDA))
-            toggle.state = fdaAllowed ? .on : .off
-            let open = makeGhostButton("Open Full Disk Access")
-            open.target = self
-            open.action = #selector(openFDA)
-            let startBtn = makeAccentButton("Start scan")
-            startBtn.target = self
-            startBtn.action = #selector(start)
-            startBtn.isEnabled = true
-            let skip = NSButton(title: "Skip for now", target: self, action: #selector(start))
-            skip.isBordered = false
-            skip.contentTintColor = Theme.muted
-            [title, body, open, toggle, startBtn, skip].forEach { stack.addArrangedSubview($0) }
+        case 0: renderWelcome(into: stack)
+        case 1: renderEmail(into: stack)
+        default: renderFDA(into: stack)
         }
 
         NSLayoutConstraint.activate([
-            stack.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            stack.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            stack.leadingAnchor.constraint(greaterThanOrEqualTo: view.leadingAnchor, constant: 28),
-            stack.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor, constant: -28),
-            stack.widthAnchor.constraint(lessThanOrEqualToConstant: 360)
+            column.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: edgePad),
+            column.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -edgePad),
+            column.topAnchor.constraint(equalTo: view.topAnchor, constant: edgePad),
+            column.widthAnchor.constraint(equalToConstant: contentW),
+
+            stack.leadingAnchor.constraint(equalTo: column.leadingAnchor),
+            stack.trailingAnchor.constraint(equalTo: column.trailingAnchor),
+            stack.topAnchor.constraint(equalTo: column.topAnchor),
+            stack.bottomAnchor.constraint(equalTo: column.bottomAnchor)
         ])
+
+        // Measure content, then shrink the sheet so bottom pad matches top.
+        view.setFrameSize(NSSize(width: cardW, height: 900))
+        view.layoutSubtreeIfNeeded()
+        let fitted = ceil(stack.fittingSize.height) + edgePad * 2
+        let size = NSSize(width: cardW, height: max(240, fitted))
+        view.setFrameSize(size)
+        view.window?.setContentSize(size)
+    }
+
+    private func fullWidth(_ view: NSView) {
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.widthAnchor.constraint(equalToConstant: contentW).isActive = true
+    }
+
+    private func centeredBody(_ text: String) -> NSTextField {
+        let body = makeMultilineLabel(text, size: 13.5, weight: .regular, color: mu)
+        body.alignment = .center
+        body.preferredMaxLayoutWidth = contentW
+        fullWidth(body)
+        return body
+    }
+
+    private func renderWelcome(into stack: NSStackView) {
+        let icon = brandSheetIcon(size: 72)
+        let title = makeLabel("Welcome to iClearer", size: 21, weight: .bold, color: tx, align: .center)
+        let tag = makeLabel("Clear space. Keep control.", size: 13.5, weight: .regular, color: mu, align: .center)
+
+        let bullets = NSStackView()
+        bullets.orientation = .vertical
+        bullets.alignment = .leading
+        bullets.spacing = 6
+        bullets.translatesAutoresizingMaskIntoConstraints = false
+        fullWidth(bullets)
+        for line in [
+            "See everything before anything moves",
+            "Everything goes to the Trash, with Undo",
+            "Keychain and accounts can never be touched"
+        ] {
+            let label = makeLabel(line, size: 13.5, weight: .regular, color: tx)
+            label.setContentHuggingPriority(.defaultLow, for: .horizontal)
+            let row = NSStackView(views: [makeGlossBead(size: 12), label])
+            row.orientation = .horizontal
+            row.alignment = .centerY
+            row.spacing = 10
+            bullets.addArrangedSubview(row)
+        }
+
+        let next = makeAccentButton("Continue")
+        next.target = self
+        next.action = #selector(goEmail)
+
+        [icon, title, tag, bullets, next].forEach { stack.addArrangedSubview($0) }
+        stack.setCustomSpacing(10, after: icon)
+        stack.setCustomSpacing(4, after: title)
+        stack.setCustomSpacing(12, after: tag)
+        stack.setCustomSpacing(14, after: bullets)
+    }
+
+    private func renderEmail(into stack: NSStackView) {
+        let title = makeLabel("What’s your email?", size: 21, weight: .bold, color: tx, align: .center)
+        let body = centeredBody(
+            "We use it for your license, receipts and security notices, and to restore your plan on a new Mac."
+        )
+
+        let existing = LicenseStore.current.email
+        let input = makeSheetInput(
+            placeholder: "you@example.com",
+            value: existing.isEmpty ? "" : existing
+        )
+        emailField = input.field
+        fullWidth(input.wrap)
+
+        errorLabel.alignment = .center
+        errorLabel.isHidden = errorLabel.stringValue.isEmpty
+        fullWidth(errorLabel)
+
+        let market = makeMarketingRow()
+        fullWidth(market)
+
+        let next = makeAccentButton("Continue")
+        next.target = self
+        next.action = #selector(goFDA)
+
+        let footer = makeSignInFooter()
+
+        [title, body, input.wrap, errorLabel, market, next, footer].forEach { stack.addArrangedSubview($0) }
+        stack.setCustomSpacing(4, after: title)
+        stack.setCustomSpacing(12, after: body)
+        // Gap between email field and marketing checkbox (keep a little room for error text).
+        stack.setCustomSpacing(errorLabel.isHidden ? 16 : 6, after: input.wrap)
+        stack.setCustomSpacing(errorLabel.isHidden ? 0 : 10, after: errorLabel)
+        stack.setCustomSpacing(12, after: market)
+        stack.setCustomSpacing(10, after: next)
+    }
+
+    private func renderFDA(into stack: NSStackView) {
+        let icon = brandSheetIcon(size: 72)
+        let title = makeLabel("Allow Full Disk Access", size: 21, weight: .bold, color: tx, align: .center)
+        let body = centeredBody(
+            "To find hidden files, iClearer needs Full Disk Access. It only reads names and sizes, and moves things to the Trash when you say so."
+        )
+
+        let row = makeFDARow()
+        fullWidth(row)
+
+        let startBtn = makeAccentButton("Start scan")
+        startBtn.target = self
+        startBtn.action = #selector(start)
+        startBtn.isEnabled = fdaAllowed
+        startBtn.alphaValue = fdaAllowed ? 1 : 0.4
+        startButton = startBtn
+
+        [icon, title, body, row, startBtn].forEach { stack.addArrangedSubview($0) }
+        stack.setCustomSpacing(10, after: icon)
+        stack.setCustomSpacing(4, after: title)
+        stack.setCustomSpacing(12, after: body)
+        stack.setCustomSpacing(14, after: row)
+    }
+
+    private func makeMarketingRow() -> NSView {
+        let box = NSButton(checkboxWithTitle: "", target: self, action: #selector(toggleMarket))
+        box.state = marketing ? .on : .off
+        box.translatesAutoresizingMaskIntoConstraints = false
+        box.widthAnchor.constraint(equalToConstant: 18).isActive = true
+
+        let title = makeLabel("Email me about updates and new products", size: 13, weight: .regular, color: tx)
+        let note = makeLabel("Optional. You can unsubscribe anytime. We never share your email.", size: 12, weight: .regular, color: mu)
+        let text = NSStackView(views: [title, note])
+        text.orientation = .vertical
+        text.alignment = .leading
+        text.spacing = 2
+
+        let row = NSStackView(views: [box, text])
+        row.orientation = .horizontal
+        row.alignment = .top
+        row.spacing = 10
+        row.translatesAutoresizingMaskIntoConstraints = false
+        return row
+    }
+
+    private func makeSignInFooter() -> NSView {
+        let prefix = makeLabel("Already have a license? ", size: 12.5, weight: .regular, color: mu)
+        let link = NSButton(title: "Sign in or activate", target: self, action: #selector(openSignIn))
+        link.isBordered = false
+        link.font = .systemFont(ofSize: 12.5, weight: .semibold)
+        link.contentTintColor = Theme.sky
+        link.translatesAutoresizingMaskIntoConstraints = false
+        let row = NSStackView(views: [prefix, link])
+        row.orientation = .horizontal
+        row.alignment = .centerY
+        row.spacing = 0
+        return row
+    }
+
+    private func makeFDARow() -> NSView {
+        let wrap = NSView()
+        wrap.wantsLayer = true
+        wrap.layer?.cornerRadius = 14
+        wrap.layer?.backgroundColor = NSColor(srgbRed: 0x23 / 255, green: 0x2B / 255, blue: 0x34 / 255, alpha: 1).cgColor
+        wrap.layer?.borderWidth = 1
+        wrap.layer?.borderColor = NSColor.white.withAlphaComponent(0.12).cgColor
+        wrap.translatesAutoresizingMaskIntoConstraints = false
+
+        let appIcon = NSView()
+        appIcon.wantsLayer = true
+        appIcon.layer?.cornerRadius = 8
+        appIcon.layer?.backgroundColor = NSColor(srgbRed: 0x55 / 255, green: 0x6E / 255, blue: 0x99 / 255, alpha: 1).cgColor
+        appIcon.translatesAutoresizingMaskIntoConstraints = false
+        let grid = NSImageView(image: NSImage(systemSymbolName: "square.grid.2x2.fill", accessibilityDescription: nil)!)
+        grid.contentTintColor = .white
+        grid.translatesAutoresizingMaskIntoConstraints = false
+        appIcon.addSubview(grid)
+
+        let name = makeLabel("iClearer", size: 14, weight: .semibold, color: tx)
+        let toggle = SettingsToggle(on: fdaAllowed, enabled: true) { [weak self] on in
+            self?.fdaAllowed = on
+            if on { self?.openFDA() }
+            self?.startButton?.isEnabled = on
+            self?.startButton?.alphaValue = on ? 1 : 0.4
+        }
+
+        let inner = NSStackView(views: [appIcon, name, NSView(), toggle])
+        inner.orientation = .horizontal
+        inner.alignment = .centerY
+        inner.spacing = 12
+        inner.translatesAutoresizingMaskIntoConstraints = false
+        wrap.addSubview(inner)
+        NSLayoutConstraint.activate([
+            wrap.heightAnchor.constraint(equalToConstant: 48),
+            appIcon.widthAnchor.constraint(equalToConstant: 28),
+            appIcon.heightAnchor.constraint(equalToConstant: 28),
+            grid.centerXAnchor.constraint(equalTo: appIcon.centerXAnchor),
+            grid.centerYAnchor.constraint(equalTo: appIcon.centerYAnchor),
+            grid.widthAnchor.constraint(equalToConstant: 15),
+            grid.heightAnchor.constraint(equalToConstant: 15),
+            inner.leadingAnchor.constraint(equalTo: wrap.leadingAnchor, constant: 14),
+            inner.trailingAnchor.constraint(equalTo: wrap.trailingAnchor, constant: -14),
+            inner.centerYAnchor.constraint(equalTo: wrap.centerYAnchor)
+        ])
+        return wrap
     }
 
     @objc private func goEmail() { step = 1; render() }
     @objc private func toggleMarket(_ sender: NSButton) { marketing = sender.state == .on }
-    @objc private func toggleFDA(_ sender: NSButton) { fdaAllowed = sender.state == .on }
     @objc private func openFDA() {
         if let url = URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_AllFiles") {
             NSWorkspace.shared.open(url)
         }
-        fdaAllowed = true
     }
     @objc private func openSignIn() {
         dismissSheet(from: view)
         AppState.shared.showSheet(.signIn)
     }
     @objc private func goFDA() {
-        let email = emailField.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+        let email = (emailField?.stringValue ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
         guard email.contains("@"), email.contains(".") else {
-            errorLabel.stringValue = "Enter a valid email to continue."
+            errorLabel.stringValue = "Enter a valid email address."
+            render()
             return
         }
-        // Stay on Free plan so Overview / Clean match the free prototype; activate via Sign In + key for Pro.
+        errorLabel.stringValue = ""
         LicenseStore.setEmail(email, marketing: marketing)
         step = 2
         render()
     }
     @objc private func start() {
+        guard fdaAllowed else { return }
         if LicenseStore.current.email.isEmpty {
-            errorLabel.stringValue = "Email is required."
             step = 1
             render()
             return
@@ -372,24 +635,7 @@ final class UpgradeController: NSViewController {
         ])
     }
 
-    /// Glass-light brand mark for the Unlock sheet.
-    private static func brandIcon() -> NSImage {
-        let candidates: [URL?] = [
-            Bundle.main.url(forResource: "iclearer-icon-glass-light", withExtension: "png"),
-            Bundle.main.url(forResource: "iclearer-icon-glass-light", withExtension: "svg"),
-            URL(fileURLWithPath: "/Users/daniel/PycharmProjects/iclearer/mac/Resources/iclearer-icon-glass-light.png"),
-            URL(fileURLWithPath: "/Users/daniel/PycharmProjects/iclearer/website/public/assets/png/icon-glass-light-1024.png"),
-            URL(fileURLWithPath: "/Users/daniel/PycharmProjects/iclearer/mac/Resources/iclearer-icon-glass-light.svg"),
-            URL(fileURLWithPath: "/Users/daniel/PycharmProjects/iclearer/iclearer-icon-glass-light.svg")
-        ]
-        for url in candidates.compactMap({ $0 }) {
-            if let img = NSImage(contentsOf: url) {
-                img.size = NSSize(width: 88, height: 88)
-                return img
-            }
-        }
-        return NSApp.applicationIconImage ?? NSImage(size: NSSize(width: 88, height: 88))
-    }
+    private static func brandIcon() -> NSImage { sheetBrandImage(size: 88) }
 
     private func makeBulletRow(_ text: String) -> NSView {
         let row = NSStackView()
@@ -478,38 +724,135 @@ private final class PlanCardView: NSView {
 }
 
 final class SignInController: NSViewController {
-    private let emailField = NSTextField()
-    private let keyField = NSTextField()
-    private let errorLabel = makeLabel("", size: 12, weight: .medium, color: .systemRed)
+    private var emailField: NSTextField!
+    private var keyField: NSTextField!
+    private let errorLabel = makeLabel("", size: 12.5, weight: .medium, color: NSColor(srgbRed: 0xD0 / 255, green: 0x45 / 255, blue: 0x3F / 255, alpha: 1))
+    private let tx = NSColor(srgbRed: 0xF2 / 255, green: 0xF5 / 255, blue: 0xF8 / 255, alpha: 1)
+    private let mu = NSColor(srgbRed: 0x9A / 255, green: 0xA8 / 255, blue: 0xB6 / 255, alpha: 1)
+    private let cardW: CGFloat = 440
+    private let edgePad: CGFloat = 28
+    private var contentW: CGFloat { cardW - edgePad * 2 }
 
     override func loadView() {
-        view = sheetRoot()
-        let title = makeLabel("Sign in or activate", size: 22, weight: .bold, color: Theme.ink, align: .center)
-        let body = makeMultilineLabel("Enter the email you bought with and your license key.\nTest: test@iclearer.com + ICLR-TEST-0001-FREE", size: 13, weight: .regular, color: Theme.muted)
+        view = sheetRoot(width: cardW, height: 320)
+        render()
+    }
+
+    private func render() {
+        view.subviews.forEach { $0.removeFromSuperview() }
+
+        let column = NSView()
+        column.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(column)
+
+        let title = makeLabel("Sign in or activate", size: 21, weight: .bold, color: tx, align: .center)
+        let body = makeMultilineLabel(
+            "Enter the email you bought with and your license key. Or send yourself a sign-in link.",
+            size: 13.5, weight: .regular, color: mu
+        )
         body.alignment = .center
-        emailField.placeholderString = "Email"
-        emailField.stringValue = LicenseStore.current.email
-        emailField.translatesAutoresizingMaskIntoConstraints = false
-        keyField.placeholderString = "License key, for example ICLR-TEST-0001-FREE"
-        keyField.translatesAutoresizingMaskIntoConstraints = false
-        emailField.widthAnchor.constraint(equalToConstant: 320).isActive = true
-        keyField.widthAnchor.constraint(equalToConstant: 320).isActive = true
+        body.preferredMaxLayoutWidth = contentW
+        body.translatesAutoresizingMaskIntoConstraints = false
+        body.widthAnchor.constraint(equalToConstant: contentW).isActive = true
+
+        let email = makeSheetInput(placeholder: "Email", value: LicenseStore.current.email)
+        emailField = email.field
+        let key = makeSheetInput(placeholder: "License key, for example ICLR-XXXX-XXXX-XXXX")
+        keyField = key.field
+        email.wrap.widthAnchor.constraint(equalToConstant: contentW).isActive = true
+        key.wrap.widthAnchor.constraint(equalToConstant: contentW).isActive = true
+        errorLabel.alignment = .center
+        errorLabel.isHidden = errorLabel.stringValue.isEmpty
+        errorLabel.setContentHuggingPriority(.defaultLow, for: .horizontal)
+        errorLabel.widthAnchor.constraint(equalToConstant: contentW).isActive = true
+
+        // Compact pills sized to their labels, centered as a pair (prototype sign-in).
+        let linkBtn = makeGhostButton("Email me a link")
+        linkBtn.target = self
+        linkBtn.action = #selector(emailLink)
         let activateBtn = makeAccentButton("Activate")
         activateBtn.target = self
         activateBtn.action = #selector(activate)
-        let cancel = makeGhostButton("Cancel")
-        cancel.target = self
-        cancel.action = #selector(close)
-        let stack = NSStackView(views: [title, body, emailField, keyField, errorLabel, activateBtn, cancel])
+        let actions = NSStackView(views: [linkBtn, activateBtn])
+        actions.orientation = .horizontal
+        actions.alignment = .centerY
+        actions.distribution = .gravityAreas
+        actions.spacing = 14
+        actions.translatesAutoresizingMaskIntoConstraints = false
+
+        let demo = makeLabel(
+            "Demo: any key works. Add ONCE to the key for a one-time license.",
+            size: 12, weight: .regular, color: mu, align: .center
+        )
+
+        let signup = makeSignUpFooter()
+
+        let stack = NSStackView(views: [
+            title, body, email.wrap, key.wrap, errorLabel, actions, demo, signup
+        ])
         stack.orientation = .vertical
         stack.alignment = .centerX
         stack.spacing = 10
+        stack.setCustomSpacing(6, after: title)
+        stack.setCustomSpacing(14, after: body)
+        stack.setCustomSpacing(8, after: email.wrap)
+        stack.setCustomSpacing(errorLabel.isHidden ? 12 : 4, after: key.wrap)
+        stack.setCustomSpacing(errorLabel.isHidden ? 0 : 12, after: errorLabel)
+        stack.setCustomSpacing(12, after: actions)
+        stack.setCustomSpacing(10, after: demo)
         stack.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(stack)
+        column.addSubview(stack)
+
         NSLayoutConstraint.activate([
-            stack.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            stack.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+            column.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: edgePad),
+            column.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -edgePad),
+            column.topAnchor.constraint(equalTo: view.topAnchor, constant: edgePad),
+            column.widthAnchor.constraint(equalToConstant: contentW),
+            stack.leadingAnchor.constraint(equalTo: column.leadingAnchor),
+            stack.trailingAnchor.constraint(equalTo: column.trailingAnchor),
+            stack.topAnchor.constraint(equalTo: column.topAnchor),
+            stack.bottomAnchor.constraint(equalTo: column.bottomAnchor)
         ])
+
+        view.setFrameSize(NSSize(width: cardW, height: 900))
+        view.layoutSubtreeIfNeeded()
+        let fitted = ceil(stack.fittingSize.height) + edgePad * 2
+        let size = NSSize(width: cardW, height: max(280, fitted))
+        view.setFrameSize(size)
+        view.window?.setContentSize(size)
+    }
+
+    private func makeSignUpFooter() -> NSView {
+        let prefix = makeLabel("Don’t have an account? ", size: 12.5, weight: .regular, color: mu)
+        let link = NSButton(title: "Sign up", target: self, action: #selector(openSignUp))
+        link.isBordered = false
+        link.font = .systemFont(ofSize: 12.5, weight: .semibold)
+        link.contentTintColor = Theme.sky
+        link.translatesAutoresizingMaskIntoConstraints = false
+        let row = NSStackView(views: [prefix, link])
+        row.orientation = .horizontal
+        row.alignment = .centerY
+        row.spacing = 0
+        return row
+    }
+
+    @objc private func openSignUp() {
+        dismissSheet(from: view)
+        DispatchQueue.main.async {
+            AppState.shared.showSheet(.onboarding)
+        }
+    }
+
+    @objc private func emailLink() {
+        let email = emailField.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard email.contains("@"), email.contains(".") else {
+            errorLabel.stringValue = "Enter a valid email address."
+            render()
+            return
+        }
+        errorLabel.stringValue = ""
+        render()
+        AppState.shared.showToast("Sign-in link sent to \(email).")
     }
 
     @objc private func activate() {
@@ -519,9 +862,9 @@ final class SignInController: NSViewController {
             dismissSheet(from: view)
         } else {
             errorLabel.stringValue = result.message
+            render()
         }
     }
-    @objc private func close() { dismissSheet(from: view) }
 }
 
 // Account lives inside Settings → Account tab (SettingsSheet.swift).
