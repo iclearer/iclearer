@@ -691,12 +691,13 @@ final class UpgradeController: NSViewController {
         default: plan = "yearly"
         }
         let macs = max(1, LicenseStore.current.macSeats)
-        var comps = URLComponents(string: "https://iclearer.com/#pricing")!
+        var comps = URLComponents(string: "https://www.iclearer.com/")!
         comps.queryItems = [
             URLQueryItem(name: "buy", value: "1"),
             URLQueryItem(name: "plan", value: plan),
             URLQueryItem(name: "macs", value: String(macs)),
-            URLQueryItem(name: "email", value: LicenseStore.current.email)
+            URLQueryItem(name: "email", value: LicenseStore.current.email),
+            URLQueryItem(name: "key", value: LicenseStore.current.key)
         ]
         if let url = comps.url {
             NSWorkspace.shared.open(url)
@@ -770,7 +771,7 @@ final class SignInController: NSViewController {
 
         let title = makeLabel("Sign in or activate", size: 21, weight: .bold, color: tx, align: .center)
         let body = makeMultilineLabel(
-            "Enter the email you bought with and your license key. Or send yourself a sign-in link.",
+            "Enter the email you bought with and your license key. Or send yourself the license key.",
             size: 13.5, weight: .regular, color: mu
         )
         body.alignment = .center
@@ -790,7 +791,7 @@ final class SignInController: NSViewController {
         errorLabel.widthAnchor.constraint(equalToConstant: contentW).isActive = true
 
         // Compact pills sized to their labels, centered as a pair (prototype sign-in).
-        let linkBtn = makeGhostButton("Email me a link")
+        let linkBtn = makeGhostButton("Email me my key")
         linkBtn.target = self
         linkBtn.action = #selector(emailLink)
         let activateBtn = makeAccentButton("Activate")
@@ -877,12 +878,13 @@ final class SignInController: NSViewController {
         errorLabel.isHidden = false
         render()
         Task {
-            let response = await LicenseAPI.sendSignInLink(email: email)
+            // Resend the license key only — no magic web link.
+            let response = await LicenseAPI.resendKey(email: email)
             await MainActor.run {
                 if response.ok {
                     self.errorLabel.stringValue = ""
                     self.render()
-                    AppState.shared.showToast(response.message ?? "Check your email for your license key.")
+                    AppState.shared.showToast(response.message ?? "We emailed your license key.")
                 } else {
                     self.errorLabel.stringValue = response.error ?? "Could not send email."
                     self.errorLabel.isHidden = false

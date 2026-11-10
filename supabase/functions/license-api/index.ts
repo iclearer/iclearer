@@ -9,7 +9,7 @@ import {
   signLicenseBlob,
   type LicenseClaims,
 } from "../_shared/licenseCrypto.ts";
-import { licenseKeyEmail, sendEmail, signInLinkEmail } from "../_shared/resend.ts";
+import { licenseKeyEmail, planUpgradedEmail, sendEmail, signInLinkEmail } from "../_shared/resend.ts";
 
 type Body = Record<string, unknown>;
 
@@ -35,8 +35,6 @@ Deno.serve(async (req) => {
         return await heartbeat(body);
       case "send_signin_link":
         return await sendSignInLink(body);
-      case "redeem_signin":
-        return await redeemSignIn(body);
       case "resend_key":
         return await resendKey(body);
       case "list_devices":
@@ -45,6 +43,10 @@ Deno.serve(async (req) => {
         return await removeDevice(body);
       case "restore":
         return await restore(body);
+      case "verify_key":
+        return await verifyKey(body);
+      case "upgrade":
+        return await upgrade(body);
       default:
         return json({ ok: false, error: "Unknown action" }, 400);
     }
@@ -303,64 +305,18 @@ async function sendSignInLink(body: Body) {
     purpose: "signin",
   });
 
-  const site = (Deno.env.get("SITE_URL") ?? "https://www.iclearer.com").replace(/\/$/, "");
-  // Website page redeems the token and shows the license key for the Mac app.
+  const site = Deno.env.get("SITE_URL") ?? "https://iclearer.com";
+  // Deep-link style: website page can show the key; for Mac we also email the key.
   const link = `${site}/signin?token=${encodeURIComponent(raw)}&email=${encodeURIComponent(email)}`;
 
-  await sendEmail(signInLinkEmail(email, link));
-  // Also email the key directly so they can paste it even if the link fails.
+  // Prefer the license key (Mac sign-in). Optional deep link kept for website restore later.
   await sendEmail(licenseKeyEmail(email, license.license_key, String(license.plan)));
 
   return json({
     ok: true,
     emailed: true,
-    message: "Check your email for a sign-in link and your license key.",
-  });
-}
-
-async function redeemSignIn(body: Body) {
-  const email = normalizeEmail(String(body.email ?? ""));
-  const token = String(body.token ?? "").trim();
-  if (!isValidEmail(email) || !token) {
-    return json({ ok: false, error: "Invalid or expired sign-in link." }, 400);
-  }
-
-  const db = adminClient();
-  const tokenHash = await sha256Hex(token);
-  const { data: row } = await db
-    .from("iclearer_signin_tokens")
-    .select("id, email, license_id, expires_at, used_at, purpose")
-    .eq("token_hash", tokenHash)
-    .maybeSingle();
-
-  if (!row || normalizeEmail(row.email) !== email) {
-    return json({ ok: false, error: "Invalid or expired sign-in link." }, 404);
-  }
-  if (row.used_at) {
-    return json({ ok: false, error: "This sign-in link was already used. Request a new one." }, 410);
-  }
-  if (new Date(row.expires_at).getTime() < Date.now()) {
-    return json({ ok: false, error: "This sign-in link has expired. Request a new one." }, 410);
-  }
-
-  const { data: license } = await db
-    .from("iclearer_licenses")
-    .select("email, license_key, plan, macs, status")
-    .eq("id", row.license_id)
-    .maybeSingle();
-  if (!license || license.status !== "active") {
-    return json({ ok: false, error: "No active license found for this link." }, 404);
-  }
-
-  await db.from("iclearer_signin_tokens").update({ used_at: new Date().toISOString() }).eq("id", row.id);
-
-  return json({
-    ok: true,
-    email: license.email,
-    key: license.license_key,
-    plan: license.plan,
-    macs: license.macs,
-    message: "Paste this key into iClearer → Sign in or activate.",
+    message: "We emailed your license key. Paste it below to sign in.",
+    signin_link: link,
   });
 }
 
@@ -433,6 +389,88 @@ async function restore(body: Body) {
   // Same as activate but without requiring a new seat if already on this device —
   // activate already covers restore. Keep as alias.
   return activate(body);
+}
+
+/** Confirm email + existing key match before checkout. */
+async function verifyKey(body: Body) {
+  const email = normalizeEmail(String(body.email ?? ""));
+  const key = String(body.key ?? body.license_key ?? "").trim().toUpperCase();
+  if (!isValidEmail(email)) return json({ ok: false, error: "Enter a valid email address." }, 400);
+  if (!key) return json({ ok: false, error: "Enter your license key." }, 400);
+
+  const db = adminClient();
+  const { data: license } = await db
+    .from("iclearer_licenses")
+    .select("id, email, license_key, plan, macs, status")
+    .eq("license_key", key)
+    .maybeSingle();
+  if (!license) return json({ ok: false, error: "That license key isn’t recognized." }, 404);
+  if (normalizeEmail(license.email) !== email) {
+    return json({ ok: false, error: "Email doesn’t match this license key." }, 403);
+  }
+  if (license.status !== "active") {
+    return json({ ok: false, error: `License is ${license.status}.` }, 403);
+  }
+  return json({
+    ok: true,
+    email,
+    key: license.license_key,
+    plan: license.plan,
+    macs: license.macs,
+    message: "License verified. Continue to payment to upgrade this same key.",
+  });
+}
+
+/**
+ * Upgrade an existing license to a paid plan — keeps the same key.
+ * Used after Paddle (webhook) or sandbox checkout.
+ */
+async function upgrade(body: Body) {
+  const email = normalizeEmail(String(body.email ?? ""));
+  const key = String(body.key ?? body.license_key ?? "").trim().toUpperCase();
+  const plan = String(body.plan ?? "yearly");
+  const macs = Number(body.macs ?? 1);
+  const safePlan = ["monthly", "yearly", "once"].includes(plan) ? plan : "yearly";
+  const safeMacs = [1, 2, 5].includes(macs) ? macs : 1;
+  const sendMail = body.send_email !== false;
+
+  if (!isValidEmail(email)) return json({ ok: false, error: "Enter a valid email address." }, 400);
+  if (!key) return json({ ok: false, error: "Enter your license key." }, 400);
+
+  const db = adminClient();
+  const { data: license } = await db
+    .from("iclearer_licenses")
+    .select("*")
+    .eq("license_key", key)
+    .maybeSingle();
+  if (!license) return json({ ok: false, error: "That license key isn’t recognized." }, 404);
+  if (normalizeEmail(license.email) !== email) {
+    return json({ ok: false, error: "Email doesn’t match this license key." }, 403);
+  }
+
+  const { error } = await db
+    .from("iclearer_licenses")
+    .update({
+      plan: safePlan,
+      macs: safeMacs,
+      status: "active",
+    })
+    .eq("id", license.id);
+  if (error) throw error;
+
+  if (sendMail) {
+    await sendEmail(planUpgradedEmail(email, license.license_key, safePlan));
+  }
+
+  return json({
+    ok: true,
+    email,
+    key: license.license_key,
+    plan: safePlan,
+    macs: safeMacs,
+    upgraded: true,
+    message: `Same key upgraded to ${safePlan}. No new key was issued.`,
+  });
 }
 
 async function issueBlob(args: {

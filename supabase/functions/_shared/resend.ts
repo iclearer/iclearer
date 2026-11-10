@@ -78,21 +78,38 @@ export function licenseKeyEmail(email: string, key: string, plan: string): SendA
   return { to: email, subject, html, text };
 }
 
+export function planUpgradedEmail(email: string, key: string, plan: string): SendArgs {
+  const site = Deno.env.get("SITE_URL") ?? "https://www.iclearer.com";
+  const subject = "Your iClearer plan is upgraded";
+  const text =
+    `Thanks for upgrading iClearer.\n\n` +
+    `Your same license key is now on the ${plan} plan:\n${key}\n\n` +
+    `No new key was issued — keep using this one in the Mac app.\n\n` +
+    `${site}\n`;
+  const html = `
+    <div style="font-family:-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;max-width:520px;margin:0 auto;color:#14202B">
+      ${emailHeader(site)}
+      <h1 style="font-size:22px;text-align:center;margin:0 0 12px">You’re upgraded</h1>
+      <p>Thanks for paying. Your <strong>same</strong> license key is now on the <strong>${plan}</strong> plan — we did not create a new key.</p>
+      <p style="font-size:20px;font-weight:700;letter-spacing:0.04em;background:#F2F5F8;padding:14px 16px;border-radius:12px">${key}</p>
+      <p>Email: <strong>${email}</strong></p>
+      <p>Open iClearer → Sign in or activate if this Mac isn’t activated yet.</p>
+      <p style="color:#6B7A88;font-size:13px"><a href="${site}">${site}</a></p>
+    </div>`;
+  return { to: email, subject, html, text };
+}
+
 export function signInLinkEmail(email: string, link: string): SendArgs {
   const site = Deno.env.get("SITE_URL") ?? "https://www.iclearer.com";
   const subject = "Sign in to iClearer";
-  const text =
-    `Sign in to iClearer\n\n` +
-    `Open this link to see your license key (expires in 30 minutes):\n${link}\n\n` +
-    `Then paste the key into the Mac app → Sign in or activate.\n` +
-    `If you did not ask for this, ignore this email.`;
+  const text = `Sign in to iClearer with this one-time link (expires in 30 minutes):\n\n${link}\n\nIf you did not ask for this, ignore this email.`;
   const html = `
     <div style="font-family:-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;max-width:520px;margin:0 auto;color:#14202B">
       ${emailHeader(site)}
       <h1 style="font-size:22px;text-align:center;margin:0 0 12px">Sign in to iClearer</h1>
-      <p style="text-align:center">This link shows your license key. It expires in 30 minutes.</p>
-      <p style="text-align:center"><a href="${link}" style="display:inline-block;background:#7FB8E6;color:#06131F;text-decoration:none;padding:12px 18px;border-radius:999px;font-weight:600">Show my license key</a></p>
-      <p style="color:#6B7A88;font-size:13px;text-align:center">Then open iClearer on your Mac → Sign in or activate, and paste the key.<br><br>Or open:<br>${link}</p>
+      <p>This one-time link expires in 30 minutes.</p>
+      <p style="text-align:center"><a href="${link}" style="display:inline-block;background:#7FB8E6;color:#06131F;text-decoration:none;padding:12px 18px;border-radius:999px;font-weight:600">Sign in</a></p>
+      <p style="color:#6B7A88;font-size:13px">Or paste this into a browser:<br>${link}</p>
     </div>`;
   return { to: email, subject, html, text };
 }

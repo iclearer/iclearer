@@ -13,11 +13,13 @@ export type LicenseApiResult = {
   error?: string;
   message?: string;
   email?: string;
+  key?: string;
   plan?: string;
   macs?: number;
   emailed?: boolean;
   email_skipped?: boolean;
   next?: string;
+  upgraded?: boolean;
   checkout_url?: string;
 };
 
@@ -49,47 +51,85 @@ export function resendKey(email: string) {
   return post({ action: "resend_key", email });
 }
 
-/** Paddle.js overlay when configured; otherwise signup+email key (dev). */
+export function verifyKey(email: string, key: string) {
+  return post({ action: "verify_key", email, key });
+}
+
+export function upgradeLicense(opts: {
+  email: string;
+  key: string;
+  plan: "monthly" | "yearly" | "once";
+  macs: 1 | 2 | 5;
+}) {
+  return post({
+    action: "upgrade",
+    email: opts.email,
+    key: opts.key,
+    plan: opts.plan,
+    macs: opts.macs,
+  });
+}
+
+/**
+ * Buy flow: verify existing key, then Paddle checkout (same key in custom_data).
+ * Sandbox / no Paddle.js: upgrade that same key in place (no new key emailed as “new”).
+ */
 export async function startCheckout(opts: {
   email: string;
-  name?: string;
+  key: string;
   marketing?: boolean;
   plan: "monthly" | "yearly" | "once";
   macs: 1 | 2 | 5;
 }): Promise<LicenseApiResult> {
+  const verified = await verifyKey(opts.email, opts.key);
+  if (!verified.ok) return verified;
+
   const priceId = paddlePriceId(opts.plan, opts.macs);
   const token = import.meta.env.VITE_PADDLE_CLIENT_TOKEN as string | undefined;
+  const paddleReady =
+    Boolean(token && priceId && typeof window !== "undefined") &&
+    Boolean((window as unknown as { Paddle?: PaddleLike }).Paddle);
 
-  if (token && priceId && typeof window !== "undefined" && (window as unknown as { Paddle?: PaddleLike }).Paddle) {
+  if (paddleReady) {
     const Paddle = (window as unknown as { Paddle: PaddleLike }).Paddle;
     return await new Promise((resolve) => {
       Paddle.Checkout.open({
         settings: { displayMode: "overlay", theme: "dark" },
-        items: [{ priceId, quantity: 1 }],
+        items: [{ priceId: priceId!, quantity: 1 }],
         customer: { email: opts.email },
         customData: {
           email: opts.email,
+          license_key: opts.key.toUpperCase(),
           plan: opts.plan,
           macs: String(opts.macs),
         },
-        onComplete: () =>
+        onComplete: async () => {
+          // Webhook upgrades the key; also upgrade optimistically for snappy UI.
+          const up = await upgradeLicense(opts);
           resolve({
             ok: true,
-            message: "Payment complete. Check your email for your license key.",
-            emailed: true,
-          }),
+            upgraded: true,
+            email: opts.email,
+            key: opts.key.toUpperCase(),
+            plan: opts.plan,
+            macs: opts.macs,
+            message:
+              up.message ||
+              "Payment complete. Your same license key is now paid — no new key was issued.",
+          });
+        },
       });
     });
   }
 
-  // Payments not live: create/ensure account and email the (free/dev) key.
-  const result = await signup(opts.email, Boolean(opts.marketing));
-  if (result.ok) {
-    result.message =
-      result.message ||
-      "Payments are not live yet. We emailed your license key so you can sign in on the Mac app.";
+  // Payments UI not wired / sandbox without Paddle.js — upgrade same key.
+  const up = await upgradeLicense(opts);
+  if (up.ok) {
+    up.message =
+      up.message ||
+      `Same key upgraded to ${opts.plan}. Use it in the Mac app — we did not create a new key.`;
   }
-  return result;
+  return up;
 }
 
 function paddlePriceId(plan: string, macs: number): string | undefined {

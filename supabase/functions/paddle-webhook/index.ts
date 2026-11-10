@@ -1,7 +1,7 @@
 import { json, optionsResponse } from "../_shared/cors.ts";
 import { adminClient } from "../_shared/supabaseAdmin.ts";
 import { generateLicenseKey, isValidEmail, normalizeEmail } from "../_shared/licenseCrypto.ts";
-import { licenseKeyEmail, sendEmail } from "../_shared/resend.ts";
+import { planUpgradedEmail, sendEmail } from "../_shared/resend.ts";
 
 /**
  * Paddle Billing webhook.
@@ -82,6 +82,7 @@ async function handlePaid(
         "",
     ),
   );
+  const incomingKey = String(custom.license_key ?? custom.key ?? "").trim().toUpperCase();
 
   // Paddle often nests customer id only — email may be in details
   if (!isValidEmail(email)) {
@@ -111,13 +112,29 @@ async function handlePaid(
   ) || null;
   const txnId = String(data.id ?? data.transaction_id ?? "") || null;
 
-  const { data: existing } = await db
-    .from("iclearer_licenses")
-    .select("*")
-    .eq("email", email)
-    .order("created_at", { ascending: false })
-    .limit(1)
-    .maybeSingle();
+  // Prefer upgrading the key they entered at checkout — never mint a new one when key is present.
+  let existing = null as Record<string, unknown> | null;
+  if (incomingKey) {
+    const { data: byKey } = await db
+      .from("iclearer_licenses")
+      .select("*")
+      .eq("license_key", incomingKey)
+      .maybeSingle();
+    existing = byKey;
+    if (existing && normalizeEmail(String(existing.email)) !== email) {
+      return json({ ok: false, error: "Email doesn’t match this license key." }, 403);
+    }
+  }
+  if (!existing) {
+    const { data: byEmail } = await db
+      .from("iclearer_licenses")
+      .select("*")
+      .eq("email", email)
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+    existing = byEmail;
+  }
 
   let licenseId = existing?.id as string | undefined;
   let licenseKey = existing?.license_key as string | undefined;
@@ -134,7 +151,11 @@ async function handlePaid(
         paddle_subscription_id: subscriptionId ?? existing.paddle_subscription_id,
       })
       .eq("id", existing.id);
+  } else if (incomingKey) {
+    // Key claimed but missing in DB — refuse rather than invent another key.
+    return json({ ok: false, error: "License key not found; payment recorded for support." }, 404);
   } else {
+    // Legacy checkout without a key: create once (should be rare).
     licenseKey = generateLicenseKey();
     const { data: createdRow, error } = await db
       .from("iclearer_licenses")
@@ -168,10 +189,18 @@ async function handlePaid(
   });
 
   if (licenseKey) {
-    await sendEmail(licenseKeyEmail(email, licenseKey, safePlan));
+    await sendEmail(planUpgradedEmail(email, licenseKey, safePlan));
   }
 
-  return json({ ok: true, created, email, plan: safePlan, macs: safeMacs });
+  return json({
+    ok: true,
+    created,
+    upgraded: !created,
+    email,
+    key: licenseKey,
+    plan: safePlan,
+    macs: safeMacs,
+  });
 }
 
 function extractPriceId(data: Record<string, unknown>): string {
