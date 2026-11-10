@@ -298,7 +298,9 @@ final class MainViewController: NSViewController {
         let initial = (local.first.map { String($0).uppercased() }) ?? "Y"
         let accountCaption: String
         if state.isPro {
-            accountCaption = state.license.plan == .once ? "Version 1" : "Yearly"
+            accountCaption = state.license.plan == .once
+                ? "Version 1"
+                : (state.license.plan == .monthly ? "Monthly" : "Yearly")
         } else {
             accountCaption = "Free · \(AppFormat.freeQuota(state.license.remainingFreeBytes)) left"
         }

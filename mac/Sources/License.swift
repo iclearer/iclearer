@@ -2,18 +2,21 @@ import Foundation
 
 enum LicensePlan: String, Codable {
     case free
+    case monthly
     case yearly
     case once
 
     var displayName: String {
         switch self {
         case .free: return "Free plan"
+        case .monthly: return "iClearer Monthly"
         case .yearly: return "iClearer Yearly"
         case .once: return "iClearer · Version 1"
         }
     }
 
     var isPro: Bool { self != .free }
+    var isSubscription: Bool { self == .monthly || self == .yearly }
 }
 
 struct LicenseState: Equatable {
@@ -38,8 +41,10 @@ struct LicenseState: Equatable {
     var notifyScanFinished: Bool
     /// "Daily" | "Weekly" | "Monthly"
     var scheduleFrequency: String
+    /// Unix seconds of last successful online verify (also embedded in Keychain blob).
+    var lastVerifiedAt: Int
 
-    static let freeQuotaBytes: Int64 = 500_000_000 // 500 MB (decimal), matches prototype copy
+    static let freeQuotaBytes: Int64 = 500_000_000 // 500 MB
     static let testKey = "ICLR-TEST-0001-FREE"
     static let testEmail = "test@iclearer.com"
 
@@ -63,7 +68,8 @@ struct LicenseState: Equatable {
             appearance: "dark",
             lowSpaceAlerts: false,
             notifyScanFinished: true,
-            scheduleFrequency: "Weekly"
+            scheduleFrequency: "Weekly",
+            lastVerifiedAt: 0
         )
     }
 
@@ -71,7 +77,26 @@ struct LicenseState: Equatable {
         max(0, Self.freeQuotaBytes - usedCleanupBytes)
     }
 
-    var isPro: Bool { plan.isPro }
+    /// Pro entitlement considering offline signed blob + grace window.
+    var isPro: Bool {
+        guard plan.isPro else { return false }
+        if let claims = LicenseBlob.currentClaims() {
+            guard claims.device_hash == DeviceIdentity.deviceHash else { return false }
+            return claims.isWithinGrace
+        }
+        // No blob yet (legacy / mid-migration): allow briefly if we have a key.
+        if lastVerifiedAt > 0 {
+            let days = Int(Date().timeIntervalSince1970 - TimeInterval(lastVerifiedAt)) / 86_400
+            return days <= LicenseConfig.graceDaysTotal
+        }
+        return !key.isEmpty
+    }
+
+    var licenseNeedsOnlineCheck: Bool {
+        guard plan.isPro else { return false }
+        guard let claims = LicenseBlob.currentClaims() else { return true }
+        return claims.isWithinWarnWindow || claims.daysSinceVerified >= LicenseConfig.graceDaysOK
+    }
 }
 
 extension LicenseState: Codable {
@@ -80,6 +105,7 @@ extension LicenseState: Codable {
         case protectedPaths, scanEveryday, scanBackups, scanBuilders, largeFileMinMB
         case launchAtLogin, menuBarItem, scheduleEnabled
         case appearance, lowSpaceAlerts, notifyScanFinished, scheduleFrequency
+        case lastVerifiedAt
     }
 
     init(from decoder: Decoder) throws {
@@ -104,13 +130,13 @@ extension LicenseState: Codable {
         lowSpaceAlerts = try c.decodeIfPresent(Bool.self, forKey: .lowSpaceAlerts) ?? base.lowSpaceAlerts
         notifyScanFinished = try c.decodeIfPresent(Bool.self, forKey: .notifyScanFinished) ?? base.notifyScanFinished
         scheduleFrequency = try c.decodeIfPresent(String.self, forKey: .scheduleFrequency) ?? base.scheduleFrequency
+        lastVerifiedAt = try c.decodeIfPresent(Int.self, forKey: .lastVerifiedAt) ?? base.lastVerifiedAt
     }
 }
 
 enum LicenseStore {
     private static let defaultsKey = "iclearer.license.v1"
     private static var cached = load()
-    private static let observers = NSHashTable<AnyObject>.weakObjects()
 
     static var current: LicenseState { cached }
 
@@ -134,50 +160,71 @@ enum LicenseStore {
         }
     }
 
+    /// Apply a successful activate / heartbeat response (signed blob + plan).
+    static func applyRemote(_ response: LicenseAPIResponse) {
+        guard response.ok else { return }
+        let plan = LicensePlan(rawValue: response.plan ?? "free") ?? .free
+        if let blob = response.license_blob {
+            LicenseBlob.store(blob)
+        }
+        update {
+            if let email = response.email, !email.isEmpty { $0.email = email.lowercased() }
+            if let key = response.key, !key.isEmpty { $0.key = key.uppercased() }
+            $0.plan = plan
+            $0.macSeats = max(1, response.macs ?? $0.macSeats)
+            $0.lastVerifiedAt = Int(Date().timeIntervalSince1970)
+            if plan.isPro { $0.onboardingComplete = true }
+        }
+    }
+
+    /// Local-only activate for the seeded test key when the API is unreachable.
     @discardableResult
-    static func activate(email: String, key: String) -> (ok: Bool, message: String) {
+    static func activateOfflineFallback(email: String, key: String) -> (ok: Bool, message: String) {
         let cleanEmail = email.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
         let cleanKey = key.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
-
         guard cleanEmail.contains("@"), cleanEmail.contains(".") else {
             return (false, "Enter a valid email address.")
         }
-        guard !cleanKey.isEmpty else {
-            return (false, "Enter a license key.")
-        }
+        guard !cleanKey.isEmpty else { return (false, "Enter your license key.") }
 
-        let isTestCombo =
+        let isTest =
             cleanKey == LicenseState.testKey
-            || (cleanEmail == LicenseState.testEmail && cleanKey.contains("TEST"))
             || cleanKey.contains("TEST")
             || cleanKey.contains("ONCE")
-
-        guard isTestCombo || cleanKey.hasPrefix("ICLR-") else {
-            return (false, "That key isn’t recognized. Try ICLR-TEST-0001-FREE for local testing.")
+        guard isTest else {
+            return (false, "Connect to the internet to activate this license.")
         }
 
-        // FREE test key stays Free (prototype). Use YEARLY or ONCE in the key for Pro.
         let plan: LicensePlan
         if cleanKey.contains("ONCE") { plan = .once }
-        else if cleanKey.contains("FREE") { plan = .yearly }
+        else if cleanKey.contains("MONTH") { plan = .monthly }
         else { plan = .yearly }
+
         update {
             $0.email = cleanEmail
             $0.key = cleanKey
             $0.plan = plan
             $0.macSeats = 1
             $0.onboardingComplete = true
-            if plan == .free { $0.usedCleanupBytes = 0 }
+            $0.lastVerifiedAt = Int(Date().timeIntervalSince1970)
         }
-        return (true, "\(plan.displayName) activated for \(cleanEmail).")
+        return (true, "\(plan.displayName) activated for \(cleanEmail) (offline test).")
+    }
+
+    @discardableResult
+    static func activate(email: String, key: String) -> (ok: Bool, message: String) {
+        // Synchronous wrapper kept for older call sites — prefer async activateOnline.
+        activateOfflineFallback(email: email, key: key)
     }
 
     static func signOut() {
+        LicenseBlob.clear()
         update {
             $0.plan = .free
             $0.key = ""
             $0.usedCleanupBytes = 0
-            // Keep email for convenience unless empty
+            $0.lastVerifiedAt = 0
+            $0.macSeats = 1
         }
     }
 
@@ -188,6 +235,22 @@ enum LicenseStore {
 
     static func completeOnboarding() {
         update { $0.onboardingComplete = true }
+    }
+
+    /// Refresh signed license when online (call from app launch).
+    static func heartbeatIfNeeded() {
+        let state = cached
+        guard !state.key.isEmpty, !state.email.isEmpty else { return }
+        Task {
+            let response = await LicenseAPI.heartbeat(email: state.email, key: state.key)
+            await MainActor.run {
+                if response.ok {
+                    applyRemote(response)
+                } else if let err = response.error, err.lowercased().contains("not activated") {
+                    // Device missing — leave local state; user can re-activate.
+                }
+            }
+        }
     }
 
     private static func load() -> LicenseState {

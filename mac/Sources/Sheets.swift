@@ -525,10 +525,26 @@ final class OnboardingController: NSViewController {
             render()
             return
         }
-        errorLabel.stringValue = ""
         LicenseStore.setEmail(email, marketing: marketing)
-        step = 2
-        render()
+        AppState.shared.showToast("Creating your account…")
+        Task {
+            let response = await LicenseAPI.signup(email: email, marketing: marketing)
+            await MainActor.run {
+                if response.ok {
+                    AppState.shared.showToast(
+                        response.message ?? "We emailed your license key. Sign in to continue."
+                    )
+                    dismissSheet(from: self.view)
+                    DispatchQueue.main.async {
+                        AppState.shared.showSheet(.signIn)
+                    }
+                } else {
+                    self.errorLabel.stringValue = response.error ?? "Could not create your account."
+                    self.errorLabel.isHidden = false
+                    self.render()
+                }
+            }
+        }
     }
     @objc private func start() {
         guard fdaAllowed else { return }
@@ -664,21 +680,28 @@ final class UpgradeController: NSViewController {
         guard let card = sender.view as? PlanCardView else { return }
         selectedPlan = card.planIndex
         for c in planCards { c.setSelected(c.planIndex == selectedPlan) }
-        // Prototype: tapping a plan card buys that plan.
-        if selectedPlan == 2 { buyOnce() } else { buyYearly() }
+        buySelected()
     }
 
-    @objc private func buyYearly() {
-        let email = LicenseStore.current.email.isEmpty ? LicenseState.testEmail : LicenseStore.current.email
-        _ = LicenseStore.activate(email: email, key: LicenseState.testKey)
-        AppState.shared.showToast("iClearer unlocked (test activation).")
-        dismissSheet(from: view)
-    }
-
-    @objc private func buyOnce() {
-        let email = LicenseStore.current.email.isEmpty ? LicenseState.testEmail : LicenseStore.current.email
-        _ = LicenseStore.activate(email: email, key: "ICLR-ONCE-TEST")
-        AppState.shared.showToast("One-time plan unlocked (test).")
+    @objc private func buySelected() {
+        let plan: String
+        switch selectedPlan {
+        case 1: plan = "monthly"
+        case 2: plan = "once"
+        default: plan = "yearly"
+        }
+        let macs = max(1, LicenseStore.current.macSeats)
+        var comps = URLComponents(string: "https://iclearer.com/#pricing")!
+        comps.queryItems = [
+            URLQueryItem(name: "buy", value: "1"),
+            URLQueryItem(name: "plan", value: plan),
+            URLQueryItem(name: "macs", value: String(macs)),
+            URLQueryItem(name: "email", value: LicenseStore.current.email)
+        ]
+        if let url = comps.url {
+            NSWorkspace.shared.open(url)
+            AppState.shared.showToast("Complete checkout in your browser. We’ll email your license key.")
+        }
         dismissSheet(from: view)
     }
 
@@ -850,19 +873,51 @@ final class SignInController: NSViewController {
             render()
             return
         }
-        errorLabel.stringValue = ""
+        errorLabel.stringValue = "Sending…"
+        errorLabel.isHidden = false
         render()
-        AppState.shared.showToast("Sign-in link sent to \(email).")
+        Task {
+            let response = await LicenseAPI.sendSignInLink(email: email)
+            await MainActor.run {
+                if response.ok {
+                    self.errorLabel.stringValue = ""
+                    self.render()
+                    AppState.shared.showToast(response.message ?? "Check your email for your license key.")
+                } else {
+                    self.errorLabel.stringValue = response.error ?? "Could not send email."
+                    self.errorLabel.isHidden = false
+                    self.render()
+                }
+            }
+        }
     }
 
     @objc private func activate() {
-        let result = LicenseStore.activate(email: emailField.stringValue, key: keyField.stringValue)
-        if result.ok {
-            AppState.shared.showToast(result.message)
-            dismissSheet(from: view)
-        } else {
-            errorLabel.stringValue = result.message
-            render()
+        let email = emailField.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+        let key = keyField.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+        errorLabel.stringValue = "Signing in…"
+        errorLabel.isHidden = false
+        render()
+        Task {
+            let response = await LicenseAPI.activate(email: email, key: key)
+            await MainActor.run {
+                if response.ok {
+                    LicenseStore.applyRemote(response)
+                    AppState.shared.showToast(response.message ?? "Signed in.")
+                    dismissSheet(from: self.view)
+                    return
+                }
+                // Offline / API down: allow seeded test keys only.
+                let fallback = LicenseStore.activateOfflineFallback(email: email, key: key)
+                if fallback.ok {
+                    AppState.shared.showToast(fallback.message)
+                    dismissSheet(from: self.view)
+                } else {
+                    self.errorLabel.stringValue = response.error ?? fallback.message
+                    self.errorLabel.isHidden = false
+                    self.render()
+                }
+            }
         }
     }
 }

@@ -1,17 +1,10 @@
 import "./landing.css";
 import { bumpSharedDownloadCount } from "./lib/iclearerDownloads";
+import { resendKey, startCheckout, signup } from "./lib/licenseApi";
 
 const DMG_URL = "/downloads/iClearer.dmg";
 const LEAD_KEY = "iclearer-download-lead";
 const LICENSE_KEY = "iclearer-license";
-
-/** Free Pro test user for local/dev testing (no payment required). */
-const TEST_LICENSE = {
-  email: "test@iclearer.com",
-  key: "ICLR-TEST-0001-FREE",
-  plan: "yearly" as const,
-  macs: 1,
-};
 
 type Mode = "download" | "buy";
 
@@ -43,14 +36,34 @@ function saveLead(lead: Lead) {
   localStorage.setItem(LEAD_KEY, JSON.stringify(lead));
 }
 
-function saveLicense(email: string) {
-  const license = {
-    ...TEST_LICENSE,
-    email: email || TEST_LICENSE.email,
-    activatedAt: new Date().toISOString(),
-  };
-  localStorage.setItem(LICENSE_KEY, JSON.stringify(license));
-  return license;
+function saveLicenseHint(email: string, plan: string, macs: number) {
+  localStorage.setItem(
+    LICENSE_KEY,
+    JSON.stringify({ email, plan, macs, activatedAt: new Date().toISOString() }),
+  );
+}
+
+function selectedPlan(): "monthly" | "yearly" | "once" {
+  const params = new URLSearchParams(location.search);
+  const fromQuery = params.get("plan");
+  if (fromQuery === "monthly" || fromQuery === "once" || fromQuery === "yearly") return fromQuery;
+  const note = document.getElementById("pn")?.textContent?.toLowerCase() || "";
+  if (note.includes("one-time") || note.includes("once")) return "once";
+  if (note.includes("month") && !note.includes("year")) return "monthly";
+  const pressed = document.querySelector('#sb button[aria-pressed="true"]')?.textContent?.toLowerCase() || "";
+  if (pressed.includes("month")) return "monthly";
+  if (pressed.includes("one")) return "once";
+  return "yearly";
+}
+
+function selectedMacs(): 1 | 2 | 5 {
+  const params = new URLSearchParams(location.search);
+  const q = Number(params.get("macs") || 0);
+  if (q === 1 || q === 2 || q === 5) return q;
+  const label = document.querySelector('#sm button[aria-pressed="true"]')?.textContent || "1";
+  if (label.includes("5")) return 5;
+  if (label.includes("2")) return 2;
+  return 1;
 }
 
 function pricingLabel(): string {
@@ -68,21 +81,22 @@ function openModal(next: Mode) {
   if (!m) return;
   m.hidden = false;
   if (titleEl()) {
-    titleEl()!.textContent = next === "buy" ? "Activate iClearer" : "Download iClearer";
+    titleEl()!.textContent = next === "buy" ? "Buy iClearer" : "Download iClearer";
   }
   if (subEl()) {
     subEl()!.textContent =
       next === "buy"
-        ? "Payments are not live yet. Enter your details to activate the free test Pro license."
+        ? "We’ll email your license key with Resend. Open the Mac app → Sign in or activate."
         : "We use your email for your license, receipts and security notices.";
   }
   if (submitBtn()) {
-    submitBtn()!.textContent = next === "buy" ? "Activate free test license" : "Download .dmg";
+    submitBtn()!.textContent = next === "buy" ? "Continue to checkout" : "Download .dmg";
+    submitBtn()!.onclick = null;
   }
   if (noteEl()) {
     noteEl()!.innerHTML =
       next === "buy"
-        ? `Test key <code>${TEST_LICENSE.key}</code> unlocks Pro in the Mac app. Price selected: ${selectedPrice}`
+        ? `Selected: <strong>${selectedPrice}</strong>. After payment (or while payments are in sandbox), your key is emailed.`
         : "Requires macOS 13 or later · Intel and Apple silicon";
   }
   const lead = readLead();
@@ -90,6 +104,11 @@ function openModal(next: Mode) {
   if (f && lead) {
     (f.elements.namedItem("name") as HTMLInputElement).value = lead.name;
     (f.elements.namedItem("email") as HTMLInputElement).value = lead.email;
+  }
+  const params = new URLSearchParams(location.search);
+  const emailQ = params.get("email");
+  if (f && emailQ) {
+    (f.elements.namedItem("email") as HTMLInputElement).value = emailQ;
   }
 }
 
@@ -100,6 +119,8 @@ function closeModal() {
 
 async function startDownload(lead: Lead) {
   await bumpSharedDownloadCount({ name: lead.name, email: lead.email });
+  // Also ensure a free license exists + key emailed on first download.
+  await signup(lead.email, Boolean(lead.marketing));
   const a = document.createElement("a");
   a.href = DMG_URL;
   a.download = "iClearer.dmg";
@@ -108,16 +129,15 @@ async function startDownload(lead: Lead) {
   a.remove();
 }
 
-function showLicenseCard(email: string) {
-  const license = saveLicense(email);
+function showKeySent(email: string, plan: string, macs: number) {
+  saveLicenseHint(email, plan, macs);
   if (!noteEl()) return;
   noteEl()!.innerHTML = `
     <div class="lic-box">
-      <strong>Pro activated for testing</strong><br>
-      Email: ${license.email}<br>
-      License key: <code>${license.key}</code><br>
-      Plan: Yearly · 1 Mac<br>
-      Open iClearer → Account → paste this key to unlock paid features.
+      <strong>Check your email</strong><br>
+      We sent your license key to <code>${email}</code>.<br>
+      Open iClearer → <em>Sign in or activate</em> and paste the key.<br>
+      Plan: ${plan} · ${macs} Mac${macs === 1 ? "" : "s"}
     </div>`;
 }
 
@@ -135,18 +155,29 @@ async function onSubmit(event: Event) {
   const btn = submitBtn();
   if (btn) {
     btn.disabled = true;
-    btn.textContent = mode === "buy" ? "Activating…" : "Starting download…";
+    btn.textContent = mode === "buy" ? "Working…" : "Starting download…";
   }
   try {
     if (mode === "buy") {
-      showLicenseCard(email);
+      const plan = selectedPlan();
+      const macs = selectedMacs();
+      const result = await startCheckout({ email, name, marketing, plan, macs });
+      if (!result.ok) {
+        if (noteEl()) noteEl()!.textContent = result.error || "Checkout failed.";
+        return;
+      }
+      showKeySent(email, plan, macs);
       if (btn) {
         btn.disabled = false;
-        btn.textContent = "Download app too";
+        btn.textContent = "Resend key";
         btn.onclick = async (e) => {
           e.preventDefault();
-          await startDownload(lead);
-          closeModal();
+          btn.disabled = true;
+          const again = await resendKey(email);
+          btn.disabled = false;
+          if (noteEl()) {
+            noteEl()!.textContent = again.message || (again.ok ? "Key resent." : again.error || "Failed");
+          }
         };
       }
       return;
@@ -177,6 +208,14 @@ function wireActions() {
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape") closeModal();
   });
+
+  // Deep link from the Mac upgrade sheet: ?buy=1&plan=yearly&macs=1&email=
+  const params = new URLSearchParams(location.search);
+  if (params.get("buy") === "1" || location.hash.includes("pricing")) {
+    if (params.get("buy") === "1") {
+      setTimeout(() => openModal("buy"), 300);
+    }
+  }
 }
 
 wireActions();

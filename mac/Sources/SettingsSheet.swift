@@ -257,7 +257,7 @@ final class SettingsController: NSViewController {
         ))
 
         let login = SettingsToggle(on: license.launchAtLogin, enabled: true) { [weak self] on in
-            if LicenseStore.current.plan != .yearly {
+            if !LicenseStore.current.plan.isSubscription {
                 AppState.shared.showSheet(.upgrade, reason: "Open at login is part of monthly and yearly plans.")
                 self?.renderTab()
                 return
@@ -272,7 +272,7 @@ final class SettingsController: NSViewController {
         ))
 
         let menuBar = SettingsToggle(on: license.menuBarItem, enabled: true) { [weak self] on in
-            if LicenseStore.current.plan != .yearly {
+            if !LicenseStore.current.plan.isSubscription {
                 AppState.shared.showSheet(.upgrade, reason: "Menu bar monitor is part of monthly and yearly plans.")
                 self?.renderTab()
                 return
@@ -313,7 +313,7 @@ final class SettingsController: NSViewController {
         ))
 
         let low = SettingsToggle(on: license.lowSpaceAlerts, enabled: true) { [weak self] on in
-            if LicenseStore.current.plan != .yearly {
+            if !LicenseStore.current.plan.isSubscription {
                 AppState.shared.showSheet(.upgrade, reason: "Low space alerts are part of monthly and yearly plans.")
                 self?.renderTab()
                 return
@@ -490,7 +490,7 @@ final class SettingsController: NSViewController {
         stack.setCustomSpacing(20, after: subtitle)
         stack.translatesAutoresizingMaskIntoConstraints = false
 
-        let yearly = license.plan == .yearly
+        let yearly = license.plan.isSubscription
         if !yearly {
             addFullWidthRow(stack, upgradeBanner(
                 text: "Scheduled scans are part of monthly and yearly plans."
@@ -499,7 +499,7 @@ final class SettingsController: NSViewController {
         }
 
         let sched = SettingsToggle(on: license.scheduleEnabled && yearly, enabled: true) { [weak self] on in
-            if LicenseStore.current.plan != .yearly {
+            if !LicenseStore.current.plan.isSubscription {
                 AppState.shared.showSheet(.upgrade, reason: "Scheduled scans are part of monthly and yearly plans.")
                 self?.renderTab()
                 return
@@ -521,7 +521,7 @@ final class SettingsController: NSViewController {
             }
         }()
         let freq = SettingsSegment(labels: labels, selected: selected) { idx in
-            if LicenseStore.current.plan != .yearly {
+            if !LicenseStore.current.plan.isSubscription {
                 AppState.shared.showSheet(.upgrade, reason: "Scheduled scans are part of monthly and yearly plans.")
                 return
             }
@@ -562,7 +562,7 @@ final class SettingsController: NSViewController {
         let emailTitle = license.email.isEmpty ? "No email yet" : license.email
         let planCaption: String = {
             switch license.plan {
-            case .yearly: return "\(license.plan.displayName) · priority support"
+            case .monthly, .yearly: return "\(license.plan.displayName) · priority support"
             case .once: return "\(license.plan.displayName) · covers version 1, updates until version 2"
             case .free: return LicensePlan.free.displayName
             }
@@ -976,11 +976,23 @@ final class SettingsController: NSViewController {
     }
 
     @objc private func restorePurchase() {
-        if LicenseStore.current.isPro {
-            AppState.shared.showToast("Your purchase is already active.")
-        } else {
-            let email = LicenseStore.current.email.isEmpty ? "this Mac" : LicenseStore.current.email
-            AppState.shared.showToast("No purchase found for \(email).")
+        let email = LicenseStore.current.email
+        let key = LicenseStore.current.key
+        guard !email.isEmpty, !key.isEmpty else {
+            AppState.shared.showToast("Sign in with your email and license key first.")
+            return
+        }
+        AppState.shared.showToast("Checking your license…")
+        Task {
+            let response = await LicenseAPI.activate(email: email, key: key)
+            await MainActor.run {
+                if response.ok {
+                    LicenseStore.applyRemote(response)
+                    AppState.shared.showToast(response.message ?? "Purchase restored.")
+                } else {
+                    AppState.shared.showToast(response.error ?? "No active purchase found.")
+                }
+            }
         }
     }
 
@@ -990,10 +1002,8 @@ final class SettingsController: NSViewController {
     }
 
     @objc private func signOut() {
+        LicenseStore.signOut()
         LicenseStore.update {
-            $0.plan = .free
-            $0.key = ""
-            $0.usedCleanupBytes = 0
             $0.email = ""
             $0.onboardingComplete = false
         }

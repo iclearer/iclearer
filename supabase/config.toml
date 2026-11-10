@@ -1,0 +1,8 @@
+# Minimal Supabase CLI config for Edge Functions deploy.
+project_id = "kzbimjneyhlivsodhpgm"
+
+[functions.license-api]
+verify_jwt = false
+
+[functions.paddle-webhook]
+verify_jwt = false

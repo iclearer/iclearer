@@ -8,6 +8,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         // Ship dark by default (prototype default); Settings can later follow system.
         NSApp.appearance = NSAppearance(named: .darkAqua)
 
+        // Refresh signed license when online (offline grace still applies).
+        LicenseStore.heartbeatIfNeeded()
+
         buildMenus()
         let controller = MainViewController()
         mainController = controller
