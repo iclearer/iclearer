@@ -5,12 +5,12 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/assets/apple-touch-icon-180.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="theme-color" content="#ffffff" />
+    <meta name="theme-color" content="#3B7CB0" />
     <meta name="description" content="iClearer finds hidden caches, logs and leftovers on your Mac, shows what you’ll free, and moves it all to the Trash." />
     <title>iClearer – Clear space. Keep control.</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" />
     <link rel="stylesheet" href="/src/landing.css" />
   </head>
   <body>
@@ -23,6 +23,7 @@
       <a class="hd-logo" href="#top"><img src="/assets/png/icon-glass-light-120.png" width="36" height="36" alt="">iClearer</a>
       <nav class="hd-nav" aria-label="Main">
         <a href="#features">Features</a>
+        <a href="#feedback">Feedback</a>
         <a href="#pricing">Pricing</a>
         <a href="#install">Install</a>
         <a href="#faq">FAQ</a>
@@ -35,6 +36,7 @@
     </div>
     <div class="hd-drop" id="hd-drop" hidden>
       <a href="#features">Features</a>
+      <a href="#feedback">Feedback</a>
       <a href="#pricing">Pricing</a>
       <a href="#install">Install</a>
       <a href="#faq">FAQ</a>
@@ -49,7 +51,8 @@
   <div class="hero-bg" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
   <div class="hero-in">
     <img class="hero-ic" src="/assets/png/icon-glass-light-512.png" width="150" height="150" alt="iClearer app icon">
-    <h1>iClearer<br>Clear space. <br class="br-xs">Keep control.</h1>
+    <p class="hero-kk">Every Mac fills up</p>
+    <h1>Clear space.<br><span class="gt">Keep control.</span></h1>
     <p class="hero-tx">iClearer finds the hidden caches, logs and leftovers filling your Mac, shows exactly how much you’ll free, and moves it all to the Trash. Nothing is deleted for good.</p>
     <div class="hero-cta">
       <a class="btn ring" href="/downloads/iClearer.dmg" download="iClearer.dmg" data-action="download">Download Free</a>
@@ -88,7 +91,7 @@
   <ul class="ach-list">
     <li class="r" style="--g:#bfe0f7"><div class="ach-nm"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="2.5" width="19" height="19" rx="5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M7 12.5l3.2 3.2L17 9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Free cleanup</div><div class="ach-n">500 MB</div><svg class="ach-ic" viewBox="0 0 224 224" aria-hidden="true"><use href="#g-scan"/></svg></li>
     <li class="r" style="--g:#bfeeda"><div class="ach-nm"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="2.5" width="19" height="19" rx="5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M7 12.5l3.2 3.2L17 9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Goes to the Trash first</div><div class="ach-n">100%</div><svg class="ach-ic" viewBox="0 0 224 224" aria-hidden="true"><use href="#g-safe"/></svg></li>
-    <li class="r" style="--g:#dcd5ff"><div class="ach-nm"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="2.5" width="19" height="19" rx="5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M7 12.5l3.2 3.2L17 9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Files we collect</div><div class="ach-n">0</div><svg class="ach-ic" viewBox="0 0 224 224" aria-hidden="true"><use href="#g-pv"/></svg></li>
+    <li class="r" style="--g:#dce8f2"><div class="ach-nm"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="2.5" width="19" height="19" rx="5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M7 12.5l3.2 3.2L17 9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Files we collect</div><div class="ach-n">0</div><svg class="ach-ic" viewBox="0 0 224 224" aria-hidden="true"><use href="#g-pv"/></svg></li>
   </ul>
 </section>
 
@@ -279,7 +282,7 @@
 
 <section class="sec trust" id="trust">
   <h2>Nothing happens <span class="tx-ac">behind your back</span></h2>
-  <p class="sec-tx">A cleaner that deletes things has to earn your trust. These are the rules iClearer follows, every time.</p>
+  <p class="sec-tx">See first. Undo anything. Keychain stays. These are the rules iClearer follows, every time.</p>
   <ul class="trust-list">
     <li class="r"><svg viewBox="0 0 224 224" aria-hidden="true"><use href="#g-see"/></svg><h3>You decide every cleanup</h3><p>Nothing is cleaned automatically. iClearer shows what it found, and you pick what goes.</p></li>
     <li class="r"><svg viewBox="0 0 224 224" aria-hidden="true"><use href="#g-hs"/></svg><h3>Everything goes to the Trash</h3><p>Nothing is permanently deleted. Undo works right away, and History keeps every cleanup so you can restore anything.</p></li>
@@ -291,16 +294,37 @@
   <p class="trust-note"><b>What we collect.</b> Your email, your plan and a hashed ID of your Mac, so we can manage your license seats. We never collect your files, file names or scan results. We only email you about updates and new products if you opt in.</p>
 </section>
 
-<section class="sec rvw">
-  <h2>Early users <span class="tx-ac">got their space back</span></h2>
+<section class="sec rvw" id="feedback">
+  <p class="sec-kk">Feedback</p>
+  <h2>From people who <span class="tx-ac">used it</span></h2>
+  <p class="sec-tx">Real notes from Mac users after their first cleanup.</p>
   <div class="rvw-wrap">
     <button class="rvw-ar prev" id="rv-prev" type="button" aria-label="Previous review" hidden><svg viewBox="0 0 20 35" aria-hidden="true"><path d="M17 3L3 17.5 17 32" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-    <ul class="rvw-list" id="rv-list">
-      <li><div class="rvw-av" style="--a:#7fb8e6;--b:#2d6da4">EE</div><div class="rvw-bd"><b>98 GB recovered.</b><p>“Works perfectly. I recovered around 98GB total mostly Xcode cache, browser cache and old system logs.”</p></div><div class="rvw-au">Emmanuel Eves</div></li>
-      <li><div class="rvw-av" style="--a:#8fe0bd;--b:#1f9a67">BM</div><div class="rvw-bd"><b>Almost 30 GB of cache.</b><p>“Thank you so much, this saved me almost 30GBs of cache.”</p></div><div class="rvw-au">Benjamin Mpano</div></li>
-      <li><div class="rvw-av" style="--a:#f6c36b;--b:#dc8a16">IA</div><div class="rvw-bd"><b>Downloaded and used it.</b><p>“Thank you so much for this product, I have downloaded and used it. Well done.”</p></div><div class="rvw-au">Israel Afolabi</div></li>
-    </ul>
+    <ul class="rvw-list" id="rv-list" aria-live="polite"></ul>
     <button class="rvw-ar next" id="rv-next" type="button" aria-label="Next review" hidden><svg viewBox="0 0 20 35" aria-hidden="true"><path d="M3 3l14 14.5L3 32" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+  </div>
+</section>
+
+<section class="sec fb-leave" id="leave-feedback">
+  <div class="fb-in">
+    <h2>Leave feedback</h2>
+    <p class="sec-tx">Share your name, email, and what you thought after using iClearer.</p>
+    <form class="fb-form" id="fb-form" novalidate>
+      <label>
+        <span>Name</span>
+        <input id="fb-name" name="name" type="text" autocomplete="name" placeholder="Your name" required>
+      </label>
+      <label>
+        <span>Email</span>
+        <input id="fb-email" name="email" type="email" autocomplete="email" placeholder="you@email.com" required>
+      </label>
+      <label>
+        <span>Feedback</span>
+        <textarea id="fb-text" name="feedback" rows="4" placeholder="How did it go?" required></textarea>
+      </label>
+      <p class="fb-note" id="fb-note" hidden></p>
+      <button class="btn" type="submit" id="fb-submit">Send feedback</button>
+    </form>
   </div>
 </section>
 
@@ -377,7 +401,8 @@ open /Applications/iClearer.app</pre></div>
       <div class="lap-base"></div>
     </div>
     <div class="bn-tx">
-      <h2>You stay in control, while iClearer gives your Mac room to breathe.</h2>
+      <h2>Clear space. Keep control.</h2>
+      <p>See first. Undo anything. Keychain stays.</p>
       <div class="bn-cta">
         <a class="btn" href="#pricing">Buy Now</a>
         <a class="btn wh" href="/downloads/iClearer.dmg" download="iClearer.dmg" data-action="download">Download Free</a>
@@ -396,13 +421,13 @@ open /Applications/iClearer.app</pre></div>
 </section>
 
 <section class="sec nl">
-  <h2><span class="tx-ac">Get</span> your free key and Mac care tips</h2>
+  <h2><span class="tx-ac">Get</span> your free key</h2>
   <div class="nl-ct">
-    <p class="nl-sub">Create your free iClearer account and hear about updates and new products.</p>
+    <p class="nl-sub">Create your free iClearer account. We’ll email your key, and only tip you about updates if you opt in.</p>
     <form class="nl-form" id="nl-form" novalidate>
       <label class="vh" for="nl-email">Email address</label>
       <input id="nl-email" name="email" type="email" autocomplete="email" placeholder="Enter your email address..." required>
-      <button class="btn bk" type="submit" id="nl-submit">I’m in!</button>
+      <button class="btn bk" type="submit" id="nl-submit">Get my key</button>
     </form>
     <p class="nl-note" id="nl-note">We’ll email your free license key. You can unsubscribe anytime. For more details, see our <a href="/privacy.html">privacy policy</a>.</p>
   </div>

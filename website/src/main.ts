@@ -1,5 +1,10 @@
 import "./landing.css";
-import { bumpSharedDownloadCount } from "./lib/iclearerDownloads";
+import {
+  bumpSharedDownloadCount,
+  fetchIclearerFeedback,
+  submitIclearerFeedback,
+  type IclearerFeedback,
+} from "./lib/iclearerDownloads";
 import { startCheckout, signup } from "./lib/licenseApi";
 
 const DMG_URL = "/downloads/iClearer.dmg";
@@ -9,6 +14,134 @@ const LICENSE_KEY = "iclearer-license";
 type Mode = "buy" | "create";
 
 type Lead = { email: string; marketing?: boolean };
+
+const SEED_FEEDBACK: IclearerFeedback[] = [
+  {
+    name: "Israel Afolabi",
+    text: "Thank you so much for this product, I have downloaded and used it. Well done.",
+  },
+  {
+    name: "Benjamin Mpano",
+    text: "Thank you so much, this saved me almost 30GBs of cache.",
+  },
+  {
+    name: "Digital Dreams",
+    text: "I mean… the fuck. This worked. Thank you so much.",
+  },
+  {
+    name: "Chris Eminence",
+    text: "You will get one canopy to yourself alone on my wedding day. God bless you.",
+  },
+  {
+    name: "Emmanuel Eves",
+    text: "Works perfectly. I recovered around 98GB total mostly Xcode cache, browser cache and old system logs. Cleaned my Mac in seconds, no problems. Best cleaner I've tried.",
+  },
+];
+
+const AVATAR_TONES = [
+  ["#7fb8e6", "#2d6da4"],
+  ["#8fe0bd", "#1f9a67"],
+  ["#f6c36b", "#dc8a16"],
+  ["#9a8ae0", "#5d4fc2"],
+  ["#5fd0c8", "#2a8f8f"],
+  ["#f19a8e", "#d1544a"],
+];
+
+function initials(name: string): string {
+  const parts = name.trim().split(/\s+/).filter(Boolean);
+  if (!parts.length) return "?";
+  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+  return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+}
+
+function feedbackHeadline(text: string): string {
+  const trimmed = text.trim();
+  const match = trimmed.match(/(\d+(?:\.\d+)?\s*(?:GB|GBs|MB))/i);
+  if (match) return match[1].replace(/\s+/g, " ") + " recovered.";
+  const first = trimmed.split(/[.!?]/)[0]?.trim() || trimmed;
+  return first.length > 42 ? first.slice(0, 40).trimEnd() + "…" : first + ".";
+}
+
+function mergeFeedback(remote: IclearerFeedback[]): IclearerFeedback[] {
+  const seen = new Set<string>();
+  const merged: IclearerFeedback[] = [];
+  for (const item of [...remote, ...SEED_FEEDBACK]) {
+    const key = `${item.name.trim().toLowerCase()}|${item.text.trim().toLowerCase()}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    merged.push(item);
+  }
+  return merged;
+}
+
+function esc(value: string): string {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+function renderFeedback(items: IclearerFeedback[]) {
+  const list = document.getElementById("rv-list");
+  if (!list) return;
+  list.innerHTML = items
+    .map((item, index) => {
+      const [a, b] = AVATAR_TONES[index % AVATAR_TONES.length];
+      return `<li><div class="rvw-av" style="--a:${a};--b:${b}">${esc(initials(item.name))}</div><div class="rvw-bd"><b>${esc(feedbackHeadline(item.text))}</b><p>“${esc(item.text)}”</p></div><div class="rvw-au">${esc(item.name)}</div></li>`;
+    })
+    .join("");
+  const nav = (window as unknown as { iclearerReviewsNav?: () => void }).iclearerReviewsNav;
+  nav?.();
+}
+
+async function loadFeedback() {
+  renderFeedback(SEED_FEEDBACK);
+  const remote = await fetchIclearerFeedback();
+  renderFeedback(mergeFeedback(remote));
+}
+
+function wireFeedbackForm() {
+  const form = document.getElementById("fb-form") as HTMLFormElement | null;
+  const note = document.getElementById("fb-note");
+  const btn = document.getElementById("fb-submit") as HTMLButtonElement | null;
+  if (!form || !note || !btn) return;
+
+  const say = (msg: string, kind: "ok" | "err") => {
+    note.hidden = false;
+    note.textContent = msg;
+    note.className = `fb-note ${kind}`;
+  };
+
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const name = (document.getElementById("fb-name") as HTMLInputElement)?.value.trim() || "";
+    const email = (document.getElementById("fb-email") as HTMLInputElement)?.value.trim() || "";
+    const feedback = (document.getElementById("fb-text") as HTMLTextAreaElement)?.value.trim() || "";
+    if (!name) return say("Please enter your name.", "err");
+    if (!email || !email.includes("@")) return say("Please enter a valid email.", "err");
+    if (!feedback) return say("Please write your feedback.", "err");
+
+    btn.disabled = true;
+    const idle = btn.textContent || "Send feedback";
+    btn.textContent = "Sending…";
+    try {
+      const ok = await submitIclearerFeedback({ name, email, feedback });
+      if (!ok) {
+        say("Could not send feedback. Please try again.", "err");
+        return;
+      }
+      form.reset();
+      say("Thanks — your feedback is up.", "ok");
+      renderFeedback(mergeFeedback([{ name, text: feedback }, ...(await fetchIclearerFeedback())]));
+    } catch {
+      say("Could not send feedback. Please try again.", "err");
+    } finally {
+      btn.disabled = false;
+      btn.textContent = idle;
+    }
+  });
+}
 
 const modal = () => document.getElementById("dl-modal");
 const form = () => document.getElementById("dl-form") as HTMLFormElement | null;
@@ -445,3 +578,5 @@ function wireActions() {
 }
 
 wireActions();
+wireFeedbackForm();
+void loadFeedback();

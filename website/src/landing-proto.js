@@ -137,22 +137,30 @@
     rs.forEach(function (e) { e.classList.add("in"); });
   }
 
-  /* Reviews: arrows only appear when the cards overflow (phones) */
-  var rl = $("rv-list"), pv = $("rv-prev"), nx = $("rv-next");
+  /* Reviews: arrows only appear when the cards overflow */
+  var rl = $("rv-list"), pv = $("rv-prev"), nx = $("rv-next"), rvWired = false;
   function rvState() {
+    if (!rl || !pv || !nx) return;
     var ov = rl.scrollWidth > rl.clientWidth + 4;
     pv.hidden = !ov || rl.scrollLeft < 8;
     nx.hidden = !ov || rl.scrollLeft > rl.scrollWidth - rl.clientWidth - 8;
   }
   function rvGo(d) {
-    var c = rl.querySelector("li"), step = c ? c.offsetWidth + 16 : 280;
+    var c = rl.querySelector("li"), step = c ? c.offsetWidth + 24 : 280;
     rl.scrollBy({ left: d * step, behavior: rm ? "auto" : "smooth" });
   }
-  pv.onclick = function () { rvGo(-1); };
-  nx.onclick = function () { rvGo(1); };
-  rl.addEventListener("scroll", rvState, { passive: true });
-  addEventListener("resize", rvState);
-  rvState();
+  window.iclearerReviewsNav = function () {
+    if (!rl || !pv || !nx) return;
+    if (!rvWired) {
+      pv.onclick = function () { rvGo(-1); };
+      nx.onclick = function () { rvGo(1); };
+      rl.addEventListener("scroll", rvState, { passive: true });
+      addEventListener("resize", rvState);
+      rvWired = true;
+    }
+    rvState();
+  };
+  window.iclearerReviewsNav();
 
   /* Mobile menu */
   var mb = $("hd-menu"), dr = $("hd-drop");
