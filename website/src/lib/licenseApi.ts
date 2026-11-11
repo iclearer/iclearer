@@ -93,32 +93,45 @@ export async function startCheckout(opts: {
   if (paddleReady) {
     const Paddle = (window as unknown as { Paddle: PaddleLike }).Paddle;
     return await new Promise((resolve) => {
-      Paddle.Checkout.open({
-        settings: { displayMode: "overlay", theme: "dark" },
-        items: [{ priceId: priceId!, quantity: 1 }],
-        customer: { email: opts.email },
-        customData: {
-          email: opts.email,
-          license_key: opts.key.toUpperCase(),
-          plan: opts.plan,
-          macs: String(opts.macs),
-        },
-        onComplete: async () => {
-          // Webhook upgrades the key; also upgrade optimistically for snappy UI.
-          const up = await upgradeLicense(opts);
-          resolve({
-            ok: true,
-            upgraded: true,
+      let settled = false;
+      const finish = (result: LicenseApiResult) => {
+        if (settled) return;
+        settled = true;
+        resolve(result);
+      };
+      try {
+        Paddle.Checkout.open({
+          settings: { displayMode: "overlay", theme: "dark" },
+          items: [{ priceId: priceId!, quantity: 1 }],
+          customer: { email: opts.email },
+          customData: {
             email: opts.email,
-            key: opts.key.toUpperCase(),
+            license_key: opts.key.toUpperCase(),
             plan: opts.plan,
-            macs: opts.macs,
-            message:
-              up.message ||
-              "Payment complete. Your same license key is now paid — no new key was issued.",
-          });
-        },
-      });
+            macs: String(opts.macs),
+          },
+          onComplete: async () => {
+            // Webhook upgrades the key; also upgrade optimistically for snappy UI.
+            const up = await upgradeLicense(opts);
+            finish({
+              ok: true,
+              upgraded: true,
+              email: opts.email,
+              key: opts.key.toUpperCase(),
+              plan: opts.plan,
+              macs: opts.macs,
+              message:
+                up.message ||
+                "Payment complete. Your same license key is now paid — no new key was issued.",
+            });
+          },
+        });
+      } catch (err) {
+        finish({
+          ok: false,
+          error: err instanceof Error ? err.message : "Could not open checkout.",
+        });
+      }
     });
   }
 
