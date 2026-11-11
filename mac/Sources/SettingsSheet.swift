@@ -1,5 +1,4 @@
 import AppKit
-import ObjectiveC
 
 enum SettingsTab: Int, CaseIterable {
     case general
@@ -606,17 +605,16 @@ final class SettingsController: NSViewController {
                     ? (isThis ? DeviceIdentity.deviceName : "Mac")
                     : trimmedName
                 let subtitle = isThis ? "This Mac · Active now" : "Linked to your license"
+                // No Remove — seats are permanent once used (stops seat hopping).
                 let trailing: NSView
                 if isThis {
                     let badge = tallerSettingsButton("This Mac")
                     badge.isEnabled = false
                     trailing = badge
                 } else {
-                    let remove = tallerSettingsButton("Remove")
-                    remove.target = self
-                    remove.action = #selector(removeDeviceTap(_:))
-                    objc_setAssociatedObject(remove, &AssociatedKeys.deviceHash, device.device_hash, .OBJC_ASSOCIATION_COPY_NONATOMIC)
-                    trailing = remove
+                    let linked = tallerSettingsButton("Linked")
+                    linked.isEnabled = false
+                    trailing = linked
                 }
                 let deviceRow = settingsRow(title: name, subtitle: subtitle, trailing: trailing)
                 stack.addArrangedSubview(deviceRow)
@@ -624,7 +622,7 @@ final class SettingsController: NSViewController {
             }
 
             let hint = makeLabel(
-                "Signing in on a new Mac uses one seat. At the limit, remove a Mac above first.",
+                "Signing in on a new Mac uses one seat. Seats stay linked — email support@iclearer.com if you replace a Mac.",
                 size: 12, weight: .regular, color: mu
             )
             hint.alignment = .left
@@ -987,10 +985,6 @@ final class SettingsController: NSViewController {
         AppState.shared.showToast("License key copied.")
     }
 
-    private enum AssociatedKeys {
-        static var deviceHash: UInt8 = 0
-    }
-
     private func refreshDevicesIfNeeded() {
         let license = LicenseStore.current
         guard license.isPro, !license.email.isEmpty, !license.key.isEmpty, !devicesLoading else { return }
@@ -1005,25 +999,6 @@ final class SettingsController: NSViewController {
                         LicenseStore.update { $0.macSeats = max(1, macs) }
                     }
                     if self.tab == .account { self.renderTab() }
-                }
-            }
-        }
-    }
-
-    @objc private func removeDeviceTap(_ sender: NSButton) {
-        guard let hash = objc_getAssociatedObject(sender, &AssociatedKeys.deviceHash) as? String else { return }
-        let license = LicenseStore.current
-        guard !license.email.isEmpty, !license.key.isEmpty else { return }
-        AppState.shared.showToast("Removing Mac…")
-        Task {
-            let response = await LicenseAPI.removeDevice(email: license.email, key: license.key, deviceHash: hash)
-            await MainActor.run {
-                if response.ok {
-                    self.knownDevices.removeAll { $0.device_hash == hash }
-                    AppState.shared.showToast(response.message ?? "Mac removed. That seat is free.")
-                    self.renderTab()
-                } else {
-                    AppState.shared.showToast(response.error ?? "Could not remove that Mac.")
                 }
             }
         }

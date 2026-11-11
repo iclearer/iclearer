@@ -169,7 +169,7 @@ async function activate(body: Body) {
       ok: false,
       error:
         `This license is for ${seatLimit} Mac${seatLimit === 1 ? "" : "s"} and all seats are in use. ` +
-        `Open iClearer on an activated Mac → Account → Your Macs, remove one, then try again. ` +
+        `This license’s Mac seats are full. Email support@iclearer.com if you replaced a Mac and need a seat freed. ` +
         `A correct key alone is not enough on a new Mac once seats are full.`,
       macs: seatLimit,
       seats_used: devices?.length ?? 0,

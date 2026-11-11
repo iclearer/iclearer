@@ -702,7 +702,7 @@ final class UpgradeController: NSViewController {
 
     private func seatNote() -> String {
         let n = selectedMacs
-        return "Each Mac you sign in on is linked to your license. \(n) Mac\(n == 1 ? "" : "s") max — remove one in Account → Your Macs to free a seat."
+        return "Each Mac you sign in on is linked to your license. \(n) Mac\(n == 1 ? "" : "s") max — seats stay linked once used."
     }
 
     private func refreshPlanCards() {

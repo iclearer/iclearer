@@ -999,9 +999,10 @@ final class TopPinnedClipView: NSClipView {
     }
 }
 
-final class CleanRowView: NSView {
+final class CleanRowView: NSView, NSGestureRecognizerDelegate {
     private var onToggle: (() -> Void)?
     private var onSelect: (() -> Void)?
+    private let check = NSButton(checkboxWithTitle: "", target: nil, action: nil)
 
     init(item: CacheItem, checked: Bool, isPro: Bool, maxBytes: Int64, onToggle: @escaping () -> Void, onSelect: @escaping () -> Void) {
         super.init(frame: .zero)
@@ -1016,9 +1017,11 @@ final class CleanRowView: NSView {
             layer?.borderColor = Theme.Colors.accent.withAlphaComponent(0.45).cgColor
         }
 
-        let check = NSButton(checkboxWithTitle: "", target: self, action: #selector(toggle))
+        check.target = self
+        check.action = #selector(toggle)
         check.state = checked ? .on : .off
         check.translatesAutoresizingMaskIntoConstraints = false
+        check.setContentHuggingPriority(.required, for: .horizontal)
 
         let badge = IconBadgeView()
         badge.screen = item.group == .builders ? .builders : .clean
@@ -1040,7 +1043,11 @@ final class CleanRowView: NSView {
         bar.usesQuotaGradient = true
         bar.translatesAutoresizingMaskIntoConstraints = false
 
+        // Row click selects for the inspector only — must not steal checkbox mouse-downs
+        // (default delaysPrimaryMouseButtonEvents blocked paid users from ticking items).
         let click = NSClickGestureRecognizer(target: self, action: #selector(selectRow))
+        click.delaysPrimaryMouseButtonEvents = false
+        click.delegate = self
         addGestureRecognizer(click)
 
         [check, badge, name, path, pill, size, bar].forEach { addSubview($0) }
@@ -1072,6 +1079,12 @@ final class CleanRowView: NSView {
     required init?(coder: NSCoder) { nil }
     @objc private func toggle() { onToggle?() }
     @objc private func selectRow() { onSelect?() }
+
+    func gestureRecognizer(_ gestureRecognizer: NSGestureRecognizer, shouldAttemptToRecognizeWith event: NSEvent) -> Bool {
+        let point = convert(event.locationInWindow, from: nil)
+        // Leave checkbox clicks to the button itself.
+        return !check.frame.insetBy(dx: -6, dy: -6).contains(point)
+    }
 }
 
 final class InspectorView: NSView {
