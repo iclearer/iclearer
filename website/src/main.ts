@@ -6,9 +6,9 @@ const DMG_URL = "/downloads/iClearer.dmg";
 const LEAD_KEY = "iclearer-download-lead";
 const LICENSE_KEY = "iclearer-license";
 
-type Mode = "download" | "buy" | "create";
+type Mode = "buy" | "create";
 
-type Lead = { name: string; email: string; marketing?: boolean };
+type Lead = { email: string; marketing?: boolean };
 
 const modal = () => document.getElementById("dl-modal");
 const form = () => document.getElementById("dl-form") as HTMLFormElement | null;
@@ -17,12 +17,11 @@ const subEl = () => document.getElementById("dl-sub");
 const noteEl = () => document.getElementById("dl-note");
 const successEl = () => document.getElementById("dl-success");
 const submitBtn = () => document.getElementById("dl-submit") as HTMLButtonElement | null;
-const nameWrap = () => document.getElementById("dl-name-wrap");
 const keyWrap = () => document.getElementById("dl-key-wrap");
 const mktWrap = () => document.getElementById("dl-mkt-wrap");
 const noKeyEl = () => document.getElementById("dl-no-key");
 
-let mode: Mode = "download";
+let mode: Mode = "buy";
 let selectedPrice = "$29.99 / year · 1 Mac";
 
 function readLead(): Lead | null {
@@ -55,7 +54,6 @@ function selectedPlan(): "monthly" | "yearly" | "once" {
   const note = document.getElementById("pn")?.textContent?.toLowerCase() || "";
   if (note.includes("one-time") || note.includes("once")) return "once";
   if (note.includes("month") && !note.includes("year")) return "monthly";
-  // Landing pricing segment is #sp (not #sb).
   const pressed =
     document.querySelector('#sp button[aria-pressed="true"]')?.textContent?.toLowerCase() || "";
   if (pressed.includes("month")) return "monthly";
@@ -93,15 +91,11 @@ function resetSuccessUI() {
 
 function setFieldVisibility(next: Mode) {
   const isBuy = next === "buy";
-  const needsName = next === "download" || next === "create";
-  if (nameWrap()) nameWrap()!.hidden = !needsName;
   if (keyWrap()) keyWrap()!.hidden = !isBuy;
   if (mktWrap()) mktWrap()!.hidden = isBuy;
   if (noKeyEl()) noKeyEl()!.hidden = !isBuy;
 
-  const nameInput = form()?.elements.namedItem("name") as HTMLInputElement | null;
   const keyInput = form()?.elements.namedItem("license_key") as HTMLInputElement | null;
-  if (nameInput) nameInput.required = needsName;
   if (keyInput) keyInput.required = isBuy;
 }
 
@@ -115,48 +109,33 @@ function openModal(next: Mode) {
   setFieldVisibility(next);
 
   if (titleEl()) {
-    titleEl()!.textContent =
-      next === "buy"
-        ? "Buy iClearer"
-        : next === "create"
-          ? "Create your free account"
-          : "Download iClearer";
+    titleEl()!.textContent = next === "buy" ? "Buy iClearer" : "Create your free account";
   }
   if (subEl()) {
     subEl()!.textContent =
       next === "buy"
         ? "Enter the email and license key from your free account. After you pay, that same key becomes paid — we won’t issue a new one."
-        : next === "create"
-          ? "We’ll email you a free license key. Then come back here, enter that key, and pay to upgrade it."
-          : "We use your email for your license, receipts and security notices.";
+        : "We’ll email you a free license key. Then come back here, enter that key, and pay to upgrade it.";
   }
   if (submitBtn()) {
     submitBtn()!.hidden = false;
     submitBtn()!.disabled = false;
     submitBtn()!.onclick = null;
     submitBtn()!.textContent =
-      next === "buy"
-        ? "Continue to checkout"
-        : next === "create"
-          ? "Create account & get key"
-          : "Download .dmg";
+      next === "buy" ? "Continue to checkout" : "Create account & get key";
   }
   if (noteEl()) {
     noteEl()!.innerHTML =
       next === "buy"
         ? `Selected: <strong>${selectedPrice}</strong>. You’ll keep your current key.`
-        : next === "create"
-          ? "Free account first → get your <code>ICLR-…</code> key by email → then upgrade that same key."
-          : "Requires macOS 13 or later · Intel and Apple silicon";
+        : "Free account first → get your <code>ICLR-…</code> key by email → then upgrade that same key.";
   }
 
   const lead = readLead();
   const f = form();
-  const nameInput = f?.elements.namedItem("name") as HTMLInputElement | null;
   const keyInput = f?.elements.namedItem("license_key") as HTMLInputElement | null;
   if (f && lead?.email) {
     (f.elements.namedItem("email") as HTMLInputElement).value = lead.email;
-    if (lead.name && nameInput) nameInput.value = lead.name;
   }
   const params = new URLSearchParams(location.search);
   const emailQ = params.get("email");
@@ -175,8 +154,9 @@ function closeModal() {
   resetSuccessUI();
 }
 
-async function startDownload(lead: Lead) {
-  await bumpSharedDownloadCount({ name: lead.name, email: lead.email });
+/** Instant DMG download — no email/name gate. Sign-up lives in Buy → Create account. */
+function triggerDownload() {
+  void bumpSharedDownloadCount({});
   const a = document.createElement("a");
   a.href = DMG_URL;
   a.download = "iClearer.dmg";
@@ -271,27 +251,26 @@ async function onSubmit(event: Event) {
   const f = form();
   if (!f) return;
   const data = new FormData(f);
-  const name = String(data.get("name") || "").trim();
   const email = String(data.get("email") || "").trim();
   const key = String(data.get("license_key") || "").trim();
   const marketing = Boolean(data.get("marketing"));
 
   if (mode === "buy") {
     if (!email || !key) {
-      if (noteEl()) noteEl()!.textContent = "Enter your email and license key, or create an account below.";
+      if (noteEl()) {
+        noteEl()!.textContent = "Enter your email and license key, or create an account below.";
+      }
       return;
     }
-  } else if (!name || !email) {
+  } else if (!email) {
     return;
   }
 
-  const lead: Lead = { name: name || email.split("@")[0] || "User", email, marketing };
-  saveLead(lead);
+  saveLead({ email, marketing });
   const btn = submitBtn();
   if (btn) {
     btn.disabled = true;
-    btn.textContent =
-      mode === "buy" ? "Working…" : mode === "create" ? "Creating account…" : "Starting download…";
+    btn.textContent = mode === "buy" ? "Working…" : "Creating account…";
   }
 
   try {
@@ -312,31 +291,16 @@ async function onSubmit(event: Event) {
       return;
     }
 
-    if (mode === "create") {
-      const result = await signup(email, marketing);
-      if (!result.ok) {
-        if (noteEl()) noteEl()!.textContent = result.error || "Could not create account.";
-        return;
-      }
-      await bumpSharedDownloadCount({ name: lead.name, email: lead.email });
-      showCreatedAccount(email);
-      return;
-    }
-
-    // download
     const result = await signup(email, marketing);
     if (!result.ok) {
-      if (noteEl()) noteEl()!.textContent = result.error || "Could not start download.";
+      if (noteEl()) noteEl()!.textContent = result.error || "Could not create account.";
       return;
     }
-    await startDownload(lead);
-    closeModal();
+    showCreatedAccount(email);
   } finally {
     if (btn && !btn.hidden) {
       btn.disabled = false;
-      if (mode === "buy") btn.textContent = "Continue to checkout";
-      else if (mode === "create") btn.textContent = "Create account & get key";
-      else btn.textContent = "Download .dmg";
+      btn.textContent = mode === "buy" ? "Continue to checkout" : "Create account & get key";
     }
   }
 }
@@ -351,7 +315,14 @@ function ensurePaddle() {
   s.src = "https://cdn.paddle.com/paddle/v2/paddle.js";
   s.async = true;
   s.onload = () => {
-    const Paddle = (window as unknown as { Paddle?: { Environment: { set: (e: string) => void }; Initialize: (o: { token: string }) => void } }).Paddle;
+    const Paddle = (
+      window as unknown as {
+        Paddle?: {
+          Environment: { set: (e: string) => void };
+          Initialize: (o: { token: string }) => void;
+        };
+      }
+    ).Paddle;
     if (!Paddle) return;
     if (token.startsWith("test_")) Paddle.Environment.set("sandbox");
     Paddle.Initialize({ token });
@@ -366,7 +337,7 @@ function wireActions() {
     el.addEventListener("click", (event) => {
       event.preventDefault();
       const action = el.getAttribute("data-action");
-      if (action === "download") openModal("download");
+      if (action === "download") triggerDownload();
       if (action === "buy") openModal("buy");
     });
   });
