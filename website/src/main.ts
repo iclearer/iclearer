@@ -114,7 +114,7 @@ function openModal(next: Mode) {
   if (subEl()) {
     subEl()!.textContent =
       next === "buy"
-        ? "Enter the email and license key from your free account. After you pay, that same key becomes paid — we won’t issue a new one."
+        ? "Enter the email and license key from your free account. After you pay, that same key becomes paid for the Mac seats you selected — we won’t issue a new one."
         : "We’ll email you a free license key. Then come back here, enter that key, and pay to upgrade it.";
   }
   if (submitBtn()) {

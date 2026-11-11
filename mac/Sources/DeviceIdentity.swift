@@ -3,7 +3,12 @@ import IOKit
 import CryptoKit
 
 enum DeviceIdentity {
-    /// Stable hashed hardware UUID for this Mac (not the raw serial).
+    /// Stable seat fingerprint for this Mac.
+    ///
+    /// Industry practice (LicenseFlow / Keylight / LicenseManager): use
+    /// `IOPlatformUUID` (survives OS reinstalls, changes on logic-board swap),
+    /// hash it, and never send the raw hardware serial to the server.
+    /// Re-activating the same Mac reuses the same seat.
     static var deviceHash: String {
         let raw = hardwareUUID() ?? Host.current().localizedName ?? "unknown-mac"
         let digest = SHA256.hash(data: Data(raw.utf8))

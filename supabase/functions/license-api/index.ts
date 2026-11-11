@@ -163,8 +163,17 @@ async function activate(body: Body) {
   if (!existing && (devices?.length ?? 0) >= seatLimit) {
     return json({
       ok: false,
-      error: `This license already has ${seatLimit} Mac${seatLimit === 1 ? "" : "s"} activated. Remove one in Account → Your Macs.`,
-      devices: devices ?? [],
+      error:
+        `This license is for ${seatLimit} Mac${seatLimit === 1 ? "" : "s"} and all seats are in use. ` +
+        `Open iClearer on an activated Mac → Account → Your Macs, remove one, then try again. ` +
+        `A correct key alone is not enough on a new Mac once seats are full.`,
+      macs: seatLimit,
+      seats_used: devices?.length ?? 0,
+      devices: (devices ?? []).map((d) => ({
+        device_hash: d.device_hash,
+        device_name: d.device_name,
+        last_seen_at: d.last_seen_at,
+      })),
     }, 409);
   }
 

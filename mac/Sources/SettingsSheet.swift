@@ -32,6 +32,9 @@ final class SettingsController: NSViewController {
     private let contentHost = NSView()
     private var navButtons: [SettingsTab: NSButton] = [:]
     private var largeFileLabel: NSTextField?
+    /// Cached seat list from license-api (Account tab).
+    private var knownDevices: [LicenseDeviceDTO] = []
+    private var devicesLoading = false
 
     // Prototype sheet tokens (body.dk --cd / --cd2).
     private let sheetBG = NSColor(srgbRed: 0x1A / 255, green: 0x20 / 255, blue: 0x27 / 255, alpha: 1)
@@ -579,26 +582,60 @@ final class SettingsController: NSViewController {
         pinFullWidth(emailRow, in: stack)
 
         if license.isPro {
-            // Your Macs — seats from license
-            let seatsUsed = 1
+            refreshDevicesIfNeeded()
             let seatsTotal = max(1, license.macSeats)
+            let seatsUsed = knownDevices.isEmpty ? (license.key.isEmpty ? 0 : 1) : knownDevices.count
             let seats = groupLabel("YOUR MACS · \(seatsUsed) OF \(seatsTotal) USED")
             seats.alignment = .left
             stack.setCustomSpacing(8, after: stack.arrangedSubviews.last!)
             stack.addArrangedSubview(seats)
             stack.setCustomSpacing(4, after: seats)
 
-            let host = Host.current().localizedName ?? "This MacBook Pro"
-            let thisMac = tallerSettingsButton("This Mac")
-            thisMac.target = nil
-            thisMac.action = nil
-            let deviceRow = settingsRow(
-                title: host,
-                subtitle: "Active now",
-                trailing: thisMac
+            let devices = knownDevices.isEmpty
+                ? [LicenseDeviceDTO(
+                    id: nil,
+                    device_hash: DeviceIdentity.deviceHash,
+                    device_name: DeviceIdentity.deviceName,
+                    app_version: nil,
+                    last_seen_at: nil,
+                    created_at: nil
+                )]
+                : knownDevices
+
+            for device in devices {
+                let isThis = device.device_hash == DeviceIdentity.deviceHash
+                let trimmedName = device.device_name?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+                let name = trimmedName.isEmpty
+                    ? (isThis ? DeviceIdentity.deviceName : "Mac")
+                    : trimmedName
+                let subtitle = isThis ? "This Mac · Active now" : "Linked to your license"
+                let trailing: NSView
+                if isThis {
+                    let badge = tallerSettingsButton("This Mac")
+                    badge.isEnabled = false
+                    trailing = badge
+                } else {
+                    let remove = tallerSettingsButton("Remove")
+                    remove.target = self
+                    remove.action = #selector(removeDeviceTap(_:))
+                    objc_setAssociatedObject(remove, &AssociatedKeys.deviceHash, device.device_hash, .OBJC_ASSOCIATION_COPY_NONATOMIC)
+                    trailing = remove
+                }
+                let deviceRow = settingsRow(title: name, subtitle: subtitle, trailing: trailing)
+                stack.addArrangedSubview(deviceRow)
+                pinFullWidth(deviceRow, in: stack)
+            }
+
+            let hint = makeLabel(
+                "Signing in on a new Mac uses one seat. At the limit, remove a Mac above first.",
+                size: 12, weight: .regular, color: mu
             )
-            stack.addArrangedSubview(deviceRow)
-            pinFullWidth(deviceRow, in: stack)
+            hint.alignment = .left
+            hint.maximumNumberOfLines = 2
+            hint.lineBreakMode = .byWordWrapping
+            stack.setCustomSpacing(10, after: stack.arrangedSubviews.last!)
+            stack.addArrangedSubview(hint)
+            pinFullWidth(hint, in: stack)
         } else {
             let unlock = tallerSettingsButton("Unlock", accent: true)
             unlock.target = self
@@ -951,6 +988,48 @@ final class SettingsController: NSViewController {
         NSPasteboard.general.clearContents()
         NSPasteboard.general.setString(key, forType: .string)
         AppState.shared.showToast("License key copied.")
+    }
+
+    private enum AssociatedKeys {
+        static var deviceHash: UInt8 = 0
+    }
+
+    private func refreshDevicesIfNeeded() {
+        let license = LicenseStore.current
+        guard license.isPro, !license.email.isEmpty, !license.key.isEmpty, !devicesLoading else { return }
+        devicesLoading = true
+        Task {
+            let response = await LicenseAPI.listDevices(email: license.email, key: license.key)
+            await MainActor.run {
+                self.devicesLoading = false
+                if response.ok {
+                    self.knownDevices = response.devices ?? []
+                    if let macs = response.macs {
+                        LicenseStore.update { $0.macSeats = max(1, macs) }
+                    }
+                    if self.tab == .account { self.renderTab() }
+                }
+            }
+        }
+    }
+
+    @objc private func removeDeviceTap(_ sender: NSButton) {
+        guard let hash = objc_getAssociatedObject(sender, &AssociatedKeys.deviceHash) as? String else { return }
+        let license = LicenseStore.current
+        guard !license.email.isEmpty, !license.key.isEmpty else { return }
+        AppState.shared.showToast("Removing Mac…")
+        Task {
+            let response = await LicenseAPI.removeDevice(email: license.email, key: license.key, deviceHash: hash)
+            await MainActor.run {
+                if response.ok {
+                    self.knownDevices.removeAll { $0.device_hash == hash }
+                    AppState.shared.showToast(response.message ?? "Mac removed. That seat is free.")
+                    self.renderTab()
+                } else {
+                    AppState.shared.showToast(response.error ?? "Could not remove that Mac.")
+                }
+            }
+        }
     }
 
     @objc private func changeEmailTap() {

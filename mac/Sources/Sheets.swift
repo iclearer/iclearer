@@ -563,8 +563,11 @@ final class OnboardingController: NSViewController {
 
 final class UpgradeController: NSViewController {
     private let reason: String?
-    private var selectedPlan = 0 // 0 yearly, 1 monthly, 2 once
+    private var selectedPlan = Pricing.Plan.yearly
+    private var selectedMacIndex = 0 // 0→1 Mac, 1→2, 2→5
     private var planCards: [PlanCardView] = []
+    private var seatButtons: [NSButton] = []
+    private var noteLabel: NSTextField!
 
     init(reason: String?) {
         self.reason = reason
@@ -572,9 +575,11 @@ final class UpgradeController: NSViewController {
     }
     required init?(coder: NSCoder) { nil }
 
+    private var selectedMacs: Int { Pricing.macSeats[selectedMacIndex] }
+
     override func loadView() {
         let root = sheetRoot()
-        root.frame = NSRect(x: 0, y: 0, width: 560, height: 560)
+        root.frame = NSRect(x: 0, y: 0, width: 580, height: 640)
         view = root
 
         let icon = NSImageView()
@@ -607,10 +612,29 @@ final class UpgradeController: NSViewController {
             bullets.addArrangedSubview(makeBulletRow(line))
         }
 
-        let yearly = PlanCardView(price: "$29.99", term: "Yearly", selected: true)
-        let monthly = PlanCardView(price: "$4.99", term: "Monthly", selected: false)
-        let once = PlanCardView(price: "$79.99", term: "One-time", selected: false)
-        planCards = [yearly, monthly, once]
+        let seatsLabel = makeLabel("How many Macs?", size: 13, weight: .semibold, color: Theme.Colors.muted, align: .center)
+        seatButtons = Pricing.macSeats.enumerated().map { idx, count in
+            let title = count == 1 ? "1 Mac" : "\(count) Macs"
+            let b = NSButton(title: title, target: self, action: #selector(pickSeats(_:)))
+            b.tag = idx
+            b.bezelStyle = .rounded
+            b.setButtonType(.toggle)
+            b.state = idx == selectedMacIndex ? .on : .off
+            return b
+        }
+        let seats = NSStackView(views: seatButtons)
+        seats.orientation = .horizontal
+        seats.spacing = 10
+        seats.distribution = .fillEqually
+        seats.translatesAutoresizingMaskIntoConstraints = false
+
+        planCards = Pricing.Plan.allCases.map { plan in
+            PlanCardView(
+                price: Pricing.priceLabel(plan: plan, macs: selectedMacs),
+                term: plan.label,
+                selected: plan == selectedPlan
+            )
+        }
         for (i, card) in planCards.enumerated() {
             card.planIndex = i
             let click = NSClickGestureRecognizer(target: self, action: #selector(pickPlan(_:)))
@@ -622,18 +646,28 @@ final class UpgradeController: NSViewController {
         plans.distribution = .fillEqually
         plans.translatesAutoresizingMaskIntoConstraints = false
 
+        noteLabel = makeMultilineLabel(seatNote(), size: 12.5, weight: .regular, color: Theme.Colors.muted)
+        noteLabel.alignment = .center
+
+        let buy = PillButton(title: "Continue to checkout", style: .primary)
+        buy.target = self
+        buy.action = #selector(buySelected)
+
         let later = PillButton(title: "Maybe later", style: .ghost)
         later.target = self
         later.action = #selector(close)
 
-        let stack = NSStackView(views: [icon, title, body, bullets, plans, later])
+        let stack = NSStackView(views: [icon, title, body, bullets, seatsLabel, seats, plans, noteLabel, buy, later])
         stack.orientation = .vertical
         stack.alignment = .centerX
-        stack.spacing = 14
+        stack.spacing = 12
         stack.setCustomSpacing(8, after: title)
-        stack.setCustomSpacing(18, after: body)
-        stack.setCustomSpacing(22, after: bullets)
-        stack.setCustomSpacing(22, after: plans)
+        stack.setCustomSpacing(16, after: body)
+        stack.setCustomSpacing(18, after: bullets)
+        stack.setCustomSpacing(8, after: seatsLabel)
+        stack.setCustomSpacing(14, after: seats)
+        stack.setCustomSpacing(10, after: plans)
+        stack.setCustomSpacing(16, after: noteLabel)
         stack.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(stack)
 
@@ -641,17 +675,38 @@ final class UpgradeController: NSViewController {
             icon.widthAnchor.constraint(equalToConstant: 88),
             icon.heightAnchor.constraint(equalToConstant: 88),
             bullets.widthAnchor.constraint(equalToConstant: 440),
-            plans.widthAnchor.constraint(equalToConstant: 480),
+            seats.widthAnchor.constraint(equalToConstant: 360),
+            plans.widthAnchor.constraint(equalToConstant: 500),
             plans.heightAnchor.constraint(equalToConstant: 92),
+            noteLabel.widthAnchor.constraint(equalToConstant: 460),
+            buy.widthAnchor.constraint(equalToConstant: 220),
             later.widthAnchor.constraint(equalToConstant: 180),
             stack.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             stack.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            stack.leadingAnchor.constraint(greaterThanOrEqualTo: view.leadingAnchor, constant: 32),
-            stack.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor, constant: -32)
+            stack.leadingAnchor.constraint(greaterThanOrEqualTo: view.leadingAnchor, constant: 28),
+            stack.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor, constant: -28)
         ])
+        refreshPlanCards()
     }
 
     private static func brandIcon() -> NSImage { sheetBrandImage(size: 88) }
+
+    private func seatNote() -> String {
+        let n = selectedMacs
+        return "Each Mac you sign in on is linked to your license. \(n) Mac\(n == 1 ? "" : "s") max — remove one in Account → Your Macs to free a seat."
+    }
+
+    private func refreshPlanCards() {
+        for (i, card) in planCards.enumerated() {
+            guard let plan = Pricing.Plan(rawValue: i) else { continue }
+            card.update(
+                price: Pricing.priceLabel(plan: plan, macs: selectedMacs),
+                term: Pricing.termLabel(plan: plan, macs: selectedMacs)
+            )
+            card.setSelected(plan == selectedPlan)
+        }
+        noteLabel?.stringValue = seatNote()
+    }
 
     private func makeBulletRow(_ text: String) -> NSView {
         let row = NSStackView()
@@ -676,32 +731,31 @@ final class UpgradeController: NSViewController {
         return row
     }
 
+    @objc private func pickSeats(_ sender: NSButton) {
+        selectedMacIndex = sender.tag
+        for b in seatButtons { b.state = b.tag == selectedMacIndex ? .on : .off }
+        refreshPlanCards()
+    }
+
     @objc private func pickPlan(_ sender: NSClickGestureRecognizer) {
-        guard let card = sender.view as? PlanCardView else { return }
-        selectedPlan = card.planIndex
-        for c in planCards { c.setSelected(c.planIndex == selectedPlan) }
-        buySelected()
+        guard let card = sender.view as? PlanCardView,
+              let plan = Pricing.Plan(rawValue: card.planIndex) else { return }
+        selectedPlan = plan
+        refreshPlanCards()
     }
 
     @objc private func buySelected() {
-        let plan: String
-        switch selectedPlan {
-        case 1: plan = "monthly"
-        case 2: plan = "once"
-        default: plan = "yearly"
-        }
-        let macs = max(1, LicenseStore.current.macSeats)
         var comps = URLComponents(string: "https://www.iclearer.com/")!
         comps.queryItems = [
             URLQueryItem(name: "buy", value: "1"),
-            URLQueryItem(name: "plan", value: plan),
-            URLQueryItem(name: "macs", value: String(macs)),
+            URLQueryItem(name: "plan", value: selectedPlan.apiValue),
+            URLQueryItem(name: "macs", value: String(selectedMacs)),
             URLQueryItem(name: "email", value: LicenseStore.current.email),
             URLQueryItem(name: "key", value: LicenseStore.current.key)
         ]
         if let url = comps.url {
             NSWorkspace.shared.open(url)
-            AppState.shared.showToast("Complete checkout in your browser. We’ll email your license key.")
+            AppState.shared.showToast("Complete checkout in your browser. Your same key upgrades — each Mac is linked as a seat.")
         }
         dismissSheet(from: view)
     }
@@ -719,7 +773,9 @@ private final class PlanCardView: NSView {
     init(price: String, term: String, selected: Bool) {
         self.isPlanSelected = selected
         self.priceLabel = makeLabel(price, size: 20, weight: .bold, color: Theme.Colors.text, align: .center)
-        self.termLabel = makeLabel(term, size: 12.5, weight: .regular, color: Theme.Colors.muted, align: .center)
+        self.termLabel = makeLabel(term, size: 11.5, weight: .regular, color: Theme.Colors.muted, align: .center)
+        self.termLabel.maximumNumberOfLines = 2
+        self.termLabel.lineBreakMode = .byWordWrapping
         super.init(frame: .zero)
         wantsLayer = true
         translatesAutoresizingMaskIntoConstraints = false
@@ -729,11 +785,19 @@ private final class PlanCardView: NSView {
         addSubview(termLabel)
         NSLayoutConstraint.activate([
             priceLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
-            priceLabel.topAnchor.constraint(equalTo: topAnchor, constant: 16),
+            priceLabel.topAnchor.constraint(equalTo: topAnchor, constant: 14),
             termLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
-            termLabel.topAnchor.constraint(equalTo: priceLabel.bottomAnchor, constant: 4)
+            termLabel.topAnchor.constraint(equalTo: priceLabel.bottomAnchor, constant: 4),
+            termLabel.leadingAnchor.constraint(greaterThanOrEqualTo: leadingAnchor, constant: 8),
+            termLabel.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor, constant: -8),
+            termLabel.bottomAnchor.constraint(lessThanOrEqualTo: bottomAnchor, constant: -10)
         ])
         setSelected(selected)
+    }
+
+    func update(price: String, term: String) {
+        priceLabel.stringValue = price
+        termLabel.stringValue = term
     }
 
     required init?(coder: NSCoder) { nil }
