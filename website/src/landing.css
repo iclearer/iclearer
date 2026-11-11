@@ -122,6 +122,20 @@ svg {
   min-width: 192px;
   box-shadow: 0 0 0 5px rgba(63, 124, 176, 0.4);
 }
+.btn.go-green {
+  background: #1b8a56;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28), 0 10px 24px -8px rgba(27, 138, 86, 0.5);
+}
+.btn.go-green:hover {
+  background: #177a4c;
+}
+.btn.ring.go-green {
+  box-shadow: 0 0 0 5px rgba(46, 190, 122, 0.5);
+}
+.btn.ring.go-green:hover {
+  background: #177a4c;
+  box-shadow: 0 0 0 5px rgba(46, 190, 122, 0.55);
+}
 .btn.ghost {
   min-width: 192px;
   background: transparent;
@@ -850,7 +864,8 @@ svg {
 
 /* Leave feedback */
 .fb-leave {
-  margin-bottom: 120px;
+  margin-top: 48px;
+  margin-bottom: 96px;
 }
 .fb-in {
   max-width: 560px;
