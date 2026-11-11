@@ -473,7 +473,9 @@ function ensurePaddle() {
       }
     ).Paddle;
     if (!Paddle) return;
+    // Live is the Paddle.js default. Only force sandbox for test_ tokens.
     if (token.startsWith("test_")) Paddle.Environment.set("sandbox");
+    // pwCustomer (Retain) is set later at checkout when we know ctm_… from verify_key.
     Paddle.Initialize({ token });
   };
   document.head.appendChild(s);

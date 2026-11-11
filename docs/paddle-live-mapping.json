@@ -1,0 +1,25 @@
+{
+  "note": "Sandbox had only 1-Mac prices; live now has full 1/2/5 Mac matrix matching app + website UI amounts.",
+  "products": {
+    "pro_01m71zjnp2e6z5gntc898p61bt": "pro_01m71z9v9h8vfpm6bztqy4gzr2"
+  },
+  "prices": {
+    "pri_01m71zjpdjm31bzqpt4425nwts": "pri_01m71zcp21mwg9098bsx6gqrep",
+    "pri_01m71zjq3kax8vy7sggwphaent": "pri_01m71zddaq8nctk4th63hqzyf4",
+    "pri_01m71zjqxvy4y6hxp9zm3sy3vv": "pri_01m71zfyx40y8tg34hryjmxmz4"
+  },
+  "live_notification_setting_id": "ntfset_01m75s23fgq2197vj05mk0pdz2",
+  "live_client_token_id": "ctkn_01m75rz5n5k9p717gdwwxrannn",
+  "webhook_url": "https://kzbimjneyhlivsodhpgm.supabase.co/functions/v1/paddle-webhook",
+  "live_prices_by_plan_macs": {
+    "yearly:1": "pri_01m71zcp21mwg9098bsx6gqrep",
+    "monthly:1": "pri_01m71zddaq8nctk4th63hqzyf4",
+    "once:1": "pri_01m71zfyx40y8tg34hryjmxmz4",
+    "yearly:2": "pri_01m75seqsks5w07chhhj6310s2",
+    "yearly:5": "pri_01m75sert3awq0hbtg6fqpd0s5",
+    "monthly:2": "pri_01m75sesjdx9maq2trh4yzh1zm",
+    "monthly:5": "pri_01m75set3q5ydatpy7agpx6jzp",
+    "once:2": "pri_01m75sev9ghe5cx76z70pakc7f",
+    "once:5": "pri_01m75sewbfsazab04962rczp0w"
+  }
+}

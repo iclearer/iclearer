@@ -21,6 +21,8 @@ export type LicenseApiResult = {
   next?: string;
   upgraded?: boolean;
   checkout_url?: string;
+  /** Paddle customer id (ctm_…) for Retain — not an email or internal id. */
+  paddle_customer_id?: string;
 };
 
 async function post(body: Record<string, unknown>): Promise<LicenseApiResult> {
@@ -108,8 +110,20 @@ export async function startCheckout(opts: {
     };
   }
 
-  if (paddleLoaded && priceId) {
+  if (paddleLoaded && priceId && token) {
     const Paddle = (window as unknown as { Paddle: PaddleLike }).Paddle;
+    const paddleCustomerId = verified.paddle_customer_id;
+    // Retain expects the Paddle customer id (ctm_…), never email/internal ids.
+    if (paddleCustomerId?.startsWith("ctm_")) {
+      try {
+        Paddle.Initialize({
+          token,
+          pwCustomer: { id: paddleCustomerId },
+        });
+      } catch {
+        /* Initialize may already be called; checkout still works without Retain. */
+      }
+    }
     return await new Promise((resolve) => {
       let settled = false;
       const finish = (result: LicenseApiResult) => {
@@ -121,7 +135,9 @@ export async function startCheckout(opts: {
         Paddle.Checkout.open({
           settings: { displayMode: "overlay", theme: "dark" },
           items: [{ priceId: priceId!, quantity: 1 }],
-          customer: { email: opts.email },
+          customer: paddleCustomerId?.startsWith("ctm_")
+            ? { id: paddleCustomerId }
+            : { email: opts.email },
           customData: {
             email: opts.email,
             license_key: opts.key.toUpperCase(),
@@ -157,7 +173,15 @@ export async function startCheckout(opts: {
     });
   }
 
-  // Payments UI not wired / sandbox without Paddle.js — upgrade same key.
+  // Live builds must never silently grant Pro without Paddle Checkout.
+  if (token?.startsWith("live_") || import.meta.env.VITE_PADDLE_ENV === "live") {
+    return {
+      ok: false,
+      error: "Checkout isn’t ready. Refresh the page and try again, or email support@iclearer.com.",
+    };
+  }
+
+  // Sandbox / local without Paddle.js — upgrade same key for testing only.
   const up = await upgradeLicense(opts);
   if (up.ok && opts.marketing) {
     await setMarketing(opts.email, opts.key, true);
@@ -181,6 +205,7 @@ function paddlePriceId(plan: string, macs: number): string | undefined {
 }
 
 type PaddleLike = {
+  Initialize: (opts: { token: string; pwCustomer?: { id: string } }) => void;
   Checkout: {
     open: (opts: Record<string, unknown>) => void;
   };

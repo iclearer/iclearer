@@ -16,6 +16,16 @@ Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return optionsResponse();
   if (req.method !== "POST") return json({ ok: false, error: "Method not allowed" }, 405);
 
+  // Optional IP allowlist from https://api.paddle.com/ips (source of truth; not hard-coded).
+  // Enable with PADDLE_IP_ALLOWLIST=1 once you confirm your edge sees the real client IP.
+  if ((Deno.env.get("PADDLE_IP_ALLOWLIST") ?? "") === "1") {
+    const allowed = await paddleIpv4Allowlist();
+    const ip = clientIp(req);
+    if (ip && allowed.length && !ipInCidrs(ip, allowed)) {
+      return json({ ok: false, error: "Forbidden source" }, 403);
+    }
+  }
+
   const raw = await req.text();
   const secret = Deno.env.get("PADDLE_WEBHOOK_SECRET") ?? "";
   if (secret) {
@@ -246,4 +256,35 @@ async function verifyPaddleSignature(rawBody: string, header: string, secret: st
   const sig = new Uint8Array(await crypto.subtle.sign("HMAC", key, new TextEncoder().encode(payload)));
   const hex = Array.from(sig, (b) => b.toString(16).padStart(2, "0")).join("");
   return hex === h1;
+}
+
+let cachedPaddleCidrs: { at: number; cidrs: string[] } | null = null;
+
+async function paddleIpv4Allowlist(): Promise<string[]> {
+  const now = Date.now();
+  if (cachedPaddleCidrs && now - cachedPaddleCidrs.at < 6 * 60 * 60 * 1000) {
+    return cachedPaddleCidrs.cidrs;
+  }
+  try {
+    const res = await fetch("https://api.paddle.com/ips");
+    if (!res.ok) return cachedPaddleCidrs?.cidrs ?? [];
+    const body = await res.json();
+    const cidrs = (body?.data?.ipv4_cidrs as string[] | undefined) ?? [];
+    cachedPaddleCidrs = { at: now, cidrs };
+    return cidrs;
+  } catch {
+    return cachedPaddleCidrs?.cidrs ?? [];
+  }
+}
+
+function clientIp(req: Request): string | null {
+  const fwd = req.headers.get("cf-connecting-ip") || req.headers.get("x-forwarded-for") || "";
+  const first = fwd.split(",")[0]?.trim();
+  return first || null;
+}
+
+function ipInCidrs(ip: string, cidrs: string[]): boolean {
+  // Paddle publishes /32 CIDRs today; treat exact IPv4 match.
+  const needle = ip.includes("/") ? ip : `${ip}/32`;
+  return cidrs.includes(needle) || cidrs.includes(ip);
 }

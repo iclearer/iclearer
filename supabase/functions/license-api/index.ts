@@ -414,7 +414,7 @@ async function verifyKey(body: Body) {
   const db = adminClient();
   const { data: license } = await db
     .from("iclearer_licenses")
-    .select("id, email, license_key, plan, macs, status")
+    .select("id, email, license_key, plan, macs, status, paddle_customer_id")
     .eq("license_key", key)
     .maybeSingle();
   if (!license) return json({ ok: false, error: "That license key isn’t recognized." }, 404);
@@ -424,12 +424,17 @@ async function verifyKey(body: Body) {
   if (license.status !== "active") {
     return json({ ok: false, error: `License is ${license.status}.` }, 403);
   }
+  const paddleCustomerId =
+    typeof license.paddle_customer_id === "string" && license.paddle_customer_id.startsWith("ctm_")
+      ? license.paddle_customer_id
+      : undefined;
   return json({
     ok: true,
     email,
     key: license.license_key,
     plan: license.plan,
     macs: license.macs,
+    paddle_customer_id: paddleCustomerId,
     message: "License verified. Continue to payment to upgrade this same key.",
   });
 }

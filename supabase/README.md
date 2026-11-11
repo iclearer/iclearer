@@ -24,8 +24,9 @@ LICENSE_SIGNING_PUBLIC_KEY_B64=
 RESEND_API_KEY=
 RESEND_FROM_EMAIL=iClearer <licenses@iclearer.com>
 SITE_URL=https://iclearer.com
-PADDLE_WEBHOOK_SECRET=
-PADDLE_PRICE_MAP_JSON={"pri_xxx":{"plan":"yearly","macs":1}}
+PADDLE_WEBHOOK_SECRET=pdl_ntfset_...
+PADDLE_PRICE_MAP_JSON={"pri_LIVE_YEARLY_1":{"plan":"yearly","macs":1}}
+# Optional: set PADDLE_IP_ALLOWLIST=1 to reject non-Paddle source IPs (fetches https://api.paddle.com/ips)
 GRACE_DAYS_OK=24
 GRACE_DAYS_WARN=6
 ```
