@@ -493,11 +493,15 @@ enum AppFormat {
         return "\(max(0, rounded)) GB"
     }
 
-    /// Legend / ring label: whole GB for big slices, MB for thin ones (e.g. Photos ~260 MB).
-    /// Avoids rounding 258 MB down to a misleading "0 GB".
+    /// Legend / ring label: whole numbers only ("259 MB", "41 GB") — never "258.7 MB".
     static func mapSize(_ value: Int64) -> String {
         if value >= 500_000_000 { return wholeGB(value) }
-        return bytes(value)
+        let mb = Double(value) / 1_000_000.0
+        if mb >= 0.5 {
+            return "\(max(1, Int(mb.rounded()))) MB"
+        }
+        let kb = Double(value) / 1_000.0
+        return "\(max(0, Int(kb.rounded()))) KB"
     }
 
     static func count(_ value: Int) -> String {

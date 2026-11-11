@@ -20,11 +20,12 @@ const COMPANIES = [
   "Python Cabo Verde",
 ];
 
-const INSTALL_FROM_DOWNLOADS = `hdiutil attach ~/Downloads/iClearer.dmg -nobrowse
+const INSTALL_FROM_DOWNLOADS = `DMG=$(ls -t ~/Downloads/iClearer*.dmg 2>/dev/null | head -1)
+hdiutil attach "$DMG" -nobrowse
 rm -rf /Applications/iClearer.app
-cp -R "/Volumes/Install iClearer/iClearer.app" /Applications/ 2>/dev/null || cp -R "/Volumes/Install Clearaer/Clearaer.app" /Applications/iClearer.app
+cp -R "/Volumes/Install iClearer/iClearer.app" /Applications/
 xattr -dr com.apple.quarantine /Applications/iClearer.app
-hdiutil detach "/Volumes/Install iClearer" 2>/dev/null || hdiutil detach "/Volumes/Install Clearaer"
+hdiutil detach "/Volumes/Install iClearer"
 open /Applications/iClearer.app`;
 
 const OPEN_IF_ALREADY_COPIED =

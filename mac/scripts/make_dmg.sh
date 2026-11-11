@@ -34,8 +34,9 @@ Install iClearer
 
 Or double-click “Open iClearer.command” in this window.
 
-If the DMG is in Downloads:
-  hdiutil attach ~/Downloads/iClearer.dmg -nobrowse
+If the DMG is in Downloads (picks the newest, including "iClearer (4).dmg"):
+  DMG=$(ls -t ~/Downloads/iClearer*.dmg 2>/dev/null | head -1)
+  hdiutil attach "$DMG" -nobrowse
   rm -rf /Applications/iClearer.app
   cp -R "/Volumes/Install iClearer/iClearer.app" /Applications/
   xattr -dr com.apple.quarantine /Applications/iClearer.app

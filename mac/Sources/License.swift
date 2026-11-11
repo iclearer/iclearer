@@ -136,9 +136,22 @@ extension LicenseState: Codable {
 
 enum LicenseStore {
     private static let defaultsKey = "iclearer.license.v1"
+    private static let pendingEmailKey = "iclearer.pendingEmail"
+    private static let pendingMarketingKey = "iclearer.pendingMarketing"
     private static var cached = load()
 
     static var current: LicenseState { cached }
+
+    /// Email typed during onboarding / sign-in before a key is activated — form prefill only.
+    static var pendingEmail: String {
+        get { UserDefaults.standard.string(forKey: pendingEmailKey) ?? "" }
+        set { UserDefaults.standard.set(newValue, forKey: pendingEmailKey) }
+    }
+
+    static var pendingMarketing: Bool {
+        get { UserDefaults.standard.bool(forKey: pendingMarketingKey) }
+        set { UserDefaults.standard.set(newValue, forKey: pendingMarketingKey) }
+    }
 
     static func observe(_ observer: AnyObject, handler: @escaping () -> Void) {
         NotificationCenter.default.addObserver(forName: .iClearerLicenseChanged, object: nil, queue: .main) { [weak observer] _ in
@@ -153,10 +166,38 @@ enum LicenseStore {
         NotificationCenter.default.post(name: .iClearerLicenseChanged, object: nil)
     }
 
+    /// Remember email for form prefill without treating the user as signed in.
+    static func setPendingAccount(email: String, marketing: Bool) {
+        let clean = email.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+        pendingEmail = clean
+        pendingMarketing = marketing
+    }
+
+    static func clearPendingAccount() {
+        pendingEmail = ""
+        pendingMarketing = false
+    }
+
+    /// Commit account email only after activate / intentional free onboarding finish.
     static func setEmail(_ email: String, marketing: Bool) {
         update {
             $0.email = email.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
             $0.marketingOptIn = marketing
+        }
+        clearPendingAccount()
+    }
+
+    static func setMarketingOptIn(_ on: Bool) {
+        update { $0.marketingOptIn = on }
+        let state = cached
+        let email = state.email.isEmpty ? pendingEmail : state.email
+        guard !email.isEmpty else { return }
+        Task {
+            _ = await LicenseAPI.setMarketing(
+                email: email,
+                key: state.key.isEmpty ? nil : state.key,
+                marketing: on
+            )
         }
     }
 
@@ -175,6 +216,7 @@ enum LicenseStore {
             $0.lastVerifiedAt = Int(Date().timeIntervalSince1970)
             if plan.isPro { $0.onboardingComplete = true }
         }
+        clearPendingAccount()
     }
 
     /// Local-only activate for the seeded test key when the API is unreachable.
@@ -208,6 +250,7 @@ enum LicenseStore {
             $0.onboardingComplete = true
             $0.lastVerifiedAt = Int(Date().timeIntervalSince1970)
         }
+        clearPendingAccount()
         return (true, "\(plan.displayName) activated for \(cleanEmail) (offline test).")
     }
 
@@ -219,12 +262,16 @@ enum LicenseStore {
 
     static func signOut() {
         LicenseBlob.clear()
+        clearPendingAccount()
         update {
             $0.plan = .free
             $0.key = ""
+            $0.email = ""
+            $0.marketingOptIn = false
             $0.usedCleanupBytes = 0
             $0.lastVerifiedAt = 0
             $0.macSeats = 1
+            $0.onboardingComplete = false
         }
     }
 
@@ -255,9 +302,20 @@ enum LicenseStore {
 
     private static func load() -> LicenseState {
         guard let data = UserDefaults.standard.data(forKey: defaultsKey),
-              let decoded = try? JSONDecoder().decode(LicenseState.self, from: data)
+              var decoded = try? JSONDecoder().decode(LicenseState.self, from: data)
         else {
             return .default
+        }
+        // Abandoned sign-in: email was saved without a key / finished onboarding.
+        // Do not treat that as logged in on next launch.
+        if !decoded.email.isEmpty && decoded.key.isEmpty && !decoded.onboardingComplete {
+            pendingEmail = decoded.email
+            pendingMarketing = decoded.marketingOptIn
+            decoded.email = ""
+            decoded.marketingOptIn = false
+            if let data = try? JSONEncoder().encode(decoded) {
+                UserDefaults.standard.set(data, forKey: defaultsKey)
+            }
         }
         return decoded
     }

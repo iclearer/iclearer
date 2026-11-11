@@ -87,6 +87,18 @@ enum LicenseAPI {
         ])
     }
 
+    static func setMarketing(email: String, key: String?, marketing: Bool) async -> LicenseAPIResponse {
+        var body: [String: Any] = [
+            "action": "set_marketing",
+            "email": email,
+            "marketing_opt_in": marketing
+        ]
+        if let key, !key.isEmpty {
+            body["key"] = key
+        }
+        return await post(body)
+    }
+
     private static func post(_ body: [String: Any]) async -> LicenseAPIResponse {
         var request = URLRequest(url: LicenseConfig.licenseAPIURL)
         request.httpMethod = "POST"

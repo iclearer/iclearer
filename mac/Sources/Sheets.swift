@@ -369,7 +369,9 @@ final class OnboardingController: NSViewController {
             "We use it for your license, receipts and security notices, and to restore your plan on a new Mac."
         )
 
-        let existing = LicenseStore.current.email
+        let existing = LicenseStore.current.email.isEmpty
+            ? LicenseStore.pendingEmail
+            : LicenseStore.current.email
         let input = makeSheetInput(
             placeholder: "you@example.com",
             value: existing.isEmpty ? "" : existing
@@ -525,7 +527,8 @@ final class OnboardingController: NSViewController {
             render()
             return
         }
-        LicenseStore.setEmail(email, marketing: marketing)
+        // Prefill only — do not mark signed in until a key is activated.
+        LicenseStore.setPendingAccount(email: email, marketing: marketing)
         AppState.shared.showToast("Creating your account…")
         Task {
             let response = await LicenseAPI.signup(email: email, marketing: marketing)
@@ -548,10 +551,16 @@ final class OnboardingController: NSViewController {
     }
     @objc private func start() {
         guard fdaAllowed else { return }
-        if LicenseStore.current.email.isEmpty {
+        let email = LicenseStore.current.email.isEmpty
+            ? LicenseStore.pendingEmail
+            : LicenseStore.current.email
+        if email.isEmpty {
             step = 1
             render()
             return
+        }
+        if LicenseStore.current.email.isEmpty {
+            LicenseStore.setEmail(email, marketing: LicenseStore.pendingMarketing)
         }
         LicenseStore.completeOnboarding()
         dismissSheet(from: view)
@@ -843,7 +852,10 @@ final class SignInController: NSViewController {
         body.translatesAutoresizingMaskIntoConstraints = false
         body.widthAnchor.constraint(equalToConstant: contentW).isActive = true
 
-        let email = makeSheetInput(placeholder: "Email", value: LicenseStore.current.email)
+        let prefill = LicenseStore.current.email.isEmpty
+            ? LicenseStore.pendingEmail
+            : LicenseStore.current.email
+        let email = makeSheetInput(placeholder: "Email", value: prefill)
         emailField = email.field
         let key = makeSheetInput(placeholder: "License key, for example ICLR-XXXX-XXXX-XXXX")
         keyField = key.field

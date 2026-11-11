@@ -47,6 +47,8 @@ Deno.serve(async (req) => {
         return await verifyKey(body);
       case "upgrade":
         return await upgrade(body);
+      case "set_marketing":
+        return await setMarketing(body);
       default:
         return json({ ok: false, error: "Unknown action" }, 400);
     }
@@ -100,6 +102,8 @@ async function signup(body: Body) {
       })
       .eq("id", license.id);
   }
+
+  await upsertMarketingContact(email, marketing, created ? "signup" : "signup_existing");
 
   const mail = await sendEmail(
     licenseKeyEmail(email, license!.license_key, String(license!.plan)),
@@ -480,6 +484,60 @@ async function upgrade(body: Body) {
     upgraded: true,
     message: `Same key upgraded to ${safePlan}. No new key was issued.`,
   });
+}
+
+async function setMarketing(body: Body) {
+  const email = normalizeEmail(String(body.email ?? ""));
+  const marketing = Boolean(body.marketing_opt_in ?? body.marketing);
+  const key = String(body.key ?? "").trim().toUpperCase();
+  if (!isValidEmail(email)) return json({ ok: false, error: "Enter a valid email address." }, 400);
+
+  const db = adminClient();
+
+  if (key) {
+    const { data: license } = await db
+      .from("iclearer_licenses")
+      .select("id, email, license_key")
+      .eq("license_key", key)
+      .maybeSingle();
+    if (!license) return json({ ok: false, error: "That license key isn’t recognized." }, 404);
+    if (normalizeEmail(license.email) !== email) {
+      return json({ ok: false, error: "Email doesn’t match this license key." }, 403);
+    }
+    await db
+      .from("iclearer_licenses")
+      .update({
+        marketing_opt_in: marketing,
+        marketing_opt_in_at: marketing ? new Date().toISOString() : null,
+        updated_at: new Date().toISOString(),
+      })
+      .eq("id", license.id);
+  } else if (!marketing) {
+    // Opt-out without a key only updates the mailing list row for this email.
+  } else {
+    // Opt-in without a key (pre-activate signup path) still lands on the list.
+  }
+
+  await upsertMarketingContact(email, marketing, key ? "settings" : "signup");
+  return json({
+    ok: true,
+    email,
+    marketing_opt_in: marketing,
+    message: marketing ? "You’ll get product updates." : "Unsubscribed from product updates.",
+  });
+}
+
+async function upsertMarketingContact(email: string, optedIn: boolean, source: string) {
+  const db = adminClient();
+  const now = new Date().toISOString();
+  const payload = optedIn
+    ? { email, opted_in: true, opted_in_at: now, opted_out_at: null, source, updated_at: now }
+    : { email, opted_in: false, opted_out_at: now, source, updated_at: now };
+  const { error } = await db.from("iclearer_marketing_contacts").upsert(payload, { onConflict: "email" });
+  if (error) {
+    // Table may not be migrated yet — don't fail signup/activate.
+    console.error("[license-api] marketing_contacts", error.message);
+  }
 }
 
 async function issueBlob(args: {

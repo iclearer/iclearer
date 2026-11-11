@@ -29,9 +29,9 @@ else
   echo "Installing iClearer ($CHIP)."
 fi
 
-SRC=""
-if [[ -f "$HOME/Downloads/iClearer.dmg" ]]; then
-  SRC="$HOME/Downloads/iClearer.dmg"
+# Newest local download wins — Safari names duplicates "iClearer (2).dmg", etc.
+SRC="$(ls -t "$HOME"/Downloads/iClearer*.dmg 2>/dev/null | head -1 || true)"
+if [[ -n "${SRC:-}" && -f "$SRC" ]]; then
   echo "Using $SRC"
 else
   echo "Downloading iClearer…"
@@ -47,9 +47,34 @@ if [[ ! -d "$MOUNT/iClearer.app" ]]; then
   exit 1
 fi
 
+BIN="$MOUNT/iClearer.app/Contents/MacOS/iClearer"
+if [[ -f "$BIN" ]]; then
+  ARCHS="$(lipo -archs "$BIN" 2>/dev/null || true)"
+  if [[ -n "$ARCHS" ]]; then
+    case "$CHIP" in
+      arm64)
+        if ! printf '%s' "$ARCHS" | grep -qw arm64; then
+          echo "This DMG is not built for Apple Silicon ($ARCHS)." >&2
+          exit 1
+        fi
+        ;;
+      x86_64)
+        if ! printf '%s' "$ARCHS" | grep -Eqw 'x86_64|i386'; then
+          echo "This DMG is not built for Intel Macs ($ARCHS). Download the latest iClearer.dmg from iclearer.com." >&2
+          exit 1
+        fi
+        ;;
+    esac
+  fi
+fi
+
 echo "Installing to $APP_DEST"
 rm -rf "$APP_DEST"
 cp -R "$MOUNT/iClearer.app" "$APP_DEST"
 xattr -dr com.apple.quarantine "$APP_DEST" 2>/dev/null || true
+
+# Detach before open so LaunchServices sees the installed copy, not the volume.
+hdiutil detach "$MOUNT" >/dev/null 2>&1 || true
+sleep 0.4
 open "$APP_DEST"
 echo "iClearer is installed. You can delete the DMG in Downloads."

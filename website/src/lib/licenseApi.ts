@@ -47,6 +47,15 @@ export function signup(email: string, marketing: boolean) {
   return post({ action: "signup", email, marketing_opt_in: marketing });
 }
 
+export function setMarketing(email: string, key: string, marketing: boolean) {
+  return post({
+    action: "set_marketing",
+    email,
+    key,
+    marketing_opt_in: marketing,
+  });
+}
+
 export function resendKey(email: string) {
   return post({ action: "resend_key", email });
 }
@@ -109,10 +118,14 @@ export async function startCheckout(opts: {
             license_key: opts.key.toUpperCase(),
             plan: opts.plan,
             macs: String(opts.macs),
+            marketing_opt_in: opts.marketing ? "true" : "false",
           },
           onComplete: async () => {
             // Webhook upgrades the key; also upgrade optimistically for snappy UI.
             const up = await upgradeLicense(opts);
+            if (opts.marketing) {
+              await setMarketing(opts.email, opts.key, true);
+            }
             finish({
               ok: true,
               upgraded: true,
@@ -137,6 +150,9 @@ export async function startCheckout(opts: {
 
   // Payments UI not wired / sandbox without Paddle.js — upgrade same key.
   const up = await upgradeLicense(opts);
+  if (up.ok && opts.marketing) {
+    await setMarketing(opts.email, opts.key, true);
+  }
   if (up.ok) {
     up.message =
       up.message ||

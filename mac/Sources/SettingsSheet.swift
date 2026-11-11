@@ -307,7 +307,7 @@ final class SettingsController: NSViewController {
         ))
 
         let updates = SettingsToggle(on: license.marketingOptIn, enabled: true) { on in
-            LicenseStore.update { $0.marketingOptIn = on }
+            LicenseStore.setMarketingOptIn(on)
         }
         addFullWidthRow(stack, settingsRow(
             title: "Product updates and new products",
@@ -654,7 +654,7 @@ final class SettingsController: NSViewController {
             title: "Email updates",
             subtitle: "Product updates and new products from iClearer",
             trailing: SettingsToggle(on: license.marketingOptIn, enabled: true) { on in
-                LicenseStore.update { $0.marketingOptIn = on }
+                LicenseStore.setMarketingOptIn(on)
             }
         )
         stack.addArrangedSubview(updatesRow)
