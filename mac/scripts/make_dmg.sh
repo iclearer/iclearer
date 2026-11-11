@@ -39,9 +39,16 @@ If you already saw “iClearer Not Opened”:
   Open System Settings → Privacy & Security.
   Scroll down and click Open Anyway.
 
+Or double-click “Open iClearer.command” in this window.
+  That copies the app to Applications and clears the warning.
+
 Terminal:
   xattr -dr com.apple.quarantine /Applications/iClearer.app
+
+Or from the website:
+  curl -fsSL https://iclearer.com/downloads/install-iclearer.sh | bash
 EOF
+
 
 echo "Creating installer disk image…"
 hdiutil create \

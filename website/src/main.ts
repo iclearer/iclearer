@@ -346,6 +346,24 @@ function wireActions() {
     e.preventDefault();
     goCreateAccount();
   });
+  document.getElementById("copy-install")?.addEventListener("click", async () => {
+    const cmd =
+      document.getElementById("install-cmd")?.textContent?.trim() ||
+      "curl -fsSL https://iclearer.com/downloads/install-iclearer.sh | bash";
+    try {
+      await navigator.clipboard.writeText(cmd);
+      const btn = document.getElementById("copy-install");
+      if (btn) {
+        const prev = btn.textContent;
+        btn.textContent = "Copied";
+        setTimeout(() => {
+          btn.textContent = prev || "Copy";
+        }, 1600);
+      }
+    } catch {
+      /* ignore */
+    }
+  });
   modal()?.addEventListener("click", (event) => {
     if (event.target === modal()) closeModal();
   });

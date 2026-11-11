@@ -33,9 +33,6 @@ SRC=""
 if [[ -f "$HOME/Downloads/iClearer.dmg" ]]; then
   SRC="$HOME/Downloads/iClearer.dmg"
   echo "Using $SRC"
-elif [[ -f "$HOME/Downloads/Clearaer.dmg" ]]; then
-  SRC="$HOME/Downloads/Clearaer.dmg"
-  echo "Using $SRC"
 else
   echo "Downloading iClearer…"
   curl -fL --progress-bar -o "$WORK/iClearer.dmg" "$DMG_URL"
@@ -45,20 +42,14 @@ fi
 mkdir -p "$MOUNT"
 hdiutil attach "$SRC" -nobrowse -quiet -mountpoint "$MOUNT"
 
-# DMG may still ship as Clearaer.app until the Mac binary is rebuilt.
-APP_SRC=""
-if [[ -d "$MOUNT/iClearer.app" ]]; then
-  APP_SRC="$MOUNT/iClearer.app"
-elif [[ -d "$MOUNT/Clearaer.app" ]]; then
-  APP_SRC="$MOUNT/Clearaer.app"
-else
+if [[ ! -d "$MOUNT/iClearer.app" ]]; then
   echo "iClearer.app was not found in the disk image." >&2
   exit 1
 fi
 
 echo "Installing to $APP_DEST"
-rm -rf "$APP_DEST" /Applications/Clearaer.app
-cp -R "$APP_SRC" "$APP_DEST"
+rm -rf "$APP_DEST"
+cp -R "$MOUNT/iClearer.app" "$APP_DEST"
 xattr -dr com.apple.quarantine "$APP_DEST" 2>/dev/null || true
 open "$APP_DEST"
 echo "iClearer is installed. You can delete the DMG in Downloads."
