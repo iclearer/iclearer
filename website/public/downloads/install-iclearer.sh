@@ -29,10 +29,22 @@ else
   echo "Installing iClearer ($CHIP)."
 fi
 
-# Newest local download wins — Safari names duplicates "iClearer (2).dmg", etc.
-SRC="$(ls -t "$HOME"/Downloads/iClearer*.dmg 2>/dev/null | head -1 || true)"
+# Newest by modification time (Safari names duplicates "iClearer (4).dmg", etc.).
+# Walk newest → oldest and skip tiny/incomplete downloads.
+SRC=""
+while IFS= read -r candidate; do
+  [[ -f "$candidate" ]] || continue
+  size="$(stat -f%z "$candidate" 2>/dev/null || echo 0)"
+  # Real DMG is ~1–2 MB; skip truncated downloads under 500 KB.
+  if [[ "$size" -ge 500000 ]]; then
+    SRC="$candidate"
+    break
+  fi
+  echo "Skipping incomplete download: $candidate (${size} bytes)"
+done < <(ls -t "$HOME"/Downloads/iClearer*.dmg 2>/dev/null || true)
+
 if [[ -n "${SRC:-}" && -f "$SRC" ]]; then
-  echo "Using $SRC"
+  echo "Using newest DMG: $SRC"
 else
   echo "Downloading iClearer…"
   curl -fL --progress-bar -o "$WORK/iClearer.dmg" "$DMG_URL"

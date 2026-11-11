@@ -29,10 +29,22 @@ else
   echo "Installing iClearer ($CHIP)."
 fi
 
+# Newest by modification time (Safari names duplicates "iClearer (4).dmg", etc.).
+# Walk newest → oldest and skip tiny/incomplete downloads.
 SRC=""
-if [[ -f "$HOME/Downloads/iClearer.dmg" ]]; then
-  SRC="$HOME/Downloads/iClearer.dmg"
-  echo "Using $SRC"
+while IFS= read -r candidate; do
+  [[ -f "$candidate" ]] || continue
+  size="$(stat -f%z "$candidate" 2>/dev/null || echo 0)"
+  # Real DMG is ~1–2 MB; skip truncated downloads under 500 KB.
+  if [[ "$size" -ge 500000 ]]; then
+    SRC="$candidate"
+    break
+  fi
+  echo "Skipping incomplete download: $candidate (${size} bytes)"
+done < <(ls -t "$HOME"/Downloads/iClearer*.dmg 2>/dev/null || true)
+
+if [[ -n "${SRC:-}" && -f "$SRC" ]]; then
+  echo "Using newest DMG: $SRC"
 else
   echo "Downloading iClearer…"
   curl -fL --progress-bar -o "$WORK/iClearer.dmg" "$DMG_URL"
@@ -47,9 +59,34 @@ if [[ ! -d "$MOUNT/iClearer.app" ]]; then
   exit 1
 fi
 
+BIN="$MOUNT/iClearer.app/Contents/MacOS/iClearer"
+if [[ -f "$BIN" ]]; then
+  ARCHS="$(lipo -archs "$BIN" 2>/dev/null || true)"
+  if [[ -n "$ARCHS" ]]; then
+    case "$CHIP" in
+      arm64)
+        if ! printf '%s' "$ARCHS" | grep -qw arm64; then
+          echo "This DMG is not built for Apple Silicon ($ARCHS)." >&2
+          exit 1
+        fi
+        ;;
+      x86_64)
+        if ! printf '%s' "$ARCHS" | grep -Eqw 'x86_64|i386'; then
+          echo "This DMG is not built for Intel Macs ($ARCHS). Download the latest iClearer.dmg from iclearer.com." >&2
+          exit 1
+        fi
+        ;;
+    esac
+  fi
+fi
+
 echo "Installing to $APP_DEST"
 rm -rf "$APP_DEST"
 cp -R "$MOUNT/iClearer.app" "$APP_DEST"
 xattr -dr com.apple.quarantine "$APP_DEST" 2>/dev/null || true
+
+# Detach before open so LaunchServices sees the installed copy, not the volume.
+hdiutil detach "$MOUNT" >/dev/null 2>&1 || true
+sleep 0.4
 open "$APP_DEST"
 echo "iClearer is installed. You can delete the DMG in Downloads."

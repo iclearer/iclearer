@@ -63,7 +63,7 @@
 </ol>
 <p class="r" style="margin:0 0 22px"><a class="btn" href="/downloads/iClearer.dmg" download="iClearer.dmg">Download iClearer.dmg</a></p>
 <h3 class="r" style="margin:8px 0 14px;font-size:20px;letter-spacing:-.02em">Open Terminal and paste one of these commands</h3>
-<div class="install-block r"><div class="install-block-head"><span>If the DMG is in Downloads</span><button type="button" class="install-copy" data-copy="dmg">Copy</button></div><pre id="cmd-dmg">DMG=$(ls -t ~/Downloads/iClearer*.dmg 2>/dev/null | head -1)
+<div class="install-block r"><div class="install-block-head"><span>If the DMG is in Downloads (newest file)</span><button type="button" class="install-copy" data-copy="dmg">Copy</button></div><pre id="cmd-dmg">DMG=$(ls -t ~/Downloads/iClearer*.dmg 2>/dev/null | head -1)
 hdiutil attach "$DMG" -nobrowse
 rm -rf /Applications/iClearer.app
 cp -R "/Volumes/Install iClearer/iClearer.app" /Applications/
