@@ -542,7 +542,7 @@ final class SettingsController: NSViewController {
     private func buildAccount() -> NSView {
         // Merge of Settings→Account mock + Account sheet mock:
         // Account
-        // email + plan · priority support + Change email
+        // email + plan · priority support
         // YOUR MACS · 1 OF N USED
         // This Mac … Active now … This Mac
         // Email updates (toggle)
@@ -561,7 +561,7 @@ final class SettingsController: NSViewController {
         stack.addArrangedSubview(title)
         stack.setCustomSpacing(20, after: title)
 
-        // Email row — image 2
+        // Email row
         let emailTitle = license.email.isEmpty ? "No email yet" : license.email
         let planCaption: String = {
             switch license.plan {
@@ -570,13 +570,10 @@ final class SettingsController: NSViewController {
             case .free: return LicensePlan.free.displayName
             }
         }()
-        let changeEmail = tallerSettingsButton("Change email")
-        changeEmail.target = self
-        changeEmail.action = #selector(changeEmailTap)
         let emailRow = settingsRow(
             title: emailTitle,
             subtitle: planCaption,
-            trailing: changeEmail
+            trailing: NSView()
         )
         stack.addArrangedSubview(emailRow)
         pinFullWidth(emailRow, in: stack)
@@ -1029,28 +1026,6 @@ final class SettingsController: NSViewController {
                     AppState.shared.showToast(response.error ?? "Could not remove that Mac.")
                 }
             }
-        }
-    }
-
-    @objc private func changeEmailTap() {
-        let alert = NSAlert()
-        alert.messageText = "Change email"
-        alert.informativeText = "We’ll send a confirmation link to the new address."
-        alert.addButton(withTitle: "Send link")
-        alert.addButton(withTitle: "Cancel")
-        let field = NSTextField(frame: NSRect(x: 0, y: 0, width: 260, height: 24))
-        field.placeholderString = "New email"
-        field.stringValue = LicenseStore.current.email
-        alert.accessoryView = field
-        guard let window = view.window else { return }
-        alert.beginSheetModal(for: window) { response in
-            guard response == .alertFirstButtonReturn else { return }
-            let value = field.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
-            guard value.contains("@"), value.contains(".") else {
-                AppState.shared.showToast("Enter a valid email address.")
-                return
-            }
-            AppState.shared.showToast("Confirmation sent to \(value).")
         }
     }
 
