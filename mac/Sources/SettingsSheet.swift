@@ -670,13 +670,16 @@ final class SettingsController: NSViewController {
             pinFullWidth(keyRow, in: stack)
         }
 
+        let refresh = tallerSettingsButton("Refresh plan")
+        refresh.target = self
+        refresh.action = #selector(refreshPlan)
         let restore = tallerSettingsButton("Restore purchase")
         restore.target = self
         restore.action = #selector(restorePurchase)
         let signOutBtn = tallerSettingsButton("Sign out")
         signOutBtn.target = self
         signOutBtn.action = #selector(signOut)
-        let footer = NSStackView(views: [restore, signOutBtn])
+        let footer = NSStackView(views: [refresh, restore, signOutBtn])
         footer.orientation = .horizontal
         footer.alignment = .centerY
         footer.spacing = 10
@@ -1004,6 +1007,32 @@ final class SettingsController: NSViewController {
         }
     }
 
+    @objc private func refreshPlan() {
+        let email = LicenseStore.current.email
+        let key = LicenseStore.current.key
+        guard !email.isEmpty, !key.isEmpty else {
+            AppState.shared.showToast("Sign in with your email and license key first.")
+            return
+        }
+        AppState.shared.showToast("Refreshing your plan…")
+        Task {
+            let response = await LicenseAPI.heartbeat(email: email, key: key)
+            await MainActor.run {
+                if response.ok {
+                    LicenseStore.applyRemote(response)
+                    self.renderTab()
+                    AppState.shared.showToast(
+                        LicenseStore.current.isPro
+                            ? "You’re on \(LicenseStore.current.plan.displayName)."
+                            : "Still on the free plan. Finish checkout, then tap Refresh plan."
+                    )
+                } else {
+                    AppState.shared.showToast(response.error ?? "Could not refresh. Try again in a moment.")
+                }
+            }
+        }
+    }
+
     @objc private func restorePurchase() {
         let email = LicenseStore.current.email
         let key = LicenseStore.current.key
@@ -1017,6 +1046,7 @@ final class SettingsController: NSViewController {
             await MainActor.run {
                 if response.ok {
                     LicenseStore.applyRemote(response)
+                    self.renderTab()
                     AppState.shared.showToast(response.message ?? "Purchase restored.")
                 } else {
                     AppState.shared.showToast(response.error ?? "No active purchase found.")

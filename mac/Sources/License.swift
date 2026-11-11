@@ -288,15 +288,19 @@ enum LicenseStore {
         update { $0.onboardingComplete = true }
     }
 
-    /// Refresh signed license when online (call from app launch).
-    static func heartbeatIfNeeded() {
+    /// Refresh signed license when online (call from launch and when the app becomes active).
+    static func heartbeatIfNeeded(announceUpgrade: Bool = true) {
         let state = cached
         guard !state.key.isEmpty, !state.email.isEmpty else { return }
+        let wasPro = state.plan.isPro
         Task {
             let response = await LicenseAPI.heartbeat(email: state.email, key: state.key)
             await MainActor.run {
                 if response.ok {
                     applyRemote(response)
+                    if announceUpgrade, !wasPro, current.plan.isPro {
+                        AppState.shared.showToast("You’re on \(current.plan.displayName). Thanks for upgrading.")
+                    }
                 } else if let err = response.error, err.lowercased().contains("not activated") {
                     // Device missing — leave local state; user can re-activate.
                 }

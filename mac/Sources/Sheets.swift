@@ -157,6 +157,33 @@ final class SheetPresenter {
     }
 }
 
+/// Top-leading close control for modal sheets (parent traffic lights are disabled while a sheet is up).
+private func addSheetCloseButton(to root: NSView, target: AnyObject, action: Selector) {
+    let btn = NSButton(title: "", target: target, action: action)
+    btn.bezelStyle = .inline
+    btn.isBordered = false
+    btn.image = NSImage(systemSymbolName: "xmark", accessibilityDescription: "Close")
+    btn.contentTintColor = NSColor(srgbRed: 0x9A / 255, green: 0xA8 / 255, blue: 0xB6 / 255, alpha: 1)
+    btn.toolTip = "Close"
+    btn.focusRingType = .none
+    btn.translatesAutoresizingMaskIntoConstraints = false
+    root.addSubview(btn)
+    NSLayoutConstraint.activate([
+        btn.leadingAnchor.constraint(equalTo: root.leadingAnchor, constant: 14),
+        btn.topAnchor.constraint(equalTo: root.topAnchor, constant: 12),
+        btn.widthAnchor.constraint(equalToConstant: 28),
+        btn.heightAnchor.constraint(equalToConstant: 28)
+    ])
+}
+
+private func quitOrDismissSheet(from view: NSView) {
+    dismissSheet(from: view)
+    // Welcome / sign-in are blocking first-run sheets — closing them quits, like Cursor.
+    DispatchQueue.main.async {
+        NSApp.terminate(nil)
+    }
+}
+
 private func sheetRoot(width: CGFloat = 520, height: CGFloat = 520) -> NSView {
     // Prototype `.sh` card: --cd dark #1A2027, radius 26.
     let view = NSView(frame: NSRect(x: 0, y: 0, width: width, height: height))
@@ -305,6 +332,8 @@ final class OnboardingController: NSViewController {
             stack.bottomAnchor.constraint(equalTo: column.bottomAnchor)
         ])
 
+        addSheetCloseButton(to: view, target: self, action: #selector(closeAndQuit))
+
         // Measure content, then shrink the sheet so bottom pad matches top.
         view.setFrameSize(NSSize(width: cardW, height: 900))
         view.layoutSubtreeIfNeeded()
@@ -313,6 +342,8 @@ final class OnboardingController: NSViewController {
         view.setFrameSize(size)
         view.window?.setContentSize(size)
     }
+
+    @objc private func closeAndQuit() { quitOrDismissSheet(from: view) }
 
     private func fullWidth(_ view: NSView) {
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -764,7 +795,8 @@ final class UpgradeController: NSViewController {
         ]
         if let url = comps.url {
             NSWorkspace.shared.open(url)
-            AppState.shared.showToast("Complete checkout in your browser. Your same key upgrades — each Mac is linked as a seat.")
+            // Heartbeat runs again when the app becomes active after checkout.
+            AppState.shared.showToast("Complete checkout in your browser. Come back here — your plan refreshes automatically.")
         }
         dismissSheet(from: view)
     }
@@ -914,6 +946,8 @@ final class SignInController: NSViewController {
             stack.bottomAnchor.constraint(equalTo: column.bottomAnchor)
         ])
 
+        addSheetCloseButton(to: view, target: self, action: #selector(closeAndQuit))
+
         view.setFrameSize(NSSize(width: cardW, height: 900))
         view.layoutSubtreeIfNeeded()
         let fitted = ceil(stack.fittingSize.height) + edgePad * 2
@@ -921,6 +955,8 @@ final class SignInController: NSViewController {
         view.setFrameSize(size)
         view.window?.setContentSize(size)
     }
+
+    @objc private func closeAndQuit() { quitOrDismissSheet(from: view) }
 
     private func makeSignUpFooter() -> NSView {
         let prefix = makeLabel("Don’t have an account? ", size: 12.5, weight: .regular, color: mu)

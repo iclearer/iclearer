@@ -37,10 +37,29 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         self.window = window
     }
 
+    /// When the user returns from checkout in the browser, pull the paid plan.
+    func applicationDidBecomeActive(_ notification: Notification) {
+        LicenseStore.heartbeatIfNeeded()
+    }
+
     func applicationSupportsSecureRestorableState(_ app: NSApplication) -> Bool { false }
 
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
         true
+    }
+
+    /// Sheets block the parent close button — end them first so Quit / red traffic light work.
+    func applicationShouldTerminate(_ sender: NSApplication) -> NSApplication.TerminateReply {
+        endOpenSheets()
+        return .terminateNow
+    }
+
+    private func endOpenSheets() {
+        for window in NSApp.windows {
+            if let sheet = window.attachedSheet {
+                window.endSheet(sheet)
+            }
+        }
     }
 
     private func buildMenus() {
@@ -72,15 +91,20 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         fileItem.submenu = file
         main.addItem(fileItem)
 
-        // Edit
+        // Edit — standard Cut/Copy/Paste go to the first responder (text fields).
+        // App-specific cleanup actions keep Shift+⌘ so they don’t steal typing shortcuts.
         let edit = NSMenu(title: "Edit")
-        edit.addItem(withTitle: "Undo Last Cleanup", action: #selector(MainViewController.menuUndo), keyEquivalent: "z")
+        edit.addItem(withTitle: "Undo", action: Selector(("undo:")), keyEquivalent: "z")
+        edit.addItem(withTitle: "Redo", action: Selector(("redo:")), keyEquivalent: "Z")
         edit.addItem(.separator())
-        edit.addItem(withTitle: "Select All", action: #selector(MainViewController.menuSelectAll), keyEquivalent: "a")
-        let safe = edit.addItem(withTitle: "Select Safe Only", action: #selector(MainViewController.menuSelectSafe), keyEquivalent: "s")
-        safe.keyEquivalentModifierMask = [.command, .shift]
-        let clear = edit.addItem(withTitle: "Clear Picks", action: #selector(MainViewController.menuClearPicks), keyEquivalent: "d")
-        clear.keyEquivalentModifierMask = [.command, .shift]
+        edit.addItem(withTitle: "Cut", action: #selector(NSText.cut(_:)), keyEquivalent: "x")
+        edit.addItem(withTitle: "Copy", action: #selector(NSText.copy(_:)), keyEquivalent: "c")
+        edit.addItem(withTitle: "Paste", action: #selector(NSText.paste(_:)), keyEquivalent: "v")
+        edit.addItem(withTitle: "Select All", action: #selector(NSText.selectAll(_:)), keyEquivalent: "a")
+        edit.addItem(.separator())
+        edit.addItem(withTitle: "Undo Last Cleanup", action: #selector(MainViewController.menuUndo), keyEquivalent: "")
+        edit.addItem(withTitle: "Select Safe Only", action: #selector(MainViewController.menuSelectSafe), keyEquivalent: "s").keyEquivalentModifierMask = [.command, .shift]
+        edit.addItem(withTitle: "Clear Picks", action: #selector(MainViewController.menuClearPicks), keyEquivalent: "d").keyEquivalentModifierMask = [.command, .shift]
         let editItem = NSMenuItem()
         editItem.submenu = edit
         main.addItem(editItem)

@@ -5,65 +5,345 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/assets/apple-touch-icon-180.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#ffffff" />
     <meta name="description" content="iClearer finds hidden caches, logs and leftovers on your Mac, shows what you’ll free, and moves it all to the Trash." />
     <title>iClearer – Clear space. Keep control.</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" />
     <link rel="stylesheet" href="/src/landing.css" />
   </head>
   <body>
 
 <svg id="defs" width="0" height="0" style="position:absolute" aria-hidden="true"></svg>
-<nav><div class="w"><a class="lg" href="#top"><svg viewBox="0 0 1024 1024"><use href="#ic-l"/></svg>iClearer</a><a class="nl" href="#features">Features</a><a class="nl" href="#trust">Safety</a><a class="nl" href="#pricing">Pricing</a><a class="nl" href="#install">Install</a><a class="nl" href="#faq">FAQ</a><span class="sp"></span><button class="ab" id="ab" aria-label="Appearance" aria-expanded="false" aria-controls="ap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="8.5"/><path d="M12 3.5a8.5 8.5 0 0 1 0 17z" fill="currentColor"/></svg></button><a class="btn s" href="#pricing" data-action="download">Download</a></div></nav>
-<div class="ap" id="ap" role="dialog" aria-label="Appearance" hidden><div class="al">Appearance</div><div class="seg" id="th"></div><div class="al">Glass</div><div class="gs"><span>Clear</span><input type="range" id="gl" min="0" max="100" value="50" aria-label="Glass, from clear to frosted"><span>Frosted</span></div><div class="al">Accent</div><div class="acs" id="acs"></div></div>
-<header class="hero" id="top"><div class="band"></div><div class="w c">
-<div class="pt"><svg viewBox="0 0 1024 1024" role="img" aria-label="iClearer"><use href="#ic-l"/></svg>iClearer</div>
-<h1>Clear space.<br><span class="gt">Keep control.</span></h1>
-<p class="sub">iClearer finds the hidden caches, logs and leftovers filling your Mac, shows exactly how much you’ll free, and moves it all to the Trash. Nothing is deleted for good.</p>
-<a class="btn" href="#pricing" data-action="download">Download for Mac</a><a class="lk" href="#features">See how it works ›</a>
-<p class="fine">Free to scan · Clean up to 500 MB free · Intel and Apple silicon</p><p class="fine pn">On a phone? Open this page on your Mac to download.</p>
-<div class="dev" id="dev"><svg class="bead" data-d="-34" style="width:96px;left:-48px;top:60px" viewBox="0 0 224 224"><use href="#g-scan"/></svg><svg class="bead" data-d="44" style="width:78px;right:-36px;top:-6px" viewBox="0 0 224 224"><use href="#g-dev"/></svg><svg class="bead" data-d="-52" style="width:112px;right:-56px;bottom:60px" viewBox="0 0 224 224"><use href="#g-safe"/></svg><svg class="bead" data-d="38" style="width:64px;left:-24px;bottom:10px" viewBox="0 0 224 224"><use href="#g-see"/></svg><div class="lid"><div class="scw" id="scw"><div class="nt"></div><div class="scr" id="scr"><div class="wall"></div><div class="mbar"><b>iClearer</b><span>File</span><span>Edit</span><span>View</span><span>Window</span><span>Help</span><i class="sp"></i><span>Wed 9:41 AM</span></div><div class="app"><div class="asb"><div class="atl2"><i></i><i></i><i></i></div><b class="on"><s style="--c:#5fa6da"></s>Overview</b><b><s style="--c:#7fcbe6"></s>Clean</b><b><s style="--c:#58c193"></s>Storage Map</b><b><s style="--c:#f6c36b"></s>Large &amp; Old Files</b><b><s style="--c:#8aa0c4"></s>Apps</b><b><s style="--c:#6b8197"></s>Builders</b><b><s style="--c:#f19a8e"></s>Startup Items</b><b><s style="--c:#9a8ae0"></s>Privacy Check</b><b><s style="--c:#5fd0c8"></s>History</b></div><div class="amn"><h4>Overview</h4><div class="ah"><small>FOUND ON YOUR MAC</small><strong>46.7 GB</strong><span>13.7 GB is Safe to clear now.</span><svg viewBox="0 0 224 224"><use href="#g-scan"/></svg></div><div class="at3"><div><b>13.5 GB</b>Everyday junk</div><div><b>33.2 GB</b>Builders and AI tools</div><div><b>80.9 GB</b>Large and old files</div></div></div></div><div class="dock"><i style="background:linear-gradient(#8fd0ff,#2d7ad6)"></i><i style="background:linear-gradient(#ffd27a,#ff9a3c)"></i><svg viewBox="0 0 1024 1024"><use href="#ic-l"/></svg><i style="background:linear-gradient(#9be8b5,#2fa86a)"></i><i style="background:linear-gradient(#f3a6c8,#c9578f)"></i><i style="background:linear-gradient(#cfd6de,#8d97a3)"></i></div></div></div></div><div class="base"></div></div>
-</div><div class="hz" id="hz"></div></header>
 
-<section id="features" style="padding-top:30px"><div class="w"><div class="c" style="margin-bottom:56px"><h2 class="rv">Everything your Mac<br>is hiding.</h2><p class="sub r">Clear, specific, and honest about what it finds.</p></div>
-<div class="chp blue"><div class="tx r"><svg class="gb" viewBox="0 0 224 224"><use href="#g-scan"/></svg><div class="kk">Scan</div><h2>Finds what Finder can’t.</h2><p>Hidden caches, logs and leftover folders from apps you removed long ago. iClearer looks everywhere your Mac keeps clutter and lists it in plain words.</p></div>
-<div class="mw r"><div class="mh">Scanning your Mac…<span id="sc">0 items checked</span></div><div class="pb"><i id="pbi"></i></div><div class="mq"><div><code><span>App log files</span><span>240 MB</span></code><code><span>Browser cache</span><span>1.2 GB</span></code><code><span>System temporary files</span><span>4.3 GB</span></code><code><span>Package manager cache</span><span>3.1 GB</span></code><code><span>System cache</span><span>18 MB</span></code><code><span>Developer build files</span><span>6.4 GB</span></code><code><span>App log files</span><span>240 MB</span></code><code><span>Browser cache</span><span>1.2 GB</span></code><code><span>System temporary files</span><span>4.3 GB</span></code><code><span>Package manager cache</span><span>3.1 GB</span></code><code><span>System cache</span><span>18 MB</span></code><code><span>Developer build files</span><span>6.4 GB</span></code></div></div><div class="tot"><span>Found</span><b>15.3 GB recoverable</b></div></div></div>
-<div class="chp sky rev"><div class="tx r"><svg class="gb" viewBox="0 0 224 224"><use href="#g-see"/></svg><div class="kk">See it first</div><h2>See the space first. Then decide.</h2><p>Tick folders and watch the total change before anything moves. Drag the bead to compare your Mac before and after.</p></div>
-<div class="mw r"><div class="ba" id="ba"><div class="bl bf"><h4>Before</h4><div class="fr">112 GB free</div><div class="bar" id="b1"></div><div class="lgd" id="l1"></div><p class="dt">Developer 123 GB · Other 41 GB</p></div><div class="bl af"><h4>After</h4><div class="fr">138 GB free</div><div class="bar" id="b2"></div><div class="lgd" style="visibility:hidden"><span>.</span></div><p class="dt">Developer 108 GB · Other 31 GB</p></div><input type="range" min="4" max="96" value="50" aria-label="Compare before and after"><div class="kn"></div></div><p class="fine" style="margin:12px 0 0">Illustration of a 512 GB Mac.</p></div></div>
-<div class="chp amber rev"><div class="tx r"><svg class="gb" viewBox="0 0 224 224"><use href="#g-lf"/></svg><div class="kk">Find the big stuff</div><h2>See where your space went.</h2><p>A Storage Map of your whole disk, plus the large and old files and forgotten apps hiding the most space. Preview anything before it moves.</p></div>
-<div class="mw r"><div class="mh">Storage Map<span>512 GB disk</span></div><div style="display:grid;grid-template-columns:150px 1fr;gap:16px;align-items:center;margin-top:10px"><svg viewBox="0 0 120 120" style="width:150px"><g fill="none" stroke-width="16" transform="rotate(-90 60 60)"><circle cx="60" cy="60" r="40" stroke="#5563c9" stroke-dasharray="47 205" /><circle cx="60" cy="60" r="40" stroke="#34465a" stroke-dasharray="58 205" stroke-dashoffset="-47"/><circle cx="60" cy="60" r="40" stroke="#3FA877" stroke-dasharray="36 215" stroke-dashoffset="-105"/><circle cx="60" cy="60" r="40" stroke="#fff" stroke-opacity=".5" stroke-dasharray="55 196" stroke-dashoffset="-196"/></g></svg><div><div class="tr" style="padding:7px 0"><i style="background:#5563c9;color:#5563c9;width:10px;height:10px"></i>Developer<span>118 GB</span></div><div class="tr" style="padding:7px 0"><i style="background:#34465a;color:#34465a;width:10px;height:10px"></i>Apps<span>96 GB</span></div><div class="tr" style="padding:7px 0"><i style="background:#3FA877;color:#3FA877;width:10px;height:10px"></i>Photos and media<span>74 GB</span></div></div></div><div class="mh" style="margin-top:16px">Not opened in months</div><div class="tr"><i style="background:rgba(255,255,255,.9);color:#c97a12">▢</i>Virtual machine<span>42.0 GB</span></div><div class="tr"><i style="background:rgba(255,255,255,.9);color:#c97a12">▢</i>Video project<span>18.2 GB</span></div></div></div>
-<div class="chp night"><div class="tx r"><svg class="gb" viewBox="0 0 224 224"><use href="#g-dev"/></svg><div class="kk">Builders</div><h2>Made for builders. Useful for everyone.</h2><p>Cleans npm, pip and Homebrew caches, plus Xcode and Cursor leftovers, on Intel and Apple silicon Macs. Logins stay blocked.</p></div>
-<div class="mw r"><div class="mh">Developer leftovers<span>Rebuildable</span></div><div style="margin-top:8px"><div class="mr"><span>Xcode DerivedData</span><s><u style="--w:92%"></u></s><span>6.4 GB</span></div><div class="mr"><span>npm cache</span><s><u style="--w:48%"></u></s><span>3.1 GB</span></div><div class="mr"><span>pip cache</span><s><u style="--w:22%"></u></s><span>1.4 GB</span></div><div class="mr"><span>Homebrew</span><s><u style="--w:14%"></u></s><span>0.9 GB</span></div><div class="mr"><span>Cursor leftovers</span><s><u style="--w:30%"></u></s><span>1.9 GB</span></div></div><div class="chs"><span>npm</span><span>pip</span><span>Homebrew</span><span>Xcode</span><span>Cursor</span></div></div></div>
-<div class="chp green rev"><div class="tx r"><svg class="gb" viewBox="0 0 224 224"><use href="#g-safe"/></svg><div class="kk">Safe by default</div><h2>Moves to Trash. Keychain stays.</h2><p>Nothing is permanently deleted, and you can undo a mistake. Every cleanup is saved in History, so you can restore anything. Accounts, Keychain and editor user data can never be selected, and you can add your own never-touch folders.</p></div>
-<div class="mw r"><div class="mh">Cleanup complete<span>Everything is in the Trash</span></div><div class="tr"><i>✓</i>Chrome cache<span>1.2 GB</span></div><div class="tr"><i>✓</i>npm cache<span>3.1 GB</span></div><div class="tr"><i>✓</i>User logs<span>240 MB</span><em class="undo" style="font-style:normal">Undo</em></div><div class="tr"><i>✓</i>Time Machine checked<span>3 days ago</span></div><div class="mh" style="margin-top:20px">Never touched</div><div class="chs"><span>🔒 Keychain</span><span>🔒 Accounts</span><span>🔒 Editor user data</span></div></div></div>
-</div></section>
-<section style="padding:40px 0 90px"><div class="w"><div class="st3">
-<div class="stat r"><div class="n"><b>500 MB</b></div><p>free cleanup on every Mac</p></div>
-<div class="stat r"><div class="n"><b>Trash</b></div><p>every cleanup is reversible</p></div>
-<div class="stat r"><div class="n"><b>Safe</b></div><p>Keychain and accounts stay locked</p></div></div></div></section>
-<section id="all"><div class="w c"><h2 class="rv">Everything in one app.</h2><p class="sub r">Everything you need to get space back, and nothing that scares you.</p><div class="eg"><div class="et r"><svg viewBox="0 0 224 224"><use href="#g-scan"/></svg><h3>Smart Scan</h3><p>Hidden caches, logs, leftovers, old installers and iOS backups.</p></div><div class="et r"><svg viewBox="0 0 224 224"><use href="#g-map"/></svg><h3>Storage Map</h3><p>See where every gigabyte went.</p></div><div class="et r"><svg viewBox="0 0 224 224"><use href="#g-lf"/></svg><h3>Large and old files</h3><p>Find the big ones. Preview before you decide.</p></div><div class="et r"><svg viewBox="0 0 224 224"><use href="#g-ap"/></svg><h3>App Uninstaller</h3><p>Remove an app and everything it left behind.</p></div><div class="et r"><svg viewBox="0 0 224 224"><use href="#g-dev"/></svg><h3>Builders pack</h3><p>Xcode, npm, pip, Homebrew, Docker and AI model leftovers.</p></div><div class="et r"><svg viewBox="0 0 224 224"><use href="#g-st"/></svg><h3>Startup Items</h3><p>Choose what opens when your Mac starts.</p></div><div class="et r"><svg viewBox="0 0 224 224"><use href="#g-pv"/></svg><h3>Privacy Check</h3><p>See which apps can use your camera, mic and files.</p></div><div class="et r"><svg viewBox="0 0 224 224"><use href="#g-hs"/></svg><h3>History</h3><p>Every cleanup saved, with one-click restore.</p></div></div><p class="r" style="margin:34px 0 0;color:var(--mut)"><b style="color:var(--fg)">Coming in 1.1:</b> Duplicate files · Menu bar monitor · Scheduled scans · Maintenance tasks</p></div></section>
-<section id="trust" class="alt"><div class="w c"><h2 class="rv">Nothing happens<br>behind your back.</h2><p class="sub r">A cleaner that deletes things has to earn your trust. These are the rules iClearer follows, every time.</p><div class="eg trust-grid"><div class="et r"><svg viewBox="0 0 224 224"><use href="#g-see"/></svg><h3>You decide every cleanup.</h3><p>Nothing is cleaned automatically. iClearer shows what it found, and you pick what goes.</p></div><div class="et r"><svg viewBox="0 0 224 224"><use href="#g-hs"/></svg><h3>Everything goes to the Trash.</h3><p>Nothing is permanently deleted. Undo works right away, and History keeps every cleanup so you can restore anything.</p></div><div class="et r"><svg viewBox="0 0 224 224"><use href="#g-safe"/></svg><h3>Some things can’t be selected.</h3><p>Keychain, accounts, editor data, passwords and keys in developer folders, and git repositories are off limits. You can add your own.</p></div><div class="et r"><svg viewBox="0 0 224 224"><use href="#g-pv"/></svg><h3>It checks your backup first.</h3><p>Before removing something that can’t be rebuilt, iClearer checks Time Machine and warns you if there is no recent backup.</p></div><div class="et r"><svg viewBox="0 0 224 224"><use href="#g-st"/></svg><h3>It stops when it’s unsure.</h3><p>On a macOS version iClearer hasn’t been tested on, it can still scan, but cleaning is switched off until you update.</p></div><div class="et r"><svg viewBox="0 0 224 224"><use href="#g-lf"/></svg><h3>You can read the rules.</h3><p>Our cleanup rules are public: the categories iClearer cleans and how each is labelled.</p></div></div><div class="r" style="margin:36px auto 0;max-width:720px;padding:22px 26px;border-radius:24px;background:var(--card);border:1px solid var(--ln);text-align:left"><b>What we collect.</b> <span style="color:var(--mut)">Your email, your plan and a hashed ID of your Mac, so we can manage your license seats. We never collect your files, file names or scan results. We only email you about updates and new products if you opt in.</span></div></div></section>
-<section id="design"><div class="w c"><h2 class="rv">Matches your Mac.<br>Whatever you picked.</h2><p class="sub r">iClearer follows Light, Dark and Tinted, your accent color and your Glass setting. Try it. This whole page changes with you.</p>
-<div class="mt r"><div class="set"><h3>Appearance</h3><div class="tls" id="th2"></div><div class="al">Accent color</div><div class="acs" id="acs2"></div><div class="al">Glass</div><div class="gs"><span>Clear</span><input type="range" id="gl2" min="0" max="100" value="50" aria-label="Glass, from clear to frosted"><span>Frosted</span></div><div class="al">App icon</div><div class="seg" id="ics" style="display:flex;margin:0"></div></div>
-<div class="pv"><div class="wl"></div><div class="mb2"><b>iClearer</b><span>File</span><span>View</span><span>Window</span></div><div class="pw"><div class="pwt"><i></i><i></i><i></i></div><div class="pr2"><b>Xcode DerivedData</b><em class="sf">Safe</em><span>6.4 GB</span></div><div class="pr2"><b>npm cache</b><em class="sf">Safe</em><span>3.1 GB</span></div><div class="pr2"><b>macOS temporary files</b><em class="ak">Ask first</em><span>4.3 GB</span></div><div class="pwb"><span class="btn">Clean Up · 9.5 GB</span></div></div><div class="dk2"><i style="background:linear-gradient(#8fd0ff,#2d7ad6)"></i><svg viewBox="0 0 1024 1024"><use class="pvi" href="#ic-l"/></svg><i style="background:linear-gradient(#9be8b5,#2fa86a)"></i><i style="background:linear-gradient(#cfd6de,#8d97a3)"></i></div></div></div></div></section>
-<section><div class="w c"><h2 class="rv">Loved by people who<br>care about their Mac.</h2><div class="q3">
-<div class="q r"><div class="st">★★★★★</div><p>“Thank you so much for this product, I have downloaded and used it. Well done.”</p><div class="who"><div class="av"></div><div>Israel Afolabi<small>Early user</small></div></div></div>
-<div class="q r"><div class="st">★★★★★</div><p>“Thank you so much, this saved me almost 30GBs of cache.”</p><div class="who"><div class="av"></div><div>Benjamin Mpano<small>Early user</small></div></div></div>
-<div class="q r"><div class="st">★★★★★</div><p>“Works perfectly. I recovered around 98GB total mostly Xcode cache, browser cache and old system logs.”</p><div class="who"><div class="av"></div><div>Emmanuel Eves<small>Early user</small></div></div></div></div>
-<div class="req r"><div><small>Works on</small><b>iMac, Mac mini, Mac Studio, MacBook Air and Pro</b></div><div><small>Chips</small><b>Intel and Apple silicon</b></div><div><small>macOS</small><b>macOS 13 Ventura and later</b></div><div><small>Price</small><b>Free to scan</b></div></div></div></section>
-<section id="pricing" class="alt"><div class="w c"><h2 class="rv">Free to scan.<br>Fair to keep.</h2><p class="sub r">Pay only when you want to clean beyond 500 MB.</p>
-<div class="seg" id="sp" role="group" aria-label="Billing"></div><br><div class="seg" id="sm" role="group" aria-label="Macs"></div>
-<div class="pr"><div class="pcd"><h3 style="margin:0;font-size:22px">Free</h3><div class="pc">$0</div><small style="color:var(--mut)">Forever</small><ul><li>Unlimited scans, by category</li><li>Clean up to 500 MB in total</li><li>Moves to Trash, with undo</li><li>Keychain and accounts protected</li></ul><a class="btn" style="background:transparent;color:var(--ac)!important;border:1.5px solid var(--ac);box-shadow:none" href="#pricing" data-action="download">Download free</a></div>
-<div class="pcd hl"><h3 style="margin:0;font-size:22px">iClearer</h3><div class="pc" id="pp"></div><small id="pn" style="color:var(--mut)"></small><ul id="pl"></ul><a class="btn" href="#pricing" data-action="buy">Buy iClearer</a><p class="fine">14-day money-back guarantee.</p></div></div></div><div class="r" style="max-width:800px;margin:40px auto 0;text-align:left"><table class="cmp"><tr><th>What each plan includes</th><th>Free</th><th>iClearer</th></tr><tr><td>Macs covered (choose 1, 2 or 5 at checkout)</td><td>1</td><td>1, 2 or 5</td></tr><tr><td>Scan by category, with sizes and Safe or Ask first labels</td><td>Yes</td><td>Yes</td></tr><tr><td>Item names, details and exact locations</td><td>Locked</td><td>Yes</td></tr><tr><td>Cleanup</td><td>500 MB in total</td><td>Unlimited</td></tr><tr><td>Storage Map</td><td>Big picture</td><td>Full drill-down</td></tr><tr><td>Large files</td><td>Kind and size, top 5</td><td>Names, locations, Quick Look</td></tr><tr><td>Apps</td><td>List only</td><td>Uninstall with leftovers</td></tr><tr><td>Builders pack</td><td>Scan only</td><td>Yes</td></tr><tr><td>History with restore, never-touch list</td><td>No</td><td>Yes</td></tr><tr><td>Startup items, privacy check</td><td>Preview</td><td>Yes</td></tr></table>
-<table class="cmp" style="margin-top:24px"><tr><th>One-time or subscription</th><th>One-time (version 1)</th><th>Monthly or yearly</th></tr><tr><td>Support for new macOS versions</td><td>Until version 2</td><td>Always</td></tr><tr><td>Version 2 and later</td><td>Discounted upgrade</td><td>Included</td></tr><tr><td>Scheduled scans and menu bar alerts (1.1)</td><td>No</td><td>Yes</td></tr><tr><td>Priority support</td><td>No</td><td>Yes</td></tr></table></div></section>
-<section id="install"><div class="w" style="max-width:780px"><div class="c" style="margin-bottom:28px"><h2 class="rv">Install iClearer</h2><p class="sub r">Download the DMG, then clear the first-open warning if macOS asks.</p></div>
-<ol class="install-steps r">
+<header class="hd" id="hd">
+  <div class="hd-in">
+    <div class="hd-pill">
+      <a class="hd-logo" href="#top"><img src="/assets/png/icon-glass-light-120.png" width="36" height="36" alt="">iClearer</a>
+      <nav class="hd-nav" aria-label="Main">
+        <a href="#features">Features</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#install">Install</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+      <div class="hd-cta">
+        <a class="btn sm ol" href="/downloads/iClearer.dmg" download="iClearer.dmg" data-action="download">Download Free</a>
+        <a class="btn sm" href="#pricing">Buy Now</a>
+      </div>
+      <button class="hd-menu" id="hd-menu" type="button" aria-label="Menu" aria-expanded="false" aria-controls="hd-drop"><i></i><i></i><i></i></button>
+    </div>
+    <div class="hd-drop" id="hd-drop" hidden>
+      <a href="#features">Features</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#install">Install</a>
+      <a href="#faq">FAQ</a>
+      <a class="btn" href="/downloads/iClearer.dmg" download="iClearer.dmg" data-action="download">Download Free</a>
+      <a class="btn ol" href="#pricing">Buy Now</a>
+    </div>
+  </div>
+</header>
+
+<main>
+<section class="hero" id="top">
+  <div class="hero-bg" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  <div class="hero-in">
+    <img class="hero-ic" src="/assets/png/icon-glass-light-512.png" width="150" height="150" alt="iClearer app icon">
+    <h1>iClearer<br>Clear space. <br class="br-xs">Keep control.</h1>
+    <p class="hero-tx">iClearer finds the hidden caches, logs and leftovers filling your Mac, shows exactly how much you’ll free, and moves it all to the Trash. Nothing is deleted for good.</p>
+    <div class="hero-cta">
+      <a class="btn ring" href="/downloads/iClearer.dmg" download="iClearer.dmg" data-action="download">Download Free</a>
+      <a class="btn ghost" href="#pricing">Buy Now</a>
+    </div>
+    <p class="hero-mb"><span>14</span>- day money-back guarantee</p>
+    <p class="hero-pn">On a phone? Open this page on your Mac to download.</p>
+  </div>
+</section>
+
+<div class="aw">
+  <ul class="aw-list">
+    <li><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M7 10h18M13 10V7h6v3M9.5 10l1 15h11l1-15M13.5 14.5v7M18.5 14.5v7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Moves to Trash<br>with undo</span></li>
+    <li><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="13" fill="currentColor"/><path d="M16 9v11M11 15.5l5 5 5-5" fill="none" stroke="var(--brand)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Free to scan<br>on every Mac</span></li>
+    <li class="num"><b>500 MB</b><span>of free cleanup<br>included</span></li>
+    <li><svg viewBox="0 0 32 32" aria-hidden="true"><rect x="9" y="9" width="14" height="14" rx="3" fill="currentColor"/><path d="M13 5v4M19 5v4M13 23v4M19 23v4M5 13h4M5 19h4M23 13h4M23 19h4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg><span>Intel and<br>Apple silicon</span></li>
+    <li><svg viewBox="0 0 32 32" aria-hidden="true"><rect x="7" y="14" width="18" height="13" rx="3.5" fill="currentColor"/><path d="M11 14v-3.5a5 5 0 0 1 10 0V14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg><span>Keychain stays<br>locked</span></li>
+  </ul>
+  <div class="aw-shot r">
+    <div class="shot lg" data-w="800" data-h="500"><div class="win" data-tab="Overview" style="--t:#2f78bd;--t2:#1c4f86">
+      <div class="pane">
+        <div class="ph"><div><b>Overview</b><span>Your Mac at a glance</span></div><em>Rescan</em></div>
+        <div class="ovc"><small>Found on your Mac</small><strong>46.7 GB</strong><p>13.7 GB of it is Safe to clear now. The rest needs a quick look from you.</p><div class="ovb"><span class="on">Clean Safe items</span><span>Review everything</span></div><svg viewBox="0 0 224 224" aria-hidden="true"><use href="#g-scan"/></svg></div>
+        <div class="tiles"><div><s style="--c:#5fb4e0"></s><b>13.5 GB</b>Everyday junk</div><div><s style="--c:#5b6b7d"></s><b>33.2 GB</b>Builders and AI tools</div><div><s style="--c:#f0b24a"></s><b>80.9 GB</b>Large and old files</div></div>
+        <div class="disk"><b>Your disk</b><div class="dbar"><i style="flex:27;background:#b7c0cc"></i><i style="flex:19;background:#34465a"></i><i style="flex:14;background:#d9a441"></i><i style="flex:8;background:#3fa877"></i><i style="flex:5;background:#4c8cc2"></i><i style="flex:27;background:#e6ebf0"></i></div><span>138 GB free of 512 GB.</span></div>
+      </div>
+    </div></div>
+  </div>
+</div>
+
+<section class="sec ach">
+  <div class="ach-hd">
+    <h2><span class="tx-ac">Honest</span> Mac cleanup</h2>
+    <p>What every Mac gets with iClearer</p>
+  </div>
+  <ul class="ach-list">
+    <li class="r" style="--g:#bfe0f7"><div class="ach-nm"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="2.5" width="19" height="19" rx="5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M7 12.5l3.2 3.2L17 9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Free cleanup</div><div class="ach-n">500 MB</div><svg class="ach-ic" viewBox="0 0 224 224" aria-hidden="true"><use href="#g-scan"/></svg></li>
+    <li class="r" style="--g:#bfeeda"><div class="ach-nm"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="2.5" width="19" height="19" rx="5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M7 12.5l3.2 3.2L17 9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Goes to the Trash first</div><div class="ach-n">100%</div><svg class="ach-ic" viewBox="0 0 224 224" aria-hidden="true"><use href="#g-safe"/></svg></li>
+    <li class="r" style="--g:#dcd5ff"><div class="ach-nm"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="2.5" width="19" height="19" rx="5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M7 12.5l3.2 3.2L17 9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Files we collect</div><div class="ach-n">0</div><svg class="ach-ic" viewBox="0 0 224 224" aria-hidden="true"><use href="#g-pv"/></svg></li>
+  </ul>
+</section>
+
+<section class="sec cu">
+  <h2>See what’s hiding, then get <span class="tx-ac">space back</span></h2>
+  <p class="cu-tx">Hidden caches, logs, old installers and leftovers from apps you removed long ago. iClearer lists them in plain words with Safe or Ask first labels, so you decide what goes.</p>
+  <a class="btn" href="/downloads/iClearer.dmg" download="iClearer.dmg" data-action="download">Download Free</a>
+  <div class="cu-img r">
+    <div class="cu-bg" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+    <div class="cu-fg">
+      <div class="shot"><div class="win" data-tab="Clean" style="--t:#2f78bd;--t2:#1c4f86">
+        <div class="pane">
+          <div class="ph"><div><b>Clean</b><span>Pick what goes. Nothing moves until you say so.</span></div><em>Rescan</em></div>
+          <div class="rows">
+            <div class="rw"><i class="ck on"></i><b>Xcode DerivedData</b><u class="sf">Safe</u><span>6.4 GB</span></div>
+            <div class="rw"><i class="ck on"></i><b>npm cache</b><u class="sf">Safe</u><span>3.1 GB</span></div>
+            <div class="rw"><i class="ck on"></i><b>Browser cache</b><u class="sf">Safe</u><span>1.2 GB</span></div>
+            <div class="rw"><i class="ck on"></i><b>User logs</b><u class="sf">Safe</u><span>240 MB</span></div>
+            <div class="rw"><i class="ck"></i><b>macOS temporary files</b><u class="ak">Ask first</u><span>4.3 GB</span></div>
+          </div>
+          <div class="pf"><span>Found 5 folders · 15.2 GB recoverable</span><em class="cta">Clean Up · 10.9 GB</em></div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+</section>
+
+<div id="features">
+<section class="sec ft" style="--fa:#2a7fc9">
+  <div class="ft-tx">
+    <svg class="ft-ic" viewBox="0 0 224 224" aria-hidden="true"><use href="#g-scan"/></svg>
+    <h2><span>Finds</span> what Finder can’t</h2>
+    <p>Hidden caches, logs and leftover folders from apps you removed long ago. iClearer looks everywhere your Mac keeps clutter and lists it in plain words.</p>
+  </div>
+  <div class="ft-img r">
+    <div class="shot"><div class="win" data-tab="Overview" style="--t:#2f78bd;--t2:#1c4f86">
+      <div class="pane">
+        <div class="ph"><div><b>Scanning your Mac…</b><span id="sc">0 items checked</span></div></div>
+        <div class="pb"><i id="pbi"></i></div>
+        <div class="mq"><div>
+          <code><span>App log files</span><span>240 MB</span></code><code><span>Browser cache</span><span>1.2 GB</span></code><code><span>System temporary files</span><span>4.3 GB</span></code><code><span>Package manager cache</span><span>3.1 GB</span></code><code><span>System cache</span><span>18 MB</span></code><code><span>Developer build files</span><span>6.4 GB</span></code>
+          <code><span>App log files</span><span>240 MB</span></code><code><span>Browser cache</span><span>1.2 GB</span></code><code><span>System temporary files</span><span>4.3 GB</span></code><code><span>Package manager cache</span><span>3.1 GB</span></code><code><span>System cache</span><span>18 MB</span></code><code><span>Developer build files</span><span>6.4 GB</span></code>
+        </div></div>
+        <div class="tot"><span>Found</span><b>15.3 GB recoverable</b></div>
+      </div>
+    </div></div>
+  </div>
+</section>
+
+<section class="sec ft rev" style="--fa:#1f9fb8">
+  <div class="ft-tx">
+    <svg class="ft-ic" viewBox="0 0 224 224" aria-hidden="true"><use href="#g-see"/></svg>
+    <h2><span>See the space</span> first, then decide</h2>
+    <p>Tick folders and watch the total change before anything moves. Safe items are caches your Mac rebuilds by itself. Ask first items start unticked and wait for you.</p>
+  </div>
+  <div class="ft-img r">
+    <div class="shot"><div class="win" data-tab="Clean" style="--t:#2a9db8;--t2:#156a86">
+      <div class="pane">
+        <div class="ph"><div><b>Clean</b><span>Before and after this cleanup</span></div></div>
+        <div class="ovc sm"><small>You’ll free</small><strong>26 GB</strong><p>4 folders selected. Everything goes to the Trash.</p></div>
+        <div class="ba">
+          <div><span>Before</span><b>112 GB free</b></div>
+          <div class="dbar" id="b1"></div>
+          <div><span>After</span><b class="ok">138 GB free</b></div>
+          <div class="dbar" id="b2"></div>
+          <div class="lgd" id="l1"></div>
+        </div>
+      </div>
+    </div></div>
+    <p class="ft-note">Illustration of a 512 GB Mac.</p>
+  </div>
+</section>
+
+<section class="sec ft" style="--fa:#dc8a16">
+  <div class="ft-tx">
+    <svg class="ft-ic" viewBox="0 0 224 224" aria-hidden="true"><use href="#g-lf"/></svg>
+    <h2><span>Map</span> where your space went</h2>
+    <p>A Storage Map of your whole disk, plus the large and old files and forgotten apps hiding the most space. Preview anything before it moves.</p>
+  </div>
+  <div class="ft-img r">
+    <div class="shot"><div class="win" data-tab="Storage Map" style="--t:#e09a35;--t2:#a8650f">
+      <div class="pane">
+        <div class="ph"><div><b>Storage Map</b><span>512 GB disk</span></div></div>
+        <div class="map">
+          <svg viewBox="0 0 120 120" aria-hidden="true"><g fill="none" stroke-width="16" transform="rotate(-90 60 60)"><circle cx="60" cy="60" r="40" stroke="#2a3340"/><circle cx="60" cy="60" r="40" stroke="#5563c9" stroke-dasharray="58 194"/><circle cx="60" cy="60" r="40" stroke="#7a8a9c" stroke-dasharray="47 205" stroke-dashoffset="-58"/><circle cx="60" cy="60" r="40" stroke="#3FA877" stroke-dasharray="36 216" stroke-dashoffset="-105"/></g></svg>
+          <div>
+            <div class="lg2"><i style="background:#5563c9"></i>Developer<span>118 GB</span></div>
+            <div class="lg2"><i style="background:#34465a"></i>Apps<span>96 GB</span></div>
+            <div class="lg2"><i style="background:#3FA877"></i>Photos and media<span>74 GB</span></div>
+          </div>
+        </div>
+        <div class="st">Not opened in months</div>
+        <div class="rows tight">
+          <div class="rw"><i class="fi"></i><b>Virtual machine</b><span>42.0 GB</span></div>
+          <div class="rw"><i class="fi"></i><b>Video project</b><span>18.2 GB</span></div>
+        </div>
+      </div>
+    </div></div>
+  </div>
+</section>
+</div>
+
+<section class="tools">
+  <div class="tools-strip" aria-hidden="true">
+    <svg viewBox="0 0 224 224"><use href="#g-map"/></svg>
+    <svg viewBox="0 0 224 224"><use href="#g-lf"/></svg>
+    <svg viewBox="0 0 224 224"><use href="#g-ap"/></svg>
+    <svg viewBox="0 0 224 224"><use href="#g-dev"/></svg>
+    <svg viewBox="0 0 224 224"><use href="#g-scan"/></svg>
+    <img src="/assets/png/icon-glass-light-256.png" width="129" height="129" alt="">
+    <svg viewBox="0 0 224 224"><use href="#g-see"/></svg>
+    <svg viewBox="0 0 224 224"><use href="#g-st"/></svg>
+    <svg viewBox="0 0 224 224"><use href="#g-pv"/></svg>
+    <svg viewBox="0 0 224 224"><use href="#g-hs"/></svg>
+    <svg viewBox="0 0 224 224"><use href="#g-safe"/></svg>
+  </div>
+  <h2>Download free and see<br>what your Mac is hiding</h2>
+  <a class="btn" href="/downloads/iClearer.dmg" download="iClearer.dmg" data-action="download">Download Free</a>
+</section>
+
+<section class="sec ft rev" style="--fa:#4a6fa0">
+  <div class="ft-tx">
+    <svg class="ft-ic" viewBox="0 0 224 224" aria-hidden="true"><use href="#g-dev"/></svg>
+    <h2><span>Made for builders</span>, useful for everyone</h2>
+    <p>Cleans npm, pip and Homebrew caches, plus Xcode and Cursor leftovers, on Intel and Apple silicon Macs. Logins stay blocked.</p>
+  </div>
+  <div class="ft-img r">
+    <div class="shot"><div class="win" data-tab="Builders" style="--t:#4a6078;--t2:#1f2c3a">
+      <div class="pane">
+        <div class="ph"><div><b>Builders</b><span>Developer leftovers your tools rebuild</span></div><em>Rebuildable</em></div>
+        <div class="bars">
+          <div class="mr"><span>Xcode DerivedData</span><s><u style="--w:92%"></u></s><span>6.4 GB</span></div>
+          <div class="mr"><span>npm cache</span><s><u style="--w:48%"></u></s><span>3.1 GB</span></div>
+          <div class="mr"><span>Cursor leftovers</span><s><u style="--w:30%"></u></s><span>1.9 GB</span></div>
+          <div class="mr"><span>pip cache</span><s><u style="--w:22%"></u></s><span>1.4 GB</span></div>
+          <div class="mr"><span>Homebrew</span><s><u style="--w:14%"></u></s><span>0.9 GB</span></div>
+        </div>
+        <div class="chs"><span>npm</span><span>pip</span><span>Homebrew</span><span>Xcode</span><span>Cursor</span></div>
+      </div>
+    </div></div>
+  </div>
+</section>
+
+<section class="sec ft" style="--fa:#1f9a67">
+  <div class="ft-tx">
+    <svg class="ft-ic" viewBox="0 0 224 224" aria-hidden="true"><use href="#g-safe"/></svg>
+    <h2><span>Moves to Trash</span>, Keychain stays</h2>
+    <p>Nothing is permanently deleted, and you can undo a mistake. Every cleanup is saved in History, so you can restore anything. Accounts, Keychain and editor user data can never be selected.</p>
+  </div>
+  <div class="ft-img r">
+    <div class="shot"><div class="win" data-tab="History" style="--t:#35a878;--t2:#17694c">
+      <div class="pane">
+        <div class="ph"><div><b>Cleanup complete</b><span>Everything is in the Trash</span></div></div>
+        <div class="rows tight">
+          <div class="rw"><i class="dn"></i><b>Chrome cache</b><span>1.2 GB</span></div>
+          <div class="rw"><i class="dn"></i><b>npm cache</b><span>3.1 GB</span></div>
+          <div class="rw"><i class="dn"></i><b>User logs</b><em class="undo">Undo</em><span>240 MB</span></div>
+          <div class="rw"><i class="dn"></i><b>Time Machine checked</b><span>3 days ago</span></div>
+        </div>
+        <div class="st">Never touched</div>
+        <div class="chs"><span>Keychain</span><span>Accounts</span><span>Editor user data</span></div>
+      </div>
+    </div></div>
+  </div>
+</section>
+
+<section class="sec ft rev" style="--fa:#6a55d6">
+  <div class="ft-tx">
+    <svg class="ft-ic" viewBox="0 0 224 224" aria-hidden="true"><use href="#g-ap"/></svg>
+    <h2><span>Uninstall apps</span> and their leftovers</h2>
+    <p>Remove an app and everything it left behind. Startup Items shows what opens when your Mac starts, and Privacy Check shows which apps can use your camera, mic and files.</p>
+  </div>
+  <div class="ft-img r">
+    <div class="shot"><div class="win" data-tab="Apps" style="--t:#7a67dd;--t2:#4335a0">
+      <div class="pane">
+        <div class="ph"><div><b>Apps</b><span>Remove an app with everything it left behind</span></div></div>
+        <div class="rows">
+          <div class="rw"><i class="ai" style="--c:#f19a8e"></i><b>Video editor<small>Not opened in 8 months</small></b><span>4.8 GB</span></div>
+          <div class="rw sel"><i class="ai" style="--c:#8aa0c4"></i><b>Old browser<small>App 310 MB · leftovers 1.6 GB</small></b><span>1.9 GB</span></div>
+          <div class="rw"><i class="ai" style="--c:#5fd0c8"></i><b>Design tool<small>Not opened in 5 months</small></b><span>2.2 GB</span></div>
+          <div class="rw"><i class="ai" style="--c:#f6c36b"></i><b>Game launcher<small>Not opened in 1 year</small></b><span>12.4 GB</span></div>
+        </div>
+        <div class="pf"><span>Leftovers included</span><em class="cta">Uninstall · 1.9 GB</em></div>
+      </div>
+    </div></div>
+  </div>
+</section>
+
+<section class="sec trust" id="trust">
+  <h2>Nothing happens <span class="tx-ac">behind your back</span></h2>
+  <p class="sec-tx">A cleaner that deletes things has to earn your trust. These are the rules iClearer follows, every time.</p>
+  <ul class="trust-list">
+    <li class="r"><svg viewBox="0 0 224 224" aria-hidden="true"><use href="#g-see"/></svg><h3>You decide every cleanup</h3><p>Nothing is cleaned automatically. iClearer shows what it found, and you pick what goes.</p></li>
+    <li class="r"><svg viewBox="0 0 224 224" aria-hidden="true"><use href="#g-hs"/></svg><h3>Everything goes to the Trash</h3><p>Nothing is permanently deleted. Undo works right away, and History keeps every cleanup so you can restore anything.</p></li>
+    <li class="r"><svg viewBox="0 0 224 224" aria-hidden="true"><use href="#g-safe"/></svg><h3>Some things can’t be selected</h3><p>Keychain, accounts, editor data, passwords and keys in developer folders, and git repositories are off limits. You can add your own.</p></li>
+    <li class="r"><svg viewBox="0 0 224 224" aria-hidden="true"><use href="#g-pv"/></svg><h3>It checks your backup first</h3><p>Before removing something that can’t be rebuilt, iClearer checks Time Machine and warns you if there is no recent backup.</p></li>
+    <li class="r"><svg viewBox="0 0 224 224" aria-hidden="true"><use href="#g-st"/></svg><h3>It stops when it’s unsure</h3><p>On a macOS version iClearer hasn’t been tested on, it can still scan, but cleaning is switched off until you update.</p></li>
+    <li class="r"><svg viewBox="0 0 224 224" aria-hidden="true"><use href="#g-lf"/></svg><h3>You can read the rules</h3><p>Our cleanup rules are public: the categories iClearer cleans and how each is labelled.</p></li>
+  </ul>
+  <p class="trust-note"><b>What we collect.</b> Your email, your plan and a hashed ID of your Mac, so we can manage your license seats. We never collect your files, file names or scan results. We only email you about updates and new products if you opt in.</p>
+</section>
+
+<section class="sec rvw">
+  <h2>Early users <span class="tx-ac">got their space back</span></h2>
+  <div class="rvw-wrap">
+    <button class="rvw-ar prev" id="rv-prev" type="button" aria-label="Previous review" hidden><svg viewBox="0 0 20 35" aria-hidden="true"><path d="M17 3L3 17.5 17 32" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    <ul class="rvw-list" id="rv-list">
+      <li><div class="rvw-av" style="--a:#7fb8e6;--b:#2d6da4">EE</div><div class="rvw-bd"><b>98 GB recovered.</b><p>“Works perfectly. I recovered around 98GB total mostly Xcode cache, browser cache and old system logs.”</p></div><div class="rvw-au">Emmanuel Eves</div></li>
+      <li><div class="rvw-av" style="--a:#8fe0bd;--b:#1f9a67">BM</div><div class="rvw-bd"><b>Almost 30 GB of cache.</b><p>“Thank you so much, this saved me almost 30GBs of cache.”</p></div><div class="rvw-au">Benjamin Mpano</div></li>
+      <li><div class="rvw-av" style="--a:#f6c36b;--b:#dc8a16">IA</div><div class="rvw-bd"><b>Downloaded and used it.</b><p>“Thank you so much for this product, I have downloaded and used it. Well done.”</p></div><div class="rvw-au">Israel Afolabi</div></li>
+    </ul>
+    <button class="rvw-ar next" id="rv-next" type="button" aria-label="Next review" hidden><svg viewBox="0 0 20 35" aria-hidden="true"><path d="M3 3l14 14.5L3 32" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+  </div>
+</section>
+
+<section class="sec price" id="pricing">
+  <h2>Free to scan. <span class="tx-ac">Fair to keep.</span></h2>
+  <p class="sec-tx">Pay only when you want to clean beyond 500 MB.</p>
+  <div class="seg" id="sp" role="group" aria-label="Billing"></div>
+  <div class="seg" id="sm" role="group" aria-label="Macs"></div>
+  <div class="pr">
+    <div class="pcd">
+      <h3>Free</h3>
+      <div class="pc">$0</div>
+      <small>Forever</small>
+      <ul><li>Unlimited scans, by category</li><li>Clean up to 500 MB in total</li><li>Moves to Trash, with undo</li><li>Keychain and accounts protected</li></ul>
+      <a class="btn ol" href="/downloads/iClearer.dmg" download="iClearer.dmg" data-action="download">Download Free</a>
+    </div>
+    <div class="pcd hl">
+      <h3>iClearer</h3>
+      <div class="pc" id="pp"></div>
+      <small id="pn"></small>
+      <ul id="pl"></ul>
+      <a class="btn" href="#pricing" data-action="buy">Buy iClearer</a>
+      <p class="fine">14-day money-back guarantee.</p>
+    </div>
+  </div>
+  <div class="cmp-wrap">
+    <table class="cmp"><tr><th>What each plan includes</th><th>Free</th><th>iClearer</th></tr><tr><td>Macs covered (choose 1, 2 or 5 at checkout)</td><td>1</td><td>1, 2 or 5</td></tr><tr><td>Scan by category, with sizes and Safe or Ask first labels</td><td>Yes</td><td>Yes</td></tr><tr><td>Item names, details and exact locations</td><td>Locked</td><td>Yes</td></tr><tr><td>Cleanup</td><td>500 MB in total</td><td>Unlimited</td></tr><tr><td>Storage Map</td><td>Big picture</td><td>Full drill-down</td></tr><tr><td>Large files</td><td>Kind and size, top 5</td><td>Names, locations, Quick Look</td></tr><tr><td>Apps</td><td>List only</td><td>Uninstall with leftovers</td></tr><tr><td>Builders pack</td><td>Scan only</td><td>Yes</td></tr><tr><td>History with restore, never-touch list</td><td>No</td><td>Yes</td></tr><tr><td>Startup items, privacy check</td><td>Preview</td><td>Yes</td></tr></table>
+    <table class="cmp"><tr><th>One-time or subscription</th><th>One-time (version 1)</th><th>Monthly or yearly</th></tr><tr><td>Support for new macOS versions</td><td>Until version 2</td><td>Always</td></tr><tr><td>Version 2 and later</td><td>Discounted upgrade</td><td>Included</td></tr><tr><td>Scheduled scans and menu bar alerts (1.1)</td><td>No</td><td>Yes</td></tr><tr><td>Priority support</td><td>No</td><td>Yes</td></tr></table>
+  </div>
+</section>
+
+<section class="sec inst" id="install">
+  <h2>Install <span class="tx-ac">iClearer</span></h2>
+  <p class="sec-tx">Download the DMG, then clear the first-open warning if macOS asks.</p>
+  <div class="inst-in">
+<ol class="install-steps">
 <li>Download the DMG and drag iClearer into Applications.</li>
 <li>The first time, right-click iClearer and choose <strong>Open</strong>. Do not click Move to Trash.</li>
 <li>Or click Done, then System Settings → Privacy &amp; Security → <strong>Open Anyway</strong>.</li>
 </ol>
-<p class="r" style="margin:0 0 22px"><a class="btn" href="/downloads/iClearer.dmg" download="iClearer.dmg">Download iClearer.dmg</a></p>
-<h3 class="r" style="margin:8px 0 14px;font-size:20px;letter-spacing:-.02em">Open Terminal and paste one of these commands</h3>
-<div class="install-block r"><div class="install-block-head"><span>If the DMG is in Downloads (newest file)</span><button type="button" class="install-copy" data-copy="dmg">Copy</button></div><pre id="cmd-dmg">DMG=$(ls -t ~/Downloads/iClearer*.dmg 2>/dev/null | head -1)
+<p class="inst-dl"><a class="btn" href="/downloads/iClearer.dmg" download="iClearer.dmg">Download iClearer.dmg</a></p>
+<h3>Open Terminal and paste one of these commands</h3>
+<div class="install-block"><div class="install-block-head"><span>If the DMG is in Downloads (newest file)</span><button type="button" class="install-copy" data-copy="dmg">Copy</button></div><pre id="cmd-dmg">DMG=$(ls -t ~/Downloads/iClearer*.dmg 2>/dev/null | head -1)
 MNT=$(mktemp -d /tmp/iclearer-mnt.XXXXXX)
 hdiutil attach "$DMG" -nobrowse -quiet -mountpoint "$MNT"
 rm -rf /Applications/iClearer.app
@@ -72,18 +352,71 @@ xattr -cr /Applications/iClearer.app
 hdiutil detach "$MNT"
 rmdir "$MNT" 2>/dev/null || true
 open /Applications/iClearer.app</pre></div>
-<div class="install-block r"><div class="install-block-head"><span>If the app is already in Applications</span><button type="button" class="install-copy" data-copy="apps">Copy</button></div><pre id="cmd-apps">xattr -dr com.apple.quarantine /Applications/iClearer.app &amp;&amp; open /Applications/iClearer.app</pre></div>
-<div class="install-block r"><div class="install-block-head"><span>One-line install</span><button type="button" class="install-copy" data-copy="one">Copy</button></div><pre id="cmd-one">curl -fsSL https://iclearer.com/downloads/install-iclearer.sh | bash</pre></div>
-<p class="fine r" style="margin-top:18px">Needs macOS 13 or later · Intel and Apple silicon</p>
-</div></section>
-<section id="faq" class="alt"><div class="w" style="max-width:780px"><h2 class="c">Questions.</h2>
-<details><summary>Is iClearer safe?</summary><p>Everything it removes goes to the Trash first, so you can undo it. Keychain, accounts and editor user data can never be deleted.</p></details>
-<details><summary>What do Safe and Ask first mean?</summary><p>Safe items are caches your Mac rebuilds by itself. Ask first items are larger or system-related, so they start unticked and wait for you.</p></details>
-<details><summary>Which Macs does it work on?</summary><p>iMac, Mac mini, Mac Studio, MacBook Air and MacBook Pro, Intel and Apple silicon. Apple displays are monitors, not Macs, so they don’t count.</p></details>
-<details><summary>Can I use it on more than one Mac?</summary><p>Plans cover 1, 2 or 5 Macs. When you sign in, that Mac is linked to your license (we store a hashed hardware ID, not your raw serial). Extra Macs beyond your plan are blocked. Seats stay linked — email support@iclearer.com if you replace a Mac.</p></details>
-<details><summary>What if I buy once?</summary><p>A one-time purchase covers version 1. On a macOS version iClearer hasn’t been tested on, it can still scan, but cleaning is switched off until you upgrade.</p></details><details><summary>What does the free plan include?</summary><p>Unlimited scans that show what was found by category, with sizes and Safe or Ask first labels, plus 500 MB of cleanup in total. Item names, details, locations and the other tools come with iClearer.</p></details><details><summary>Do I need to give my email?</summary><p>Yes. We use it for your license, receipts and security notices. We only send updates and news about new products if you opt in, and you can unsubscribe anytime.</p></details><details><summary>Does iClearer scan for malware?</summary><p>No. iClearer finds space, it isn’t an antivirus. The Privacy Check shows which apps you have allowed to use your camera, microphone and files.</p></details></div></section>
-<div class="fin"><svg class="hic" viewBox="0 0 1024 1024"><use href="#ic-l"/></svg><h2 class="rv">Give your Mac<br>room to breathe.</h2><a class="btn w2" href="#pricing" data-action="download">Download for Mac</a></div>
-<footer><div class="w"><a href="#install">Install</a><a href="/privacy.html">Privacy</a><a href="/terms.html">Terms</a><a href="mailto:support@iclearer.com">Support</a><p>© 2026 iClearer. iClearer is not affiliated with Apple Inc. Mac, MacBook, iMac and iPhone are trademarks of Apple Inc.</p></div></footer>
+<div class="install-block"><div class="install-block-head"><span>If the app is already in Applications</span><button type="button" class="install-copy" data-copy="apps">Copy</button></div><pre id="cmd-apps">xattr -dr com.apple.quarantine /Applications/iClearer.app &amp;&amp; open /Applications/iClearer.app</pre></div>
+<div class="install-block"><div class="install-block-head"><span>One-line install</span><button type="button" class="install-copy" data-copy="one">Copy</button></div><pre id="cmd-one">curl -fsSL https://iclearer.com/downloads/install-iclearer.sh | bash</pre></div>
+<p class="fine">Needs macOS 13 or later · Intel and Apple silicon</p>
+  </div>
+</section>
+
+<section class="sec faq" id="faq">
+  <h2>Questions? <span class="tx-ac">Answers.</span></h2>
+  <details><summary>Is iClearer safe?</summary><p>Everything it removes goes to the Trash first, so you can undo it. Keychain, accounts and editor user data can never be deleted.</p></details>
+  <details><summary>What do Safe and Ask first mean?</summary><p>Safe items are caches your Mac rebuilds by itself. Ask first items are larger or system-related, so they start unticked and wait for you.</p></details>
+  <details><summary>Which Macs does it work on?</summary><p>iMac, Mac mini, Mac Studio, MacBook Air and MacBook Pro, Intel and Apple silicon. Apple displays are monitors, not Macs, so they don’t count.</p></details>
+  <details><summary>Can I use it on more than one Mac?</summary><p>Plans cover 1, 2 or 5 Macs. When you sign in, that Mac is linked to your license (we store a hashed hardware ID, not your raw serial). Extra Macs beyond your plan are blocked. Seats stay linked — email support@iclearer.com if you replace a Mac.</p></details>
+  <details><summary>What if I buy once?</summary><p>A one-time purchase covers version 1. On a macOS version iClearer hasn’t been tested on, it can still scan, but cleaning is switched off until you upgrade.</p></details>
+  <details><summary>What does the free plan include?</summary><p>Unlimited scans that show what was found by category, with sizes and Safe or Ask first labels, plus 500 MB of cleanup in total. Item names, details, locations and the other tools come with iClearer.</p></details>
+  <details><summary>Do I need to give my email?</summary><p>Yes. We use it for your license, receipts and security notices. We only send updates and news about new products if you opt in, and you can unsubscribe anytime.</p></details>
+  <details><summary>Does iClearer scan for malware?</summary><p>No. iClearer finds space, it isn’t an antivirus. The Privacy Check shows which apps you have allowed to use your camera, microphone and files.</p></details>
+</section>
+
+<section class="sec bn">
+  <div class="bn-in">
+    <div class="bn-lap" aria-hidden="true">
+      <div class="lap"><div class="lap-scr"><img src="/assets/png/icon-glass-light-512.png" width="160" height="160" alt=""></div></div>
+      <div class="lap-base"></div>
+    </div>
+    <div class="bn-tx">
+      <h2>You stay in control, while iClearer gives your Mac room to breathe.</h2>
+      <div class="bn-cta">
+        <a class="btn" href="#pricing">Buy Now</a>
+        <a class="btn wh" href="/downloads/iClearer.dmg" download="iClearer.dmg" data-action="download">Download Free</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec info">
+  <ul class="info-list">
+    <li><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="7" width="14" height="10" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 4.5V7M12 4.5V7M16 4.5V7M8 17v2.5M12 17v2.5M16 17v2.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><small>System Requirements:</small><span>macOS 13 Ventura or later<br>Intel and Apple silicon</span></li>
+    <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.5 4H19a1 1 0 0 1 1 1v6.5L11.5 20 4 12.5z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><circle cx="16" cy="8" r="1.4" fill="currentColor"/></svg><small>Pricing:</small><span>Free to scan<br>From $2.50/month</span></li>
+    <li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M12 11v5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="12" cy="8" r="1" fill="currentColor"/></svg><small>Latest version:</small><span>1.0.1, November 2026</span></li>
+    <li><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="6" width="17" height="12" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M4.5 7.5l7.5 6 7.5-6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg><small>Support:</small><span><a href="mailto:support@iclearer.com">support@iclearer.com</a></span></li>
+  </ul>
+</section>
+
+<section class="sec nl">
+  <h2><span class="tx-ac">Get</span> your free key and Mac care tips</h2>
+  <div class="nl-ct">
+    <p class="nl-sub">Create your free iClearer account and hear about updates and new products.</p>
+    <form class="nl-form" id="nl-form" novalidate>
+      <label class="vh" for="nl-email">Email address</label>
+      <input id="nl-email" name="email" type="email" autocomplete="email" placeholder="Enter your email address..." required>
+      <button class="btn bk" type="submit" id="nl-submit">I’m in!</button>
+    </form>
+    <p class="nl-note" id="nl-note">We’ll email your free license key. You can unsubscribe anytime. For more details, see our <a href="/privacy.html">privacy policy</a>.</p>
+  </div>
+</section>
+</main>
+
+<footer class="ft-end">
+  <div class="ft-in">
+    <p class="ft-cp">Copyright © 2026 iClearer.</p>
+    <div class="ft-col"><a href="/privacy.html">Privacy Policy</a><a href="/terms.html">Terms of Use</a></div>
+    <div class="ft-col"><a href="#install">Install Guide</a><a href="mailto:support@iclearer.com">Support</a></div>
+    <p class="ft-tm">iClearer is not affiliated with Apple Inc. Mac, MacBook, iMac and iPhone are trademarks of Apple Inc.</p>
+  </div>
+</footer>
 
 <div id="dl-modal" class="ic-modal" hidden>
   <div class="ic-modal-card" role="dialog" aria-labelledby="dl-title">
@@ -104,7 +437,6 @@ open /Applications/iClearer.app</pre></div>
     <p class="fine" id="dl-note"></p>
   </div>
 </div>
-<div id="toast" role="status"><span id="tm"></span><button id="un">Undo</button></div>
 
     <script src="/landing-proto.js"></script>
     <script type="module" src="/src/main.ts"></script>

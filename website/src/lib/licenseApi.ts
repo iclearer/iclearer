@@ -95,11 +95,20 @@ export async function startCheckout(opts: {
 
   const priceId = paddlePriceId(opts.plan, opts.macs);
   const token = import.meta.env.VITE_PADDLE_CLIENT_TOKEN as string | undefined;
-  const paddleReady =
-    Boolean(token && priceId && typeof window !== "undefined") &&
+  const paddleLoaded =
+    Boolean(token && typeof window !== "undefined") &&
     Boolean((window as unknown as { Paddle?: PaddleLike }).Paddle);
 
-  if (paddleReady) {
+  // Never silently upgrade for free when Paddle is configured but this seat count
+  // has no price yet — ask for the matching checkout instead.
+  if (paddleLoaded && !priceId) {
+    return {
+      ok: false,
+      error: `Checkout for ${opts.plan} · ${opts.macs} Mac${opts.macs === 1 ? "" : "s"} isn’t set up yet. Pick 1 Mac, or email support@iclearer.com.`,
+    };
+  }
+
+  if (paddleLoaded && priceId) {
     const Paddle = (window as unknown as { Paddle: PaddleLike }).Paddle;
     return await new Promise((resolve) => {
       let settled = false;

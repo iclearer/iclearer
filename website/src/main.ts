@@ -49,15 +49,15 @@ function saveLicenseHint(email: string, key: string, plan: string, macs: number)
 
 function selectedPlan(): "monthly" | "yearly" | "once" {
   const params = new URLSearchParams(location.search);
-  const fromQuery = params.get("plan");
+  const fromQuery = (params.get("plan") || "").toLowerCase();
   if (fromQuery === "monthly" || fromQuery === "once" || fromQuery === "yearly") return fromQuery;
-  const note = document.getElementById("pn")?.textContent?.toLowerCase() || "";
-  if (note.includes("one-time") || note.includes("once")) return "once";
-  if (note.includes("month") && !note.includes("year")) return "monthly";
   const pressed =
     document.querySelector('#sp button[aria-pressed="true"]')?.textContent?.toLowerCase() || "";
   if (pressed.includes("month")) return "monthly";
   if (pressed.includes("one")) return "once";
+  const note = document.getElementById("pn")?.textContent?.toLowerCase() || "";
+  if (note.includes("one-time") || note.includes("once")) return "once";
+  if (note.includes("month") && !note.includes("year")) return "monthly";
   return "yearly";
 }
 
@@ -72,11 +72,15 @@ function selectedMacs(): 1 | 2 | 5 {
 }
 
 function pricingLabel(): string {
-  const price = document.getElementById("pp")?.textContent?.replace(/\s+/g, " ").trim() || "$29.99";
+  const plan = selectedPlan();
+  const macs = selectedMacs();
+  const price =
+    document.getElementById("pp")?.textContent?.replace(/\s+/g, " ").trim() ||
+    (plan === "yearly" ? "$2.50 / month" : plan === "monthly" ? "$4.99 / month" : "$79.99");
   const note = document.getElementById("pn")?.textContent?.trim() || "";
-  const macs =
-    document.querySelector('#sm button[aria-pressed="true"]')?.textContent?.trim() || "1 Mac";
-  return `${price} · ${macs}${note ? ` · ${note}` : ""}`;
+  const macLabel = macs === 1 ? "1 Mac" : `${macs} Macs`;
+  const planLabel = plan === "yearly" ? "Yearly" : plan === "monthly" ? "Monthly" : "One-time";
+  return `${price} · ${macLabel} · ${planLabel}${note ? ` · ${note}` : ""}`;
 }
 
 function resetSuccessUI() {
@@ -91,12 +95,24 @@ function resetSuccessUI() {
 
 function setFieldVisibility(next: Mode) {
   const isBuy = next === "buy";
-  if (keyWrap()) keyWrap()!.hidden = !isBuy;
-  if (mktWrap()) mktWrap()!.hidden = isBuy;
-  if (noKeyEl()) noKeyEl()!.hidden = !isBuy;
+  if (keyWrap()) {
+    keyWrap()!.hidden = !isBuy;
+    keyWrap()!.style.display = isBuy ? "" : "none";
+  }
+  if (mktWrap()) {
+    mktWrap()!.hidden = isBuy;
+    mktWrap()!.style.display = isBuy ? "none" : "";
+  }
+  if (noKeyEl()) {
+    noKeyEl()!.hidden = !isBuy;
+    noKeyEl()!.style.display = isBuy ? "" : "none";
+  }
 
   const keyInput = form()?.elements.namedItem("license_key") as HTMLInputElement | null;
-  if (keyInput) keyInput.required = isBuy;
+  if (keyInput) {
+    keyInput.required = isBuy;
+    if (!isBuy) keyInput.value = "";
+  }
 }
 
 function openModal(next: Mode) {
@@ -330,8 +346,51 @@ function ensurePaddle() {
   document.head.appendChild(s);
 }
 
+/** Email signup at the bottom of the page: creates the free account and opts in to updates. */
+function wireSignupForm() {
+  const f = document.getElementById("nl-form") as HTMLFormElement | null;
+  const note = document.getElementById("nl-note");
+  const btn = document.getElementById("nl-submit") as HTMLButtonElement | null;
+  if (!f || !note || !btn) return;
+  const idle = btn.textContent || "I’m in!";
+  const say = (text: string, kind: "ok" | "err") => {
+    note.textContent = text;
+    note.classList.toggle("ok", kind === "ok");
+    note.classList.toggle("err", kind === "err");
+  };
+
+  f.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const input = f.elements.namedItem("email") as HTMLInputElement;
+    const email = input.value.trim();
+    if (!email || !input.checkValidity()) {
+      say("Enter a valid email address.", "err");
+      input.focus();
+      return;
+    }
+    btn.disabled = true;
+    btn.textContent = "Sending…";
+    try {
+      const result = await signup(email, true);
+      if (!result.ok) {
+        say(result.error || "Could not sign you up. Please try again.", "err");
+        return;
+      }
+      saveLead({ email, marketing: true });
+      say(`You’re in. We emailed your free license key to ${email}.`, "ok");
+      f.reset();
+    } catch {
+      say("Could not reach the server. Please try again.", "err");
+    } finally {
+      btn.disabled = false;
+      btn.textContent = idle;
+    }
+  });
+}
+
 function wireActions() {
   ensurePaddle();
+  wireSignupForm();
 
   document.querySelectorAll<HTMLElement>("[data-action]").forEach((el) => {
     el.addEventListener("click", (event) => {
