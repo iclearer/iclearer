@@ -21,11 +21,13 @@ const COMPANIES = [
 ];
 
 const INSTALL_FROM_DOWNLOADS = `DMG=$(ls -t ~/Downloads/iClearer*.dmg 2>/dev/null | head -1)
-hdiutil attach "$DMG" -nobrowse
+MNT=$(mktemp -d /tmp/iclearer-mnt.XXXXXX)
+hdiutil attach "$DMG" -nobrowse -quiet -mountpoint "$MNT"
 rm -rf /Applications/iClearer.app
-cp -R "/Volumes/Install iClearer/iClearer.app" /Applications/
-xattr -dr com.apple.quarantine /Applications/iClearer.app
-hdiutil detach "/Volumes/Install iClearer"
+ditto "$MNT/iClearer.app" /Applications/iClearer.app
+xattr -cr /Applications/iClearer.app
+hdiutil detach "$MNT"
+rmdir "$MNT" 2>/dev/null || true
 open /Applications/iClearer.app`;
 
 const OPEN_IF_ALREADY_COPIED =
