@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
 """Build AppIcon.iconset from the glass-light brand mark (same asset as email).
 
-macOS applies its own squircle mask. Icons that are already rounded with
-transparent corners pick up a dark fringe when that mask is applied twice.
-We flatten the mark onto an opaque glass fill so the system mask is the
-only rounder — matching the clean email logo look in Finder/Dock/DMG.
+Keep transparent corners so Dock/Finder show the clean glass squircle —
+matching Apple Silicon — instead of a hard white plate.
+Prefer official pre-rendered sizes when present for sharper dock icons.
 """
 
 from __future__ import annotations
@@ -34,81 +33,90 @@ SPECS = {
     "icon_512x512@2x.png": 1024,
 }
 
+# Prefer brand-pack rasters that already look clean at these pixel sizes.
+PREFERRED = {
+    64: "icon-glass-light-64.png",
+    120: "icon-glass-light-120.png",
+    180: "icon-glass-light-180.png",
+    256: "icon-glass-light-256.png",
+    512: "icon-glass-light-512.png",
+    1024: "icon-glass-light-1024.png",
+}
 
-def find_source(root: Path) -> Path:
-    candidates = [
-        root.parent / "website" / "public" / "assets" / "png" / "icon-glass-light-1024.png",
-        root / "Resources" / "iclearer-icon-glass-light.png",
-        root.parent / "iClearer-developer-handoff" / "brand" / "logo-pack" / "png" / "icon-glass-light-1024.png",
+
+def asset_dirs(root: Path) -> list[Path]:
+    return [
+        root.parent / "website" / "public" / "assets" / "png",
+        root.parent / "iClearer-developer-handoff" / "brand" / "logo-pack" / "png",
+        root / "Resources",
     ]
-    for path in candidates:
+
+
+def find_master(root: Path) -> Path:
+    for folder in asset_dirs(root):
+        path = folder / "icon-glass-light-1024.png"
         if path.is_file():
             return path
+    fallback = root / "Resources" / "iclearer-icon-glass-light.png"
+    if fallback.is_file():
+        return fallback
     raise SystemExit("glass-light icon PNG not found")
 
 
-def sample_fill(img: Image.Image) -> tuple[int, int, int, int]:
-    """Pick an opaque glass fill near the mid-edge (not the letter)."""
-    w, h = img.size
-    for pt in [(w // 2, max(2, h // 12)), (max(2, w // 12), h // 2), (w // 2, h // 2)]:
-        r, g, b, a = img.getpixel(pt)
-        if a > 200:
-            return (r, g, b, 255)
-    return (236, 244, 250, 255)
+def find_preferred(root: Path, size: int) -> Path | None:
+    name = PREFERRED.get(size)
+    if not name:
+        return None
+    for folder in asset_dirs(root):
+        path = folder / name
+        if path.is_file():
+            return path
+    return None
 
 
-def flatten_for_macos(src: Path, size: int) -> Image.Image:
-    img = Image.open(src).convert("RGBA")
-    if img.size != (size, size):
-        img = img.resize((size, size), Image.Resampling.LANCZOS)
-    fill = sample_fill(img)
-    base = Image.new("RGBA", (size, size), fill)
-    # Composite logo; then force fully opaque so no fringe remains.
-    base.alpha_composite(img)
-    solid = Image.new("RGBA", (size, size))
-    px = base.load()
-    out = solid.load()
-    for y in range(size):
-        for x in range(size):
-            r, g, b, a = px[x, y]
-            if a < 255:
-                fr, fg, fb, _ = fill
-                # Blend toward fill, then store opaque.
-                t = a / 255.0
-                out[x, y] = (
-                    int(r * t + fr * (1 - t)),
-                    int(g * t + fg * (1 - t)),
-                    int(b * t + fb * (1 - t)),
-                    255,
-                )
-            else:
-                out[x, y] = (r, g, b, 255)
-    return solid
+def load_rgba(path: Path) -> Image.Image:
+    return Image.open(path).convert("RGBA")
+
+
+def resize_hq(img: Image.Image, size: int) -> Image.Image:
+    if img.size == (size, size):
+        return img
+    # Multi-step downsample keeps the glossy “i” smoother than a single jump.
+    cur = img
+    while cur.size[0] > size * 2:
+        nxt = (cur.size[0] // 2, cur.size[1] // 2)
+        cur = cur.resize(nxt, Image.Resampling.LANCZOS)
+    return cur.resize((size, size), Image.Resampling.LANCZOS)
+
+
+def render_size(root: Path, master: Image.Image, size: int) -> Image.Image:
+    preferred = find_preferred(root, size)
+    if preferred is not None:
+        img = load_rgba(preferred)
+        if img.size == (size, size):
+            return img
+        return resize_hq(img, size)
+    # Nearest larger preferred source, else master 1024.
+    for candidate in sorted((s for s in PREFERRED if s >= size)):
+        path = find_preferred(root, candidate)
+        if path is not None:
+            return resize_hq(load_rgba(path), size)
+    return resize_hq(master, size)
 
 
 def main() -> None:
     out = Path(sys.argv[1] if len(sys.argv) > 1 else ".")
     root = Path(__file__).resolve().parents[1]
-    src = find_source(root)
+    master_path = find_master(root)
+    master = load_rgba(master_path)
 
     iconset = out / "AppIcon.iconset"
     if iconset.exists():
         shutil.rmtree(iconset)
     iconset.mkdir(parents=True, exist_ok=True)
 
-    # Build master 1024 flattened once, then resize.
-    master = flatten_for_macos(src, 1024)
-    master_path = iconset / "_master.png"
-    master.save(master_path)
-
     for name, size in SPECS.items():
-        dest = iconset / name
-        if size == 1024:
-            shutil.copy2(master_path, dest)
-        else:
-            resized = master.resize((size, size), Image.Resampling.LANCZOS)
-            resized.save(dest)
-    master_path.unlink(missing_ok=True)
+        render_size(root, master, size).save(iconset / name, format="PNG")
     print(iconset)
 
 
