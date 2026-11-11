@@ -981,6 +981,12 @@ final class SignInController: NSViewController {
             await MainActor.run {
                 if response.ok {
                     LicenseStore.applyRemote(response)
+                    // Guarantee local credentials even if the payload omits fields.
+                    LicenseStore.update {
+                        if $0.email.isEmpty { $0.email = email.lowercased() }
+                        if $0.key.isEmpty { $0.key = key.uppercased() }
+                        $0.onboardingComplete = true
+                    }
                     AppState.shared.showToast(response.message ?? "Signed in.")
                     dismissSheet(from: self.view)
                     return

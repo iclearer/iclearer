@@ -70,7 +70,13 @@ final class MainViewController: NSViewController {
         applyContentAppearance()
         guard !didStartInitialScan else { return }
         didStartInitialScan = true
-        if !state.license.onboardingComplete || state.license.email.isEmpty {
+        // Signed-in users (email + key) skip onboarding even if an older build
+        // left onboardingComplete false after a free-plan activate.
+        let signedIn = !state.license.email.isEmpty && !state.license.key.isEmpty
+        if signedIn && !state.license.onboardingComplete {
+            LicenseStore.completeOnboarding()
+        }
+        if !signedIn && (!state.license.onboardingComplete || state.license.email.isEmpty) {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
                 self.state.showSheet(.onboarding)
             }

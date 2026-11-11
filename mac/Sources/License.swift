@@ -214,7 +214,11 @@ enum LicenseStore {
             $0.plan = plan
             $0.macSeats = max(1, response.macs ?? $0.macSeats)
             $0.lastVerifiedAt = Int(Date().timeIntervalSince1970)
-            if plan.isPro { $0.onboardingComplete = true }
+            // Any successful activate (free or Pro) counts as signed in — don’t
+            // re-prompt onboarding/sign-in on the next launch.
+            if !$0.email.isEmpty && !$0.key.isEmpty {
+                $0.onboardingComplete = true
+            }
         }
         clearPendingAccount()
     }
