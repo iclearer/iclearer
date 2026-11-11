@@ -27,26 +27,28 @@ fi
 cat > "$STAGE/Install iClearer.txt" <<'EOF'
 Install iClearer
 ================
-1. Drag iClearer into the Applications folder.
-2. Apple will warn you the first time. That is normal.
+1. Download the DMG and drag iClearer into Applications.
+2. The first time, right-click iClearer and choose Open.
    Do not click Move to Trash.
-
-Easiest:
-  Right-click iClearer → Open → Open.
-
-If you already saw “iClearer Not Opened”:
-  Click Done.
-  Open System Settings → Privacy & Security.
-  Scroll down and click Open Anyway.
+3. Or click Done, then System Settings → Privacy & Security → Open Anyway.
 
 Or double-click “Open iClearer.command” in this window.
-  That copies the app to Applications and clears the warning.
 
-Terminal:
+If the DMG is in Downloads:
+  hdiutil attach ~/Downloads/iClearer.dmg -nobrowse
+  rm -rf /Applications/iClearer.app
+  cp -R "/Volumes/Install iClearer/iClearer.app" /Applications/
   xattr -dr com.apple.quarantine /Applications/iClearer.app
+  hdiutil detach "/Volumes/Install iClearer"
+  open /Applications/iClearer.app
 
-Or from the website:
+If the app is already in Applications:
+  xattr -dr com.apple.quarantine /Applications/iClearer.app && open /Applications/iClearer.app
+
+One-line install:
   curl -fsSL https://iclearer.com/downloads/install-iclearer.sh | bash
+
+More help: https://iclearer.com/install.html
 EOF
 
 

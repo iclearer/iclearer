@@ -205,7 +205,7 @@ function showPaidSuccess(email: string, key: string, plan: string, macs: number)
     <p style="margin:16px 0 10px">
       <a class="btn" href="${DMG_URL}" download="iClearer.dmg" id="dl-success-download">Download iClearer for Mac</a>
     </p>
-    <p class="fine">Already have the app? Just sign in with the key above.</p>
+    <p class="fine"><a href="/install.html">How to install</a> · Already have the app? Sign in with the key above.</p>
     <button type="button" class="btn" id="dl-success-close" style="margin-top:8px;background:transparent;border:1.5px solid var(--ln);box-shadow:none;color:var(--fg)!important">Close</button>
   `;
   document.getElementById("dl-success-close")?.addEventListener("click", () => closeModal());
@@ -345,24 +345,6 @@ function wireActions() {
   document.getElementById("dl-create-account")?.addEventListener("click", (e) => {
     e.preventDefault();
     goCreateAccount();
-  });
-  document.getElementById("copy-install")?.addEventListener("click", async () => {
-    const cmd =
-      document.getElementById("install-cmd")?.textContent?.trim() ||
-      "curl -fsSL https://iclearer.com/downloads/install-iclearer.sh | bash";
-    try {
-      await navigator.clipboard.writeText(cmd);
-      const btn = document.getElementById("copy-install");
-      if (btn) {
-        const prev = btn.textContent;
-        btn.textContent = "Copied";
-        setTimeout(() => {
-          btn.textContent = prev || "Copy";
-        }, 1600);
-      }
-    } catch {
-      /* ignore */
-    }
   });
   modal()?.addEventListener("click", (event) => {
     if (event.target === modal()) closeModal();
