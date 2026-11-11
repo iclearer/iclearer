@@ -205,7 +205,7 @@ function showPaidSuccess(email: string, key: string, plan: string, macs: number)
     <p style="margin:16px 0 10px">
       <a class="btn" href="${DMG_URL}" download="iClearer.dmg" id="dl-success-download">Download iClearer for Mac</a>
     </p>
-    <p class="fine"><a href="/install.html">How to install</a> · Already have the app? Sign in with the key above.</p>
+    <p class="fine"><a href="#install">How to install</a> · Already have the app? Sign in with the key above.</p>
     <button type="button" class="btn" id="dl-success-close" style="margin-top:8px;background:transparent;border:1.5px solid var(--ln);box-shadow:none;color:var(--fg)!important">Close</button>
   `;
   document.getElementById("dl-success-close")?.addEventListener("click", () => closeModal());
@@ -361,6 +361,28 @@ function wireActions() {
   if (params.get("signup") === "1" || params.get("create") === "1") {
     setTimeout(() => openModal("create"), 300);
   }
+
+  const cmds: Record<string, string> = {
+    dmg: (document.getElementById("cmd-dmg")?.textContent || "").trim(),
+    apps: "xattr -dr com.apple.quarantine /Applications/iClearer.app && open /Applications/iClearer.app",
+    one: (document.getElementById("cmd-one")?.textContent || "").trim(),
+  };
+  document.querySelectorAll<HTMLButtonElement>(".install-copy").forEach((btn) => {
+    btn.addEventListener("click", async () => {
+      const key = btn.getAttribute("data-copy") || "";
+      try {
+        await navigator.clipboard.writeText(cmds[key] || "");
+        btn.textContent = "Copied";
+        btn.classList.add("ok");
+        setTimeout(() => {
+          btn.textContent = "Copy";
+          btn.classList.remove("ok");
+        }, 1600);
+      } catch {
+        btn.textContent = "Select & copy";
+      }
+    });
+  });
 }
 
 wireActions();

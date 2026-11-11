@@ -1,3 +1,10 @@
 {
-  "rewrites": []
+  "rewrites": [],
+  "redirects": [
+    {
+      "source": "/install.html",
+      "destination": "/#install",
+      "permanent": false
+    }
+  ]
 }

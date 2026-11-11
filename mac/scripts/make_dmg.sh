@@ -48,7 +48,7 @@ If the app is already in Applications:
 One-line install:
   curl -fsSL https://iclearer.com/downloads/install-iclearer.sh | bash
 
-More help: https://iclearer.com/install.html
+More help: https://iclearer.com/#install
 EOF
 
 

@@ -118,3 +118,10 @@ footer{padding:36px 0 56px;font-size:12px;color:var(--mut);border-top:1px solid 
 .ic-modal-x{position:absolute;right:14px;top:10px;border:0;background:transparent;font-size:28px;line-height:1;color:var(--mut);cursor:pointer}
 .lic-box{margin-top:14px;padding:14px;border-radius:14px;background:var(--alt);font-size:14px;text-align:left}
 .lic-box code{font:13px ui-monospace,Menlo,monospace;color:var(--ac)}
+.install-steps{margin:0 0 22px;padding-left:1.25rem;color:var(--mut);text-align:left;font-size:16px}
+.install-steps li{margin:0 0 10px}.install-steps strong{color:var(--fg);font-weight:600}
+.install-block{margin:0 0 14px;border:1px solid var(--ln);border-radius:16px;background:var(--alt);overflow:hidden;text-align:left}
+.install-block-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px;border-bottom:1px solid var(--ln);font-size:13px;font-weight:600;color:var(--mut)}
+.install-copy{border:0;background:var(--card);color:var(--fg);border-radius:999px;padding:6px 12px;font:600 12px/1 inherit;cursor:pointer;box-shadow:0 1px 0 rgba(14,40,70,.06)}
+.install-copy.ok{color:var(--ok,#1f8a5b)}
+.install-block pre{margin:0;padding:16px 18px 18px;overflow-x:auto;font:13px/1.45 ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;color:var(--fg);white-space:pre-wrap;word-break:break-word}
