@@ -17,13 +17,14 @@ Official repo for the Mac app, marketing site, design handoff, and Supabase sche
 
 ## Architecture
 
-- **Website** talks to Supabase for download leads. Buy is stubbed with a free test Pro license until payments go live.
-- **Mac app** enforces free vs paid locally (500 MB free cleanup, name/path masking). Activate Pro with the test key below.
+- **Website** talks to Supabase for download leads and starts Creem ([creem.io](https://www.creem.io/)) checkout for paid plans.
+- **Mac app** enforces free vs paid locally (500 MB free cleanup, name/path masking). Activate with your emailed key.
+- Payments: Creem is Merchant of Record. Checkout is created server-side (`create_checkout`); upgrades arrive via `creem-webhook`.
 - No Python backend.
 
 ## Free test Pro user
 
-Payments are not live yet. Use this to unlock paid features in the Mac app:
+Use this to unlock paid features in the Mac app without paying:
 
 | Field | Value |
 |-------|--------|
@@ -31,8 +32,6 @@ Payments are not live yet. Use this to unlock paid features in the Mac app:
 | License key | `ICLR-TEST-0001-FREE` |
 
 Any key containing `TEST` activates Yearly/Pro. A key containing `ONCE` activates the one-time plan.
-
-On the website, **Buy iClearer** opens the same test activation flow.
 
 ## Supabase (company project)
 

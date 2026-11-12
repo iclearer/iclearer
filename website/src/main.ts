@@ -431,12 +431,10 @@ async function onSubmit(event: Event) {
         if (noteEl()) noteEl()!.textContent = result.error || "Checkout failed.";
         return;
       }
-      showPaidSuccess(
-        email,
-        (result.key || key).toUpperCase(),
-        result.plan || plan,
-        result.macs || macs,
-      );
+      // Creem redirects the browser; if we somehow stay here, show waiting copy.
+      if (noteEl()) {
+        noteEl()!.textContent = result.message || "Redirecting to secure checkout…";
+      }
       return;
     }
 
@@ -454,31 +452,23 @@ async function onSubmit(event: Event) {
   }
 }
 
-function ensurePaddle() {
-  const token = import.meta.env.VITE_PADDLE_CLIENT_TOKEN as string | undefined;
-  if (!token || typeof document === "undefined") return;
-  if ((window as unknown as { Paddle?: unknown }).Paddle) return;
-  if (document.getElementById("paddle-js")) return;
-  const s = document.createElement("script");
-  s.id = "paddle-js";
-  s.src = "https://cdn.paddle.com/paddle/v2/paddle.js";
-  s.async = true;
-  s.onload = () => {
-    const Paddle = (
-      window as unknown as {
-        Paddle?: {
-          Environment: { set: (e: string) => void };
-          Initialize: (o: { token: string }) => void;
-        };
-      }
-    ).Paddle;
-    if (!Paddle) return;
-    // Live is the Paddle.js default. Only force sandbox for test_ tokens.
-    if (token.startsWith("test_")) Paddle.Environment.set("sandbox");
-    // pwCustomer (Retain) is set later at checkout when we know ctm_… from verify_key.
-    Paddle.Initialize({ token });
-  };
-  document.head.appendChild(s);
+function showPaidReturn() {
+  const params = new URLSearchParams(location.search);
+  if (params.get("paid") !== "1") return;
+  const plan = params.get("plan") || "yearly";
+  const macs = params.get("macs") || "1";
+  const success = document.getElementById("dl-success");
+  const modalEl = modal();
+  if (success && modalEl) {
+    success.hidden = false;
+    success.innerHTML = `<p><b>Payment received.</b></p><p>Your license is upgrading to ${plan} · ${macs} Mac${macs === "1" ? "" : "s"}. Open iClearer on your Mac and tap <b>Refresh plan</b> in Account. If it still shows Free, wait a moment and try again.</p>`;
+    modalEl.hidden = false;
+  }
+  params.delete("paid");
+  params.delete("plan");
+  params.delete("macs");
+  const next = `${location.pathname}${params.toString() ? `?${params}` : ""}${location.hash}`;
+  history.replaceState({}, "", next);
 }
 
 /** Email signup at the bottom of the page: creates the free account and opts in to updates. */
@@ -524,8 +514,8 @@ function wireSignupForm() {
 }
 
 function wireActions() {
-  ensurePaddle();
   wireSignupForm();
+  showPaidReturn();
 
   document.querySelectorAll<HTMLElement>("[data-action]").forEach((el) => {
     el.addEventListener("click", (event) => {

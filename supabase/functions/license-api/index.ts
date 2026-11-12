@@ -45,6 +45,8 @@ Deno.serve(async (req) => {
         return await restore(body);
       case "verify_key":
         return await verifyKey(body);
+      case "create_checkout":
+        return await createCheckout(body);
       case "upgrade":
         return await upgrade(body);
       case "set_marketing":
@@ -440,8 +442,118 @@ async function verifyKey(body: Body) {
 }
 
 /**
+ * Create a Creem checkout session for an existing free license key.
+ * API key stays server-side. Client redirects to the returned checkout_url.
+ */
+async function createCheckout(body: Body) {
+  const email = normalizeEmail(String(body.email ?? ""));
+  const key = String(body.key ?? body.license_key ?? "").trim().toUpperCase();
+  const plan = String(body.plan ?? "yearly");
+  const macs = Number(body.macs ?? 1);
+  const marketing = Boolean(body.marketing_opt_in ?? body.marketing);
+  const safePlan = ["monthly", "yearly", "once"].includes(plan) ? plan : "yearly";
+  const safeMacs = ([1, 2, 5].includes(macs) ? macs : 1) as 1 | 2 | 5;
+
+  if (!isValidEmail(email)) return json({ ok: false, error: "Enter a valid email address." }, 400);
+  if (!key) return json({ ok: false, error: "Enter your license key." }, 400);
+
+  const verified = await verifyKey({ email, key });
+  const verifiedBody = await verified.json();
+  if (!verifiedBody?.ok) {
+    return json(verifiedBody, verified.status);
+  }
+
+  const productId = creemProductId(safePlan, safeMacs);
+  if (!productId) {
+    return json(
+      {
+        ok: false,
+        error: `Checkout for ${safePlan} · ${safeMacs} Mac${safeMacs === 1 ? "" : "s"} isn’t set up yet. Pick 1 Mac, or email iclearerglobal@gmail.com.`,
+      },
+      400,
+    );
+  }
+
+  const apiKey = Deno.env.get("CREEM_API_KEY") ?? "";
+  if (!apiKey) {
+    return json({ ok: false, error: "Payments are not configured yet." }, 503);
+  }
+
+  const site = (Deno.env.get("SITE_URL") ?? "https://www.iclearer.com").replace(/\/$/, "");
+  const base = apiKey.startsWith("creem_test_")
+    ? "https://test-api.creem.io"
+    : "https://api.creem.io";
+
+  const payload = {
+    product_id: productId,
+    request_id: `${key}-${safePlan}-${safeMacs}-${Date.now()}`,
+    success_url: `${site}/?paid=1&plan=${safePlan}&macs=${safeMacs}`,
+    customer: { email },
+    metadata: {
+      email,
+      license_key: key,
+      plan: safePlan,
+      macs: String(safeMacs),
+      marketing_opt_in: marketing ? "true" : "false",
+    },
+  };
+
+  const res = await fetch(`${base}/v1/checkouts`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "x-api-key": apiKey,
+    },
+    body: JSON.stringify(payload),
+  });
+
+  let data: Record<string, unknown> = {};
+  try {
+    data = await res.json();
+  } catch {
+    /* ignore */
+  }
+
+  if (!res.ok) {
+    const err =
+      (data.error as { message?: string } | undefined)?.message ||
+      (typeof data.message === "string" ? data.message : null) ||
+      `Creem checkout failed (${res.status})`;
+    console.error("[license-api] create_checkout", res.status, data);
+    return json({ ok: false, error: err }, 502);
+  }
+
+  const checkoutUrl = String(
+    data.checkout_url ?? data.checkoutUrl ?? (data as { url?: string }).url ?? "",
+  );
+  if (!checkoutUrl) {
+    return json({ ok: false, error: "Creem did not return a checkout URL." }, 502);
+  }
+
+  return json({
+    ok: true,
+    checkout_url: checkoutUrl,
+    email,
+    key,
+    plan: safePlan,
+    macs: safeMacs,
+    message: "Continue to Creem checkout to finish payment.",
+  });
+}
+
+function creemProductId(plan: string, macs: number): string | undefined {
+  const mapRaw = Deno.env.get("CREEM_PRODUCT_MAP_JSON") ?? "{}";
+  try {
+    const map = JSON.parse(mapRaw) as Record<string, string>;
+    return map[`${plan}:${macs}`] || map[`${plan}_${macs}`];
+  } catch {
+    return undefined;
+  }
+}
+
+/**
  * Upgrade an existing license to a paid plan — keeps the same key.
- * Used after Paddle (webhook) or sandbox checkout.
+ * Used by webhooks / admin paths. Prefer Creem webhook for paid upgrades.
  */
 async function upgrade(body: Body) {
   const email = normalizeEmail(String(body.email ?? ""));
