@@ -46,14 +46,14 @@ final class SheetPresenter {
         switch kind {
         case .settings, .account: height = 600; width = 860
         case .rules: height = 540; width = 560
-        case .upgrade: height = 560; width = 560
+        case .upgrade: height = 720; width = 600
         case .onboarding: height = 340; width = 440
         case .signIn: height = 360; width = 440
         default: height = 440; width = 460
         }
-        _ = content.view // force load (onboarding/sign-in hug their content)
+        _ = content.view // force load (onboarding/sign-in/upgrade hug their content)
         let size: NSSize = {
-            if kind == .onboarding || kind == .signIn {
+            if kind == .onboarding || kind == .signIn || kind == .upgrade {
                 let fitted = content.view.frame.size
                 if fitted.width >= 1, fitted.height >= 1 { return fitted }
             }
@@ -628,14 +628,16 @@ final class UpgradeController: NSViewController {
 
     override func loadView() {
         let root = sheetRoot()
-        root.frame = NSRect(x: 0, y: 0, width: 580, height: 640)
+        // Tall enough for icon + plans + both CTAs (sheet size follows this frame).
+        root.frame = NSRect(x: 0, y: 0, width: 600, height: 720)
         view = root
 
+        let iconSize: CGFloat = alreadyPro ? 64 : 80
         let icon = NSImageView()
-        icon.image = Self.brandIcon()
+        icon.image = sheetBrandImage(size: iconSize)
         icon.imageScaling = .scaleProportionallyUpOrDown
         icon.wantsLayer = true
-        icon.layer?.cornerRadius = 24
+        icon.layer?.cornerRadius = iconSize * 0.27
         icon.layer?.masksToBounds = true
         icon.translatesAutoresizingMaskIntoConstraints = false
 
@@ -666,7 +668,7 @@ final class UpgradeController: NSViewController {
         let bullets = NSStackView()
         bullets.orientation = .vertical
         bullets.alignment = .leading
-        bullets.spacing = 12
+        bullets.spacing = 8
         bullets.translatesAutoresizingMaskIntoConstraints = false
         for line in features {
             bullets.addArrangedSubview(makeBulletRow(line))
@@ -720,20 +722,21 @@ final class UpgradeController: NSViewController {
         let stack = NSStackView(views: [icon, title, body, bullets, seatsLabel, seats, plans, noteLabel, buy, later])
         stack.orientation = .vertical
         stack.alignment = .centerX
-        stack.spacing = 12
-        stack.setCustomSpacing(8, after: title)
-        stack.setCustomSpacing(16, after: body)
-        stack.setCustomSpacing(18, after: bullets)
-        stack.setCustomSpacing(8, after: seatsLabel)
-        stack.setCustomSpacing(14, after: seats)
-        stack.setCustomSpacing(10, after: plans)
-        stack.setCustomSpacing(16, after: noteLabel)
+        stack.spacing = 10
+        stack.setCustomSpacing(6, after: title)
+        stack.setCustomSpacing(12, after: body)
+        stack.setCustomSpacing(14, after: bullets)
+        stack.setCustomSpacing(6, after: seatsLabel)
+        stack.setCustomSpacing(12, after: seats)
+        stack.setCustomSpacing(8, after: plans)
+        stack.setCustomSpacing(14, after: noteLabel)
+        stack.setCustomSpacing(10, after: buy)
         stack.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(stack)
 
         NSLayoutConstraint.activate([
-            icon.widthAnchor.constraint(equalToConstant: 88),
-            icon.heightAnchor.constraint(equalToConstant: 88),
+            icon.widthAnchor.constraint(equalToConstant: iconSize),
+            icon.heightAnchor.constraint(equalToConstant: iconSize),
             bullets.widthAnchor.constraint(equalToConstant: 440),
             seats.widthAnchor.constraint(equalToConstant: 360),
             plans.widthAnchor.constraint(equalToConstant: 500),
@@ -742,14 +745,17 @@ final class UpgradeController: NSViewController {
             buy.widthAnchor.constraint(equalToConstant: 220),
             later.widthAnchor.constraint(equalToConstant: 180),
             stack.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            stack.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            stack.topAnchor.constraint(equalTo: view.topAnchor, constant: 28),
             stack.leadingAnchor.constraint(greaterThanOrEqualTo: view.leadingAnchor, constant: 28),
             stack.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor, constant: -28)
         ])
         refreshPlanCards()
+        view.layoutSubtreeIfNeeded()
+        let fitted = stack.fittingSize
+        let width: CGFloat = 600
+        let height = max(640, ceil(fitted.height) + 56)
+        view.frame.size = NSSize(width: width, height: height)
     }
-
-    private static func brandIcon() -> NSImage { sheetBrandImage(size: 88) }
 
     private func seatNote() -> String {
         let n = selectedMacs
