@@ -691,7 +691,15 @@ final class SettingsController: NSViewController {
         let signOutBtn = tallerSettingsButton("Sign out")
         signOutBtn.target = self
         signOutBtn.action = #selector(signOut)
-        let footer = NSStackView(views: [refresh, restore, signOutBtn])
+        // Paid: Upgrade is also in the footer so it stays visible without scrolling.
+        var footerButtons: [NSView] = [refresh, restore, signOutBtn]
+        if license.isPro {
+            let upgradeFooter = tallerSettingsButton("Upgrade plan", accent: true)
+            upgradeFooter.target = self
+            upgradeFooter.action = #selector(openUpgrade)
+            footerButtons.insert(upgradeFooter, at: 0)
+        }
+        let footer = NSStackView(views: footerButtons)
         footer.orientation = .horizontal
         footer.alignment = .centerY
         footer.spacing = 10
