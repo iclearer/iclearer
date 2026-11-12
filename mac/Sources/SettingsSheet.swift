@@ -5,7 +5,6 @@ enum SettingsTab: Int, CaseIterable {
     case notifications
     case scanning
     case protectedItems
-    case schedule
     case account
 
     /// Used when opening Settings from Account / Manage devices.
@@ -17,7 +16,6 @@ enum SettingsTab: Int, CaseIterable {
         case .notifications: return "Notifications"
         case .scanning: return "Scanning"
         case .protectedItems: return "Protected"
-        case .schedule: return "Schedule"
         case .account: return "Account"
         }
     }
@@ -187,7 +185,6 @@ final class SettingsController: NSViewController {
         case .notifications: body = buildNotifications()
         case .scanning: body = buildScanning()
         case .protectedItems: body = buildProtected()
-        case .schedule: body = buildSchedule()
         case .account: body = buildAccount()
         }
         body.translatesAutoresizingMaskIntoConstraints = false
@@ -469,72 +466,6 @@ final class SettingsController: NSViewController {
         }
         stack.setCustomSpacing(12, after: stack.arrangedSubviews.last!)
         stack.addArrangedSubview(add)
-        return stack
-    }
-
-    private func buildSchedule() -> NSView {
-        let license = LicenseStore.current
-        let scheduleTitle = makeLabel("Schedule", size: 21, weight: .bold, color: tx)
-        scheduleTitle.alignment = .left
-        let titleRow = NSStackView()
-        titleRow.orientation = .horizontal
-        titleRow.spacing = 8
-        titleRow.alignment = .centerY
-        titleRow.addArrangedSubview(scheduleTitle)
-        titleRow.addArrangedSubview(chipBadge("1.1"))
-
-        let subtitle = makeLabel("Scan automatically and tell you what it found.", size: 14, weight: .regular, color: mu)
-        subtitle.alignment = .left
-        let stack = NSStackView(views: [titleRow, subtitle])
-        stack.orientation = .vertical
-        stack.alignment = .leading
-        stack.spacing = 6
-        stack.setCustomSpacing(20, after: subtitle)
-        stack.translatesAutoresizingMaskIntoConstraints = false
-
-        let yearly = license.plan.isSubscription
-        if !yearly {
-            addFullWidthRow(stack, upgradeBanner(
-                text: "Scheduled scans are part of monthly and yearly plans."
-            ))
-            stack.setCustomSpacing(12, after: stack.arrangedSubviews.last!)
-        }
-
-        let sched = SettingsToggle(on: license.scheduleEnabled && yearly, enabled: true) { [weak self] on in
-            if !LicenseStore.current.plan.isSubscription {
-                AppState.shared.showSheet(.upgrade, reason: "Scheduled scans are part of monthly and yearly plans.")
-                self?.renderTab()
-                return
-            }
-            LicenseStore.update { $0.scheduleEnabled = on }
-        }
-        addFullWidthRow(stack, settingsRow(
-            title: "Scan on a schedule",
-            subtitle: "iClearer never cleans by itself",
-            trailing: sched
-        ))
-
-        let labels = ["Daily", "Weekly", "Monthly"]
-        let selected: Int = {
-            switch license.scheduleFrequency {
-            case "Daily": return 0
-            case "Monthly": return 2
-            default: return 1
-            }
-        }()
-        let freq = SettingsSegment(labels: labels, selected: selected) { idx in
-            if !LicenseStore.current.plan.isSubscription {
-                AppState.shared.showSheet(.upgrade, reason: "Scheduled scans are part of monthly and yearly plans.")
-                return
-            }
-            LicenseStore.update { $0.scheduleFrequency = labels[idx] }
-        }
-        addFullWidthRow(stack, settingsRow(
-            title: "How often",
-            subtitle: "",
-            trailing: freq,
-            isLast: true
-        ))
         return stack
     }
 
