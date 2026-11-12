@@ -381,10 +381,7 @@ function showCreatedAccount(email: string) {
       Check <code>${email}</code> for your <code>ICLR-…</code> license key.<br><br>
       Then click Buy iClearer, enter that key, and pay. We upgrade the same key — no new key after payment.
     </div>
-    <p style="margin:16px 0 10px">
-      <a class="btn" href="${DMG_URL}" download="iClearer.dmg">Download iClearer for Mac</a>
-    </p>
-    <button type="button" class="btn" id="dl-created-buy" style="margin-top:8px">Buy iClearer next</button>
+    <button type="button" class="btn" id="dl-created-buy" style="margin-top:16px">Buy iClearer next</button>
     <button type="button" class="btn" id="dl-created-close" style="margin-top:8px;background:transparent;border:1.5px solid var(--ln);box-shadow:none;color:var(--fg)!important">Close</button>
   `;
   document.getElementById("dl-created-buy")?.addEventListener("click", () => {
