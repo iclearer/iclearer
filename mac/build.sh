@@ -66,5 +66,11 @@ chmod +x "$MACOS/iClearer"
 codesign --force --deep -s - "$APP" >/dev/null
 echo "Built $APP"
 "$ROOT/scripts/make_dmg.sh"
+# Keep the website download in sync with this build.
+WEBSITE_DMG="$ROOT/../website/public/downloads/iClearer.dmg"
+mkdir -p "$(dirname "$WEBSITE_DMG")"
+cp -f "$ROOT/iClearer.dmg" "$WEBSITE_DMG"
+echo "Mirrored download: $WEBSITE_DMG"
+
 echo "Open with:  open \"$APP\""
 echo "Install image: $ROOT/iClearer.dmg"
