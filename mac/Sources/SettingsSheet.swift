@@ -631,6 +631,18 @@ final class SettingsController: NSViewController {
             stack.setCustomSpacing(10, after: stack.arrangedSubviews.last!)
             stack.addArrangedSubview(hint)
             pinFullWidth(hint, in: stack)
+
+            let upgrade = tallerSettingsButton("Upgrade plan", accent: true)
+            upgrade.target = self
+            upgrade.action = #selector(openUpgrade)
+            let upgradeRow = settingsRow(
+                title: "Change plan or Macs",
+                subtitle: "Switch monthly, yearly, or one-time — or add Mac seats. Same license key.",
+                trailing: upgrade
+            )
+            stack.setCustomSpacing(14, after: hint)
+            stack.addArrangedSubview(upgradeRow)
+            pinFullWidth(upgradeRow, in: stack)
         } else {
             let unlock = tallerSettingsButton("Unlock", accent: true)
             unlock.target = self

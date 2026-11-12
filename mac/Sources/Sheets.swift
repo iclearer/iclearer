@@ -608,10 +608,19 @@ final class UpgradeController: NSViewController {
     private var planCards: [PlanCardView] = []
     private var seatButtons: [NSButton] = []
     private var noteLabel: NSTextField!
+    private var alreadyPro: Bool { LicenseStore.current.isPro }
 
     init(reason: String?) {
         self.reason = reason
         super.init(nibName: nil, bundle: nil)
+        // Prefill from the signed-in license so Account → Upgrade starts on the current tier.
+        let license = LicenseStore.current
+        selectedMacIndex = Pricing.macIndex(for: max(1, license.macSeats))
+        switch license.plan {
+        case .monthly: selectedPlan = .monthly
+        case .once: selectedPlan = .once
+        case .yearly, .free: selectedPlan = .yearly
+        }
     }
     required init?(coder: NSCoder) { nil }
 
@@ -630,19 +639,30 @@ final class UpgradeController: NSViewController {
         icon.layer?.masksToBounds = true
         icon.translatesAutoresizingMaskIntoConstraints = false
 
-        let title = makeLabel("Unlock iClearer", size: 24, weight: .bold, color: Theme.Colors.text, align: .center)
+        let titleText = alreadyPro ? "Upgrade your plan" : "Unlock iClearer"
+        let title = makeLabel(titleText, size: 24, weight: .bold, color: Theme.Colors.text, align: .center)
+        let defaultBody = alreadyPro
+            ? "Pick a different billing period or more Macs. Checkout keeps your current license key."
+            : "Everything your free plan hides, in one place."
         let body = makeMultilineLabel(
-            reason ?? "Everything your free plan hides, in one place.",
+            reason ?? defaultBody,
             size: 14, weight: .regular, color: Theme.Colors.muted
         )
         body.alignment = .center
 
-        let features = [
-            "Unlimited cleanup",
-            "Exact locations and Reveal in Finder",
-            "Full Storage Map, large files and app uninstaller",
-            "History with restore and a never-touch list"
-        ]
+        let features = alreadyPro
+            ? [
+                "Stay on the same ICLR key after you pay",
+                "Add Mac seats when you need them",
+                "Switch monthly, yearly, or one-time",
+                "Tap Refresh plan in Account after checkout"
+            ]
+            : [
+                "Unlimited cleanup",
+                "Exact locations and Reveal in Finder",
+                "Full Storage Map, large files and app uninstaller",
+                "History with restore and a never-touch list"
+            ]
         let bullets = NSStackView()
         bullets.orientation = .vertical
         bullets.alignment = .leading
@@ -689,11 +709,11 @@ final class UpgradeController: NSViewController {
         noteLabel = makeMultilineLabel(seatNote(), size: 12.5, weight: .regular, color: Theme.Colors.muted)
         noteLabel.alignment = .center
 
-        let buy = PillButton(title: "Continue to checkout", style: .primary)
+        let buy = PillButton(title: alreadyPro ? "Upgrade in browser" : "Continue to checkout", style: .primary)
         buy.target = self
         buy.action = #selector(buySelected)
 
-        let later = PillButton(title: "Maybe later", style: .ghost)
+        let later = PillButton(title: alreadyPro ? "Not now" : "Maybe later", style: .ghost)
         later.target = self
         later.action = #selector(close)
 
