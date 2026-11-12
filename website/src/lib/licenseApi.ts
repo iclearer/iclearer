@@ -106,7 +106,7 @@ export async function startCheckout(opts: {
   if (paddleLoaded && !priceId) {
     return {
       ok: false,
-      error: `Checkout for ${opts.plan} · ${opts.macs} Mac${opts.macs === 1 ? "" : "s"} isn’t set up yet. Pick 1 Mac, or email support@iclearer.com.`,
+      error: `Checkout for ${opts.plan} · ${opts.macs} Mac${opts.macs === 1 ? "" : "s"} isn’t set up yet. Pick 1 Mac, or email iclearerglobal@gmail.com.`,
     };
   }
 
@@ -177,7 +177,7 @@ export async function startCheckout(opts: {
   if (token?.startsWith("live_") || import.meta.env.VITE_PADDLE_ENV === "live") {
     return {
       ok: false,
-      error: "Checkout isn’t ready. Refresh the page and try again, or email support@iclearer.com.",
+      error: "Checkout isn’t ready. Refresh the page and try again, or email iclearerglobal@gmail.com.",
     };
   }
 

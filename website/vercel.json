@@ -1,10 +1,30 @@
 {
-  "rewrites": [],
+  "rewrites": [
+    { "source": "/terms", "destination": "/terms.html" },
+    { "source": "/privacy", "destination": "/privacy.html" },
+    { "source": "/refund", "destination": "/refund.html" },
+    { "source": "/refund-policy", "destination": "/refund.html" }
+  ],
   "redirects": [
     {
       "source": "/install.html",
       "destination": "/#install",
       "permanent": false
+    },
+    {
+      "source": "/terms-of-service",
+      "destination": "/terms",
+      "permanent": true
+    },
+    {
+      "source": "/privacy-policy",
+      "destination": "/privacy",
+      "permanent": true
+    },
+    {
+      "source": "/refund-policy.html",
+      "destination": "/refund",
+      "permanent": true
     }
   ]
 }

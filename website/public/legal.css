@@ -1,0 +1,71 @@
+body {
+  margin: 0;
+  font: 400 17px/1.55 Inter, -apple-system, "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+  color: #1d1d1f;
+  background: #fbfcfe;
+  padding: 48px 22px 80px;
+  -webkit-font-smoothing: antialiased;
+}
+main {
+  max-width: 720px;
+  margin: 0 auto;
+}
+a {
+  color: #2f6fa6;
+}
+.back {
+  margin: 0 0 28px;
+}
+.back a {
+  text-decoration: none;
+  font-weight: 600;
+}
+.back a:hover {
+  text-decoration: underline;
+}
+h1 {
+  margin: 0 0 8px;
+  font-size: clamp(32px, 5vw, 44px);
+  line-height: 1.1;
+  letter-spacing: -0.04em;
+}
+.meta {
+  margin: 0 0 28px;
+  color: #5b6773;
+  font-size: 14px;
+}
+h2 {
+  margin: 32px 0 10px;
+  font-size: 22px;
+  letter-spacing: -0.02em;
+}
+p,
+li {
+  color: #5b6773;
+}
+ul {
+  padding-left: 1.2em;
+}
+li {
+  margin: 6px 0;
+}
+b {
+  color: #1d1d1f;
+  font-weight: 600;
+}
+.legal-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+  margin-top: 48px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(14, 40, 70, 0.1);
+  font-size: 14px;
+  font-weight: 600;
+}
+.legal-nav a {
+  text-decoration: none;
+}
+.legal-nav a:hover {
+  text-decoration: underline;
+}
