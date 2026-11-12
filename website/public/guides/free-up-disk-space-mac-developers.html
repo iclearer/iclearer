@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Free Up Disk Space on Mac for Developers | iClearer</title>
+    <meta name="description" content="Reclaim tens of gigabytes on a developer Mac. Safe commands to clear Xcode DerivedData, npm, pnpm, pip, Homebrew, Docker, simulators and AI model caches." />
+    <link rel="canonical" href="https://www.iclearer.com/guides/free-up-disk-space-mac-developers" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="theme-color" content="#3B7CB0" />
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="iClearer" />
+    <meta property="og:title" content="Free Up Disk Space on Mac for Developers | iClearer" />
+    <meta property="og:description" content="Reclaim tens of gigabytes on a developer Mac. Safe commands to clear Xcode DerivedData, npm, pnpm, pip, Homebrew, Docker, simulators and AI model caches." />
+    <meta property="og:url" content="https://www.iclearer.com/guides/free-up-disk-space-mac-developers" />
+    <meta property="og:image" content="https://www.iclearer.com/og.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="iClearer, the Mac cleaner. Clear space. Keep control." />
+    <meta property="og:locale" content="en_US" />
+    <meta property="article:modified_time" content="2026-11-12" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Free Up Disk Space on Mac for Developers | iClearer" />
+    <meta name="twitter:description" content="Reclaim tens of gigabytes on a developer Mac. Safe commands to clear Xcode DerivedData, npm, pnpm, pip, Homebrew, Docker, simulators and AI model caches." />
+    <meta name="twitter:image" content="https://www.iclearer.com/og.png" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/assets/png/favicon-48.png" />
+    <link rel="apple-touch-icon" href="/assets/png/apple-touch-icon-180.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" />
+    <link rel="stylesheet" href="/guide.css" />
+    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"iClearer","item":"https://www.iclearer.com/"},{"@type":"ListItem","position":2,"name":"Guides","item":"https://www.iclearer.com/guides"},{"@type":"ListItem","position":3,"name":"Free up disk space on a Mac for developers","item":"https://www.iclearer.com/guides/free-up-disk-space-mac-developers"}]},{"@type":"Article","@id":"https://www.iclearer.com/guides/free-up-disk-space-mac-developers#article","headline":"Free up disk space on a Mac for developers","description":"Reclaim tens of gigabytes on a developer Mac. Safe commands to clear Xcode DerivedData, npm, pnpm, pip, Homebrew, Docker, simulators and AI model caches.","image":"https://www.iclearer.com/og.png","datePublished":"2026-11-12","dateModified":"2026-11-12","inLanguage":"en","mainEntityOfPage":"https://www.iclearer.com/guides/free-up-disk-space-mac-developers","author":{"@type":"Organization","@id":"https://www.iclearer.com/#organization","name":"iClearer","url":"https://www.iclearer.com/"},"publisher":{"@type":"Organization","@id":"https://www.iclearer.com/#organization","name":"iClearer","logo":{"@type":"ImageObject","url":"https://www.iclearer.com/assets/png/icon-glass-light-512.png"}},"about":{"@id":"https://www.iclearer.com/#app"}},{"@type":"FAQPage","@id":"https://www.iclearer.com/guides/free-up-disk-space-mac-developers#faq","mainEntity":[{"@type":"Question","name":"Is it safe to delete Xcode DerivedData?","acceptedAnswer":{"@type":"Answer","text":"Yes. DerivedData is Xcode’s build cache and index. Deleting it is safe; Xcode rebuilds it the next time you build, so that build will take longer than usual."}},{"@type":"Question","name":"Is it safe to delete the npm cache?","acceptedAnswer":{"@type":"Answer","text":"Yes. The npm cache in ~/.npm holds downloaded packages. Run npm cache clean --force to clear it. npm downloads packages again when you next install them."}},{"@type":"Question","name":"What does docker system prune remove?","acceptedAnswer":{"@type":"Answer","text":"It removes stopped containers, unused networks, dangling images and build cache. It does not remove volumes or images that are still tagged unless you add -a and --volumes, which can delete data you want to keep."}},{"@type":"Question","name":"Why is my Mac storage full after installing Xcode?","acceptedAnswer":{"@type":"Answer","text":"Xcode itself is large, and it adds simulator runtimes, device support files and a DerivedData build cache that grows with every project. Deleting DerivedData and unused simulators usually returns the most space."}},{"@type":"Question","name":"How do I find which developer folders are using the most space?","acceptedAnswer":{"@type":"Answer","text":"Run du -sh ~/Library/Developer ~/.npm ~/.cache ~/.gradle ~/.docker 2>/dev/null in Terminal to see the size of the common ones, or use a disk cleaner such as iClearer that lists developer caches by size."}}]}]}</script>
+  </head>
+  <body>
+    <header class="g-hd">
+      <a class="g-logo" href="/"><img src="/assets/png/icon-glass-light-120.png" width="36" height="36" alt="" />iClearer</a>
+      <nav class="g-nav" aria-label="Main">
+        <a href="/guides" class="g-keep">Guides</a>
+        <a href="/#features">Features</a>
+        <a href="/#pricing">Pricing</a>
+        <a class="g-btn" href="/downloads/iClearer.dmg" download="iClearer.dmg">Download Free</a>
+      </nav>
+    </header>
+
+    <main>
+      <nav class="g-bc" aria-label="Breadcrumb"><a href="/">iClearer</a> › <a href="/guides">Guides</a> › Free up space for developers</nav>
+      <article>
+        <h1>Free up disk space on a Mac for developers</h1>
+        <p class="g-meta">Updated <time datetime="2026-11-12">12 November 2026</time> · By the iClearer team</p>
+
+        <div class="g-answer">
+          <h2>Short answer</h2>
+          <p>On a developer’s Mac, most reclaimable space is in build caches and package downloads, and nearly all of it is safe to delete because the tools rebuild it. The biggest wins are usually <b>Xcode DerivedData and simulators</b>, <b>Docker images and build cache</b>, <b>npm, pnpm and Yarn caches</b>, <b>Homebrew downloads</b>, and <b>downloaded AI models</b>.</p>
+<pre><code>rm -rf ~/Library/Developer/Xcode/DerivedData
+xcrun simctl delete unavailable
+npm cache clean --force
+brew cleanup --prune=all
+pip cache purge
+docker system prune</code></pre>
+        </div>
+
+        <nav class="g-toc" aria-label="On this page">
+          <b>On this page</b>
+          <ol>
+            <li><a href="#xcode">Xcode</a></li>
+            <li><a href="#node">Node: npm, pnpm, Yarn and node_modules</a></li>
+            <li><a href="#python">Python and AI tooling</a></li>
+            <li><a href="#homebrew">Homebrew</a></li>
+            <li><a href="#docker">Docker</a></li>
+            <li><a href="#mobile">CocoaPods and Gradle</a></li>
+            <li><a href="#editors">Cursor and VS Code</a></li>
+            <li><a href="#never">What to never delete</a></li>
+            <li><a href="#faq">Frequently asked questions</a></li>
+          </ol>
+        </nav>
+
+<h2 id="xcode">Xcode</h2>
+<div class="g-tbl"><table>
+  <tr><th>What</th><th>Path</th><th>Safe?</th></tr>
+  <tr><td>DerivedData (build cache)</td><td><code>~/Library/Developer/Xcode/DerivedData</code></td><td>Yes. Rebuilt on the next build.</td></tr>
+  <tr><td>iOS DeviceSupport</td><td><code>~/Library/Developer/Xcode/iOS DeviceSupport</code></td><td>Yes. Recreated when you connect a device.</td></tr>
+  <tr><td>Simulator data</td><td><code>~/Library/Developer/CoreSimulator</code></td><td>Ask first. You lose simulator app data.</td></tr>
+  <tr><td>Archives</td><td><code>~/Library/Developer/Xcode/Archives</code></td><td>Keep archives of builds you shipped; they hold the symbols for crash reports.</td></tr>
+</table></div>
+<pre><code>rm -rf ~/Library/Developer/Xcode/DerivedData
+xcrun simctl delete unavailable</code></pre>
+<p>The second command removes simulators for runtimes you no longer have installed. To remove whole simulator runtimes, open Xcode → Settings → Components (called Platforms in Xcode 15).</p>
+
+<h2 id="node">Node: npm, pnpm, Yarn and node_modules</h2>
+<pre><code>npm cache clean --force
+pnpm store prune
+yarn cache clean</code></pre>
+<p>Old <code>node_modules</code> folders in projects you no longer work on add up quickly. This lists the 20 largest:</p>
+<pre><code>find ~ -name node_modules -type d -prune -exec du -sh {} + 2>/dev/null | sort -h | tail -20</code></pre>
+<p>Deleting a <code>node_modules</code> folder is safe. Run your package manager’s install command to bring it back.</p>
+
+<h2 id="python">Python and AI tooling</h2>
+<pre><code>pip cache purge
+uv cache clean</code></pre>
+<p>Many tools also write to <code>~/.cache</code>, including Hugging Face downloads. Downloaded models are often the largest thing on the disk. For Ollama:</p>
+<pre><code>ollama list
+ollama rm &lt;model-name&gt;</code></pre>
+<p class="g-note"><b>Note:</b> models are safe to remove but slow to get back. You will have to download them again.</p>
+
+<h2 id="homebrew">Homebrew</h2>
+<pre><code>brew cleanup --prune=all
+brew autoremove</code></pre>
+<p>The first removes old versions and every cached download. The second removes dependencies nothing needs any more.</p>
+
+<h2 id="docker">Docker</h2>
+<p>See what Docker is using first:</p>
+<pre><code>docker system df</code></pre>
+<p>Then remove stopped containers, unused networks, dangling images and build cache:</p>
+<pre><code>docker system prune</code></pre>
+<p class="g-note"><b>Careful:</b> <code>docker system prune -a --volumes</code> also removes every image not used by a running container and all unused volumes. Volumes can hold database data that cannot be rebuilt.</p>
+<p>Docker Desktop keeps everything inside one disk image, so Finder shows a single large file. Use the Docker commands rather than deleting that file by hand.</p>
+
+<h2 id="mobile">CocoaPods and Gradle</h2>
+<pre><code>pod cache clean --all
+rm -rf ~/.gradle/caches</code></pre>
+<p>Both download what they need on the next build.</p>
+
+<h2 id="editors">Cursor and VS Code</h2>
+<p>The caches are safe to clear: <code>~/Library/Application Support/Cursor/Cache</code>, <code>~/Library/Application Support/Cursor/CachedData</code> and <code>~/Library/Application Support/Code/Cache</code>.</p>
+<p>Do not delete the <code>User</code> folder next to them. It holds your settings, keybindings, extensions state and chat history.</p>
+
+<h2 id="never">What to never delete</h2>
+<ul>
+  <li><code>~/.ssh</code> — your SSH keys</li>
+  <li><code>.env</code> files and API tokens</li>
+  <li><code>.git</code> folders — your commit history</li>
+  <li><code>~/Library/Keychains</code> — signing certificates and passwords</li>
+  <li>Editor <code>User</code> folders — settings and chats</li>
+  <li>Docker volumes that hold data you need</li>
+</ul>
+
+        <section class="g-cta" aria-labelledby="cta">
+          <h2 id="cta">iClearer has a Builders pack for this</h2>
+          <p>iClearer’s Builders screen finds npm, pnpm, Yarn, pip and Homebrew caches, Xcode DerivedData, CocoaPods and Gradle caches, Cursor and VS Code caches, iOS Simulator data, Docker data and Ollama models, with the size of each. Rebuildable caches are labelled <b>Safe</b>; simulators, Docker and models are <b>Ask first</b>. API tokens, SSH keys, <code>.env</code> files and git repositories can never be selected.</p>
+          <div class="g-cta-row">
+            <a class="g-btn lg green" href="/downloads/iClearer.dmg" download="iClearer.dmg">Download Free</a>
+            <a class="g-btn lg ol" href="/#pricing">See pricing</a>
+          </div>
+          <small>Scanning is free on every Mac and the free plan includes 500 MB of cleanup. Unlimited cleanup starts at $29.99 per year for one Mac, with a 14-day money-back guarantee. Needs macOS 13 Ventura or later, Intel or Apple silicon.</small>
+        </section>
+
+        <section class="g-faq">
+          <h2 id="faq">Frequently asked questions</h2>
+          <h3>Is it safe to delete Xcode DerivedData?</h3>
+          <p>Yes. DerivedData is Xcode’s build cache and index. Deleting it is safe; Xcode rebuilds it the next time you build, so that build will take longer than usual.</p>
+          <h3>Is it safe to delete the npm cache?</h3>
+          <p>Yes. The npm cache in ~/.npm holds downloaded packages. Run npm cache clean --force to clear it. npm downloads packages again when you next install them.</p>
+          <h3>What does docker system prune remove?</h3>
+          <p>It removes stopped containers, unused networks, dangling images and build cache. It does not remove volumes or images that are still tagged unless you add -a and --volumes, which can delete data you want to keep.</p>
+          <h3>Why is my Mac storage full after installing Xcode?</h3>
+          <p>Xcode itself is large, and it adds simulator runtimes, device support files and a DerivedData build cache that grows with every project. Deleting DerivedData and unused simulators usually returns the most space.</p>
+          <h3>How do I find which developer folders are using the most space?</h3>
+          <p>Run du -sh ~/Library/Developer ~/.npm ~/.cache ~/.gradle ~/.docker 2&gt;/dev/null in Terminal to see the size of the common ones, or use a disk cleaner such as iClearer that lists developer caches by size.</p>
+        </section>
+
+        <section class="g-rel">
+          <h2>Related guides</h2>
+          <ul>
+            <li><a href="/guides/mac-storage-full">Mac storage full? How to free up space safely<span>Startup disk almost full? See what is using your Mac’s storage, then clear caches, System Data, large files and developer junk safely, step by step.</span></a></li>
+            <li><a href="/guides/clear-cache-mac">How to clear cache on Mac<span>Clear app, browser and system caches on a Mac safely. Step-by-step for Finder, Safari, Chrome and Firefox, plus what is safe to delete and what is not.</span></a></li>
+            <li><a href="/guides/clear-system-data-mac">How to clear System Data on Mac<span>System Data taking up too much space? Learn what it contains and how to shrink it safely: caches, logs, Time Machine snapshots and app leftovers.</span></a></li>
+          </ul>
+        </section>
+      </article>
+    </main>
+
+    <footer class="g-ft">
+      <div class="g-ft-in">
+        <a href="/">iClearer home</a>
+        <a href="/guides">Guides</a>
+        <a href="/#pricing">Pricing</a>
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms of Service</a>
+        <a href="/refund">Refund Policy</a>
+        <a href="mailto:iclearerglobal@gmail.com">iclearerglobal@gmail.com</a>
+        <p>Copyright © 2026 iClearer. iClearer is not affiliated with Apple Inc. Mac, macOS, MacBook, iMac, Xcode and iPhone are trademarks of Apple Inc.</p>
+      </div>
+    </footer>
+  </body>
+</html>

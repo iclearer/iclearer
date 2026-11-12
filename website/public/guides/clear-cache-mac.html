@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>How to Clear Cache on Mac: Apps, Browsers, System | iClearer</title>
+    <meta name="description" content="Clear app, browser and system caches on a Mac safely. Step-by-step for Finder, Safari, Chrome and Firefox, plus what is safe to delete and what is not." />
+    <link rel="canonical" href="https://www.iclearer.com/guides/clear-cache-mac" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="theme-color" content="#3B7CB0" />
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="iClearer" />
+    <meta property="og:title" content="How to Clear Cache on Mac: Apps, Browsers, System | iClearer" />
+    <meta property="og:description" content="Clear app, browser and system caches on a Mac safely. Step-by-step for Finder, Safari, Chrome and Firefox, plus what is safe to delete and what is not." />
+    <meta property="og:url" content="https://www.iclearer.com/guides/clear-cache-mac" />
+    <meta property="og:image" content="https://www.iclearer.com/og.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="iClearer, the Mac cleaner. Clear space. Keep control." />
+    <meta property="og:locale" content="en_US" />
+    <meta property="article:modified_time" content="2026-11-12" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="How to Clear Cache on Mac: Apps, Browsers, System | iClearer" />
+    <meta name="twitter:description" content="Clear app, browser and system caches on a Mac safely. Step-by-step for Finder, Safari, Chrome and Firefox, plus what is safe to delete and what is not." />
+    <meta name="twitter:image" content="https://www.iclearer.com/og.png" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/assets/png/favicon-48.png" />
+    <link rel="apple-touch-icon" href="/assets/png/apple-touch-icon-180.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" />
+    <link rel="stylesheet" href="/guide.css" />
+    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"iClearer","item":"https://www.iclearer.com/"},{"@type":"ListItem","position":2,"name":"Guides","item":"https://www.iclearer.com/guides"},{"@type":"ListItem","position":3,"name":"How to clear cache on Mac","item":"https://www.iclearer.com/guides/clear-cache-mac"}]},{"@type":"Article","@id":"https://www.iclearer.com/guides/clear-cache-mac#article","headline":"How to clear cache on Mac","description":"Clear app, browser and system caches on a Mac safely. Step-by-step for Finder, Safari, Chrome and Firefox, plus what is safe to delete and what is not.","image":"https://www.iclearer.com/og.png","datePublished":"2026-11-12","dateModified":"2026-11-12","inLanguage":"en","mainEntityOfPage":"https://www.iclearer.com/guides/clear-cache-mac","author":{"@type":"Organization","@id":"https://www.iclearer.com/#organization","name":"iClearer","url":"https://www.iclearer.com/"},"publisher":{"@type":"Organization","@id":"https://www.iclearer.com/#organization","name":"iClearer","logo":{"@type":"ImageObject","url":"https://www.iclearer.com/assets/png/icon-glass-light-512.png"}},"about":{"@id":"https://www.iclearer.com/#app"}},{"@type":"FAQPage","@id":"https://www.iclearer.com/guides/clear-cache-mac#faq","mainEntity":[{"@type":"Question","name":"Is it safe to delete everything in ~/Library/Caches?","acceptedAnswer":{"@type":"Answer","text":"Yes. Everything in ~/Library/Caches is data apps can recreate. Quit your apps first, and delete the contents of the folders rather than the folders themselves. Apps may open more slowly the first time afterwards."}},{"@type":"Question","name":"Will clearing the cache delete my passwords or log me out?","acceptedAnswer":{"@type":"Answer","text":"No. Caches hold temporary copies of data, not passwords. Passwords are stored in Keychain. You are only signed out of websites if you also clear cookies."}},{"@type":"Question","name":"Does clearing the cache make a Mac faster?","acceptedAnswer":{"@type":"Answer","text":"Not usually. It frees disk space and can fix an app that is behaving oddly, but caches exist to make apps faster, so apps can feel slower until the cache rebuilds. A Mac with a nearly full disk does run better once space is freed."}},{"@type":"Question","name":"How often should I clear the cache on my Mac?","acceptedAnswer":{"@type":"Answer","text":"Only when you need the space or an app is misbehaving. There is no benefit to clearing caches on a fixed schedule, because they grow back as you use your apps."}},{"@type":"Question","name":"Where are cache files stored on a Mac?","acceptedAnswer":{"@type":"Answer","text":"App caches are in ~/Library/Caches, system caches are in /Library/Caches, and browsers keep theirs in their own folders, mostly under ~/Library/Caches. In Finder, press Shift-Command-G and type the path to open any of them."}}]}]}</script>
+  </head>
+  <body>
+    <header class="g-hd">
+      <a class="g-logo" href="/"><img src="/assets/png/icon-glass-light-120.png" width="36" height="36" alt="" />iClearer</a>
+      <nav class="g-nav" aria-label="Main">
+        <a href="/guides" class="g-keep">Guides</a>
+        <a href="/#features">Features</a>
+        <a href="/#pricing">Pricing</a>
+        <a class="g-btn" href="/downloads/iClearer.dmg" download="iClearer.dmg">Download Free</a>
+      </nav>
+    </header>
+
+    <main>
+      <nav class="g-bc" aria-label="Breadcrumb"><a href="/">iClearer</a> › <a href="/guides">Guides</a> › Clear cache on Mac</nav>
+      <article>
+        <h1>How to clear cache on Mac</h1>
+        <p class="g-meta">Updated <time datetime="2026-11-12">12 November 2026</time> · By the iClearer team</p>
+
+        <div class="g-answer">
+          <h2>Short answer</h2>
+          <p>To clear app caches on a Mac, quit your apps, open Finder, press <kbd>Shift</kbd> <kbd>Command</kbd> <kbd>G</kbd>, go to <code>~/Library/Caches</code>, move the contents of the folders you want to clear to the Trash, and empty the Trash. Browser caches are cleared from inside each browser. <b>Deleting caches is safe</b>: apps rebuild them, though the first launch afterwards can be a little slower.</p>
+        </div>
+
+        <nav class="g-toc" aria-label="On this page">
+          <b>On this page</b>
+          <ol>
+            <li><a href="#types">The kinds of cache on a Mac</a></li>
+            <li><a href="#app-cache">Clear app caches</a></li>
+            <li><a href="#browser-cache">Clear browser caches</a></li>
+            <li><a href="#system-cache">Clear system caches</a></li>
+            <li><a href="#safe">Is it safe, and how often?</a></li>
+            <li><a href="#faq">Frequently asked questions</a></li>
+          </ol>
+        </nav>
+
+<h2 id="types">The kinds of cache on a Mac</h2>
+<div class="g-tbl"><table>
+  <tr><th>Cache</th><th>Where it lives</th><th>Safe to clear?</th></tr>
+  <tr><td>App (user) cache</td><td><code>~/Library/Caches</code></td><td>Yes. Apps rebuild it.</td></tr>
+  <tr><td>Browser cache</td><td>Each browser’s own folder, mostly under <code>~/Library/Caches</code></td><td>Yes. Pages reload once.</td></tr>
+  <tr><td>System cache</td><td><code>/Library/Caches</code></td><td>Usually. macOS rebuilds it.</td></tr>
+  <tr><td>Developer caches</td><td><code>~/.npm</code>, <code>~/Library/Caches/Homebrew</code>, Xcode DerivedData</td><td>Yes. Tools download or rebuild.</td></tr>
+</table></div>
+
+<h2 id="app-cache">Clear app caches</h2>
+<ol>
+  <li>Quit the apps whose cache you want to clear.</li>
+  <li>In Finder, press <kbd>Shift</kbd> <kbd>Command</kbd> <kbd>G</kbd>.</li>
+  <li>Type <code>~/Library/Caches</code> and press Return.</li>
+  <li>Press <kbd>Command</kbd> <kbd>J</kbd> and tick <b>Calculate All Sizes</b> to see which folders are big.</li>
+  <li>Open a large folder and move its contents to the Trash. Keeping the folder itself avoids permission problems.</li>
+  <li>Empty the Trash to get the space back.</li>
+</ol>
+
+<h2 id="browser-cache">Clear browser caches</h2>
+<h3>Safari</h3>
+<ol>
+  <li>Open Safari → Settings → Advanced and tick <b>Show features for web developers</b>. On older versions it is called Show Develop menu in menu bar.</li>
+  <li>Choose <b>Develop → Empty Caches</b>, or press <kbd>Option</kbd> <kbd>Command</kbd> <kbd>E</kbd>.</li>
+</ol>
+<h3>Chrome</h3>
+<ol>
+  <li>Press <kbd>Shift</kbd> <kbd>Command</kbd> <kbd>Delete</kbd>.</li>
+  <li>Tick <b>Cached images and files</b>, choose a time range and confirm.</li>
+</ol>
+<h3>Firefox</h3>
+<ol>
+  <li>Open Firefox → Settings → Privacy &amp; Security.</li>
+  <li>Under Cookies and Site Data, click <b>Clear Data</b>, tick the cached files option and confirm.</li>
+</ol>
+<p class="g-note"><b>Note:</b> clearing the cache does not sign you out. Clearing <i>cookies</i> does, so leave that box unticked if you want to stay logged in.</p>
+
+<h2 id="system-cache">Clear system caches</h2>
+<p>System caches live in <code>/Library/Caches</code> (no <code>~</code> at the start). macOS and shared components rebuild them, and they are usually small. You will be asked for your password to remove them. Leave <code>/System/Library/Caches</code> alone, because macOS protects and manages it.</p>
+
+<h2 id="safe">Is it safe, and how often should you do it?</h2>
+<p>Clearing caches is safe. The trade-off is speed: caches exist so apps do not have to download or rebuild the same data, so the first launch after clearing can be slower and the cache will grow back.</p>
+<p>That is why you do not need to clear caches on a schedule. Do it when you are short on space, or when one app is misbehaving and a fresh cache might fix it.</p>
+
+        <section class="g-cta" aria-labelledby="cta">
+          <h2 id="cta">Clear every cache in one pass with iClearer</h2>
+          <p>iClearer finds app caches, browser caches, system caches, logs and developer caches in one scan and shows how much space each one uses. Caches your Mac rebuilds are labelled <b>Safe</b>. You tick what goes, and it moves to the Trash so you can undo it.</p>
+          <div class="g-cta-row">
+            <a class="g-btn lg green" href="/downloads/iClearer.dmg" download="iClearer.dmg">Download Free</a>
+            <a class="g-btn lg ol" href="/#pricing">See pricing</a>
+          </div>
+          <small>Scanning is free on every Mac and the free plan includes 500 MB of cleanup. Unlimited cleanup starts at $29.99 per year for one Mac, with a 14-day money-back guarantee. Needs macOS 13 Ventura or later, Intel or Apple silicon.</small>
+        </section>
+
+        <section class="g-faq">
+          <h2 id="faq">Frequently asked questions</h2>
+          <h3>Is it safe to delete everything in ~/Library/Caches?</h3>
+          <p>Yes. Everything in ~/Library/Caches is data apps can recreate. Quit your apps first, and delete the contents of the folders rather than the folders themselves. Apps may open more slowly the first time afterwards.</p>
+          <h3>Will clearing the cache delete my passwords or log me out?</h3>
+          <p>No. Caches hold temporary copies of data, not passwords. Passwords are stored in Keychain. You are only signed out of websites if you also clear cookies.</p>
+          <h3>Does clearing the cache make a Mac faster?</h3>
+          <p>Not usually. It frees disk space and can fix an app that is behaving oddly, but caches exist to make apps faster, so apps can feel slower until the cache rebuilds. A Mac with a nearly full disk does run better once space is freed.</p>
+          <h3>How often should I clear the cache on my Mac?</h3>
+          <p>Only when you need the space or an app is misbehaving. There is no benefit to clearing caches on a fixed schedule, because they grow back as you use your apps.</p>
+          <h3>Where are cache files stored on a Mac?</h3>
+          <p>App caches are in ~/Library/Caches, system caches are in /Library/Caches, and browsers keep theirs in their own folders, mostly under ~/Library/Caches. In Finder, press Shift-Command-G and type the path to open any of them.</p>
+        </section>
+
+        <section class="g-rel">
+          <h2>Related guides</h2>
+          <ul>
+            <li><a href="/guides/mac-storage-full">Mac storage full? How to free up space safely<span>Startup disk almost full? See what is using your Mac’s storage, then clear caches, System Data, large files and developer junk safely, step by step.</span></a></li>
+            <li><a href="/guides/clear-system-data-mac">How to clear System Data on Mac<span>System Data taking up too much space? Learn what it contains and how to shrink it safely: caches, logs, Time Machine snapshots and app leftovers.</span></a></li>
+            <li><a href="/guides/free-up-disk-space-mac-developers">Free up disk space on a Mac for developers<span>Reclaim tens of gigabytes on a developer Mac. Safe commands to clear Xcode DerivedData, npm, pnpm, pip, Homebrew, Docker, simulators and AI model caches.</span></a></li>
+          </ul>
+        </section>
+      </article>
+    </main>
+
+    <footer class="g-ft">
+      <div class="g-ft-in">
+        <a href="/">iClearer home</a>
+        <a href="/guides">Guides</a>
+        <a href="/#pricing">Pricing</a>
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms of Service</a>
+        <a href="/refund">Refund Policy</a>
+        <a href="mailto:iclearerglobal@gmail.com">iclearerglobal@gmail.com</a>
+        <p>Copyright © 2026 iClearer. iClearer is not affiliated with Apple Inc. Mac, macOS, MacBook, iMac, Xcode and iPhone are trademarks of Apple Inc.</p>
+      </div>
+    </footer>
+  </body>
+</html>

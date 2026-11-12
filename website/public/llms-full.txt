@@ -1,0 +1,686 @@
+# iClearer: full reference
+
+Source: https://www.iclearer.com/ · Updated 12 November 2026
+
+## What iClearer is
+
+iClearer is a Mac cleaner that finds the hidden caches, logs, app leftovers, developer files and large files filling your Mac, shows exactly how much space you will free, and moves what you choose to the Trash.
+
+- Category: Mac cleaner / disk cleanup utility for macOS
+- Requirements: macOS 13 Ventura or later; Intel and Apple silicon
+- Current version: 1.0.1
+- Download: https://www.iclearer.com/downloads/iClearer.dmg
+- Support: iclearerglobal@gmail.com
+- The name is iClearer (with "clear"). It is not "iCleaner" and is not related to similarly named apps.
+- iClearer is not affiliated with Apple Inc.
+
+## What it does
+
+- Scans for app caches, system caches, logs and temporary files
+- Labels every item Safe or Ask first before anything moves
+- Moves items to the Trash instead of deleting them, with undo
+- History of every cleanup, with restore
+- Storage Map of the whole disk
+- Large and old file finder with preview
+- App uninstaller that removes leftover files
+- Builders pack for developer and AI tool caches: npm, pnpm, Yarn, pip, Homebrew, Xcode DerivedData, CocoaPods, Gradle, Cursor, VS Code, iOS Simulator, Docker and Ollama models
+- Never selects Keychain, accounts, editor user data, API tokens, SSH keys, .env files or git repositories
+- Checks Time Machine before removing anything that cannot be rebuilt
+- Runs on Intel and Apple silicon Macs
+
+## How it works
+
+1. Scan. iClearer looks for caches, logs, leftovers, large files and apps. Nothing moves yet.
+2. Review. Every item says what it is, how big it is, and whether it is Safe (your Mac rebuilds it) or Ask first (larger or system-related; starts unticked).
+3. Clean up. The items you chose go to the Trash. Undo works right away, and History keeps every cleanup so it can be restored.
+
+## Pricing (USD)
+
+Scanning is free on every Mac. The free plan includes 500 MB of cleanup in total. Paid plans give unlimited cleanup:
+
+| Plan | 1 Mac | 2 Macs | 5 Macs |
+| --- | --- | --- | --- |
+| Yearly (per year) | $29.99 | $44.99 | $74.99 |
+| Monthly (per month) | $4.99 | $7.99 | $12.99 |
+| One-time (pay once, version 1) | $79.99 | $119.99 | $189.99 |
+
+Every purchase has a 14-day money-back guarantee. Subscriptions can be cancelled anytime. A one-time purchase covers version 1.
+
+## Frequently asked questions
+
+### What is iClearer?
+
+iClearer is a Mac cleaner app for macOS 13 or later. It finds the hidden caches, logs, app leftovers, developer files and large files filling your Mac, shows how much space each one uses, and moves what you choose to the Trash. Scanning is free.
+
+### My Mac storage is full. What should I do?
+
+Open System Settings → General → Storage to see what is using the space. Then clear app caches and logs, old downloads, leftovers from apps you removed, and large files you no longer need. iClearer finds all of these in one scan and labels each item Safe or Ask first. For the manual steps, read Mac storage full? How to free up space safely.
+
+### How do I clear System Data on a Mac?
+
+System Data is mostly caches, logs, temporary files, Time Machine local snapshots and files left behind by apps. You can’t delete the category itself, but you can shrink it by restarting your Mac and clearing those files. iClearer lists them with their sizes. The full steps are in how to clear System Data on Mac.
+
+### Is it safe to delete caches on a Mac?
+
+Yes. Caches are copies of data that apps and macOS rebuild when they need them. The first launch after clearing can be a little slower. iClearer labels rebuildable caches as Safe and moves them to the Trash, so you can still undo.
+
+### Does iClearer clean developer caches like Xcode, npm and Docker?
+
+Yes. The Builders pack finds npm, pnpm, Yarn, pip and Homebrew caches, Xcode DerivedData, CocoaPods and Gradle caches, Cursor and VS Code caches, iOS Simulator data, Docker data and Ollama models. API tokens, SSH keys, .env files and git repositories can never be selected. See free up disk space on a Mac for developers.
+
+### How much does iClearer cost?
+
+Scanning is free, and the free plan includes 500 MB of cleanup. Unlimited cleanup for 1 Mac costs $29.99 per year, $4.99 per month or $79.99 once. For 2 Macs it is $44.99 per year, $7.99 per month or $119.99 once, and for 5 Macs it is $74.99 per year, $12.99 per month or $189.99 once. Every purchase has a 14-day money-back guarantee.
+
+### Is iClearer safe?
+
+Everything it removes goes to the Trash first, so you can undo it. Keychain, accounts and editor user data can never be deleted.
+
+### What do Safe and Ask first mean?
+
+Safe items are caches your Mac rebuilds by itself. Ask first items are larger or system-related, so they start unticked and wait for you.
+
+### Which Macs does it work on?
+
+iMac, Mac mini, Mac Studio, MacBook Air and MacBook Pro, Intel and Apple silicon. Apple displays are monitors, not Macs, so they don’t count.
+
+### Can I use it on more than one Mac?
+
+Plans cover 1, 2 or 5 Macs. When you sign in, that Mac is linked to your license (we store a hashed hardware ID, not your raw serial). Extra Macs beyond your plan are blocked. Seats stay linked — email iclearerglobal@gmail.com if you replace a Mac.
+
+### What if I buy once?
+
+A one-time purchase covers version 1. On a macOS version iClearer hasn’t been tested on, it can still scan, but cleaning is switched off until you upgrade.
+
+### What does the free plan include?
+
+Unlimited scans that show what was found by category, with sizes and Safe or Ask first labels, plus 500 MB of cleanup in total. Item names, details, locations and the other tools come with iClearer.
+
+### Do I need to give my email?
+
+Yes. We use it for your license, receipts and security notices. We only send updates and news about new products if you opt in, and you can unsubscribe anytime.
+
+---
+
+# Mac storage full? How to free up space safely
+
+URL: https://www.iclearer.com/guides/mac-storage-full
+
+**Short answer.** If your Mac says “Your disk is almost full”, open System Settings → General → Storage to see what is using the space. Then remove what is safe first: empty the Trash, delete old downloads and installers, clear app caches and logs, remove old iPhone backups, and delete large files you no longer need. Developers usually get the most space back from Xcode, npm, Homebrew and Docker caches. Try to keep at least 10–15% of the disk free.
+
+## 1. See what is using your storage
+
+Before you delete anything, look at the breakdown macOS gives you.
+
+1. Open the Apple menu and choose System Settings.
+2. Click General, then Storage.
+3. Wait for the coloured bar to finish calculating, then click the i button next to a category to see what is inside it.
+
+On macOS 12 Monterey or earlier, choose Apple menu → About This Mac → Storage → Manage instead.
+
+## 2. Quick wins that take five minutes
+
+- Empty the Trash. Files in the Trash still take up space. Right-click the Trash in the Dock and choose Empty Trash.
+- Clear out Downloads. Open Downloads in Finder, switch to List view and sort by Size. Old installers (`.dmg` and `.pkg` files) and zip archives are usually safe to delete once the app is installed.
+- Use the built-in recommendations. In Storage settings, turn on Empty Trash Automatically and Optimize Storage. Store in iCloud helps too if you pay for iCloud space.
+- Restart your Mac. A restart clears temporary files and the swap files macOS creates when memory runs low.
+
+## 3. Clear app caches and logs
+
+Apps keep caches so they load faster, and those caches can grow to many gigabytes. They are safe to remove because apps rebuild them.
+
+1. Quit the apps you have open.
+2. In Finder, press Shift-Command-G and enter `~/Library/Caches`.
+3. Press Command-J and tick Calculate All Sizes so Finder shows how big each folder is.
+4. Move the contents of the largest folders to the Trash.
+5. Repeat for `~/Library/Logs`, then empty the Trash.
+
+The full walkthrough, including browser caches, is in [how to clear cache on Mac](https://www.iclearer.com/guides/clear-cache-mac).
+
+## 4. Shrink System Data
+
+System Data is the grey catch-all in the storage bar. It holds caches, logs, Time Machine local snapshots, swap files and files left behind by apps. You cannot delete the category in one go, but you can shrink what is inside it. See [how to clear System Data on Mac](https://www.iclearer.com/guides/clear-system-data-mac).
+
+## 5. Find large and old files
+
+A few forgotten files often hold more space than every cache combined: old videos, virtual machines, disk images and archives. In Storage settings, click the i next to Documents and open Large Files. There are two more methods in [how to find large files on Mac](https://www.iclearer.com/guides/find-large-files-mac).
+
+## 6. Remove apps you do not use
+
+Dragging an app to the Trash removes the app but leaves its support files, caches and preferences in your Library folder. [How to uninstall apps on Mac completely](https://www.iclearer.com/guides/uninstall-apps-mac) lists where those leftovers live.
+
+## 7. If you write code
+
+Build caches and package downloads are usually the biggest space users on a developer’s Mac. These commands are safe because the tools download or rebuild what they need:
+
+```
+rm -rf ~/Library/Developer/Xcode/DerivedData
+npm cache clean --force
+brew cleanup --prune=all
+pip cache purge
+docker system prune
+```
+
+More tools and what each command removes: [free up disk space on a Mac for developers](https://www.iclearer.com/guides/free-up-disk-space-mac-developers).
+
+## What you should not delete
+
+| Leave this alone | Why |
+| --- | --- |
+| `/System` and `/usr` | These are macOS itself. |
+| `~/Library/Keychains` | Your saved passwords and certificates. |
+| `~/Library/Application Support` folders for apps you still use | This is app data, not cache. Deleting it can erase settings, projects or chat history. |
+| `~/.ssh`, `.env` files and `.git` folders | Keys, secrets and your project history. |
+| Your only iPhone or iPad backup | It cannot be rebuilt. Keep the most recent one. |
+
+## The faster way: scan once with iClearer
+
+iClearer does every step on this page in one scan. It lists caches, logs, leftovers, developer files and large files with their sizes, labels each one Safe or Ask first, and moves what you choose to the Trash so you can undo it. Keychain, accounts, tokens and git repositories can never be selected.
+
+## Frequently asked questions
+
+### Why is my Mac storage full when I have nothing on it?
+
+Most of the space is in places Finder hides by default. The Library folder holds app caches, logs and files left behind by apps you deleted, and System Data holds Time Machine local snapshots and swap files. Open System Settings → General → Storage to see the breakdown.
+
+### How much free space should a Mac have?
+
+A common rule of thumb is to keep at least 10–15% of the disk free. macOS needs room for swap files, updates and local snapshots, and major macOS upgrades often need 20 GB or more of free space to install.
+
+### Does emptying the Trash free up space on a Mac?
+
+Yes. Files in the Trash still count against your storage until you empty it. If the free space does not change straight away, a Time Machine local snapshot may still be holding the files; macOS removes those snapshots automatically when it needs the space.
+
+### What is the fastest way to free up space on a Mac?
+
+Empty the Trash, delete old installers from Downloads, and clear the largest folders in ~/Library/Caches. A cleaner app such as iClearer does the same in one scan and shows the size of each item before anything is removed.
+
+### Is it safe to use a Mac cleaner app?
+
+It depends on the app. Look for one that shows exactly what it will remove, moves files to the Trash instead of deleting them, and cannot touch passwords or personal documents. iClearer labels every item Safe or Ask first, moves everything to the Trash with undo, and never selects Keychain, accounts, tokens or git repositories.
+
+---
+
+# How to clear System Data on Mac
+
+URL: https://www.iclearer.com/guides/clear-system-data-mac
+
+**Short answer.** System Data is the catch-all category in Mac storage for files macOS does not sort anywhere else: caches, logs, temporary files, Time Machine local snapshots, swap files and files left behind by apps. You cannot delete the category directly. You shrink it by restarting your Mac, clearing `~/Library/Caches` and `~/Library/Logs`, removing Time Machine local snapshots, and deleting leftovers from apps you uninstalled.
+
+## What System Data is
+
+Open System Settings → General → Storage and you will see a grey section called System Data. On older versions of macOS it was called “Other”. It contains:
+
+- App caches, system caches and temporary files
+- Log files
+- Time Machine local snapshots
+- Virtual memory (swap) files and the sleep image
+- App support files, plug-ins and extensions, including files left by apps you deleted
+
+It is separate from the macOS category, which is the operating system itself and should be left alone.
+
+## 1. Restart your Mac
+
+Start here because it costs nothing. A restart deletes temporary files and resets the swap files macOS builds up when memory runs low. If your Mac has been on for weeks, this alone can return several gigabytes.
+
+## 2. Clear caches and logs
+
+1. Quit your open apps.
+2. In Finder, press Shift-Command-G, type `~/Library/Caches` and press Return.
+3. Press Command-J and tick Calculate All Sizes.
+4. Move the contents of the largest folders to the Trash.
+5. Do the same in `~/Library/Logs`, then empty the Trash.
+
+Apps rebuild their caches the next time you open them. More detail in [how to clear cache on Mac](https://www.iclearer.com/guides/clear-cache-mac).
+
+## 3. Remove Time Machine local snapshots
+
+If you use Time Machine, macOS keeps local snapshots on your startup disk so you can restore files when the backup drive is not connected. macOS deletes them automatically when it needs space, but you can remove them yourself. Open Terminal and list them:
+
+```
+tmutil listlocalsnapshots /
+```
+
+Delete one by its date stamp:
+
+```
+sudo tmutil deletelocalsnapshots 2026-11-01-093000
+```
+
+Or ask macOS to free about 20 GB of snapshot space:
+
+```
+tmutil thinlocalsnapshots / 20000000000 4
+```
+
+Note: local snapshots are not your Time Machine backup. Deleting them does not touch the backups on your external drive.
+
+## 4. Delete leftovers from apps you removed
+
+When you drag an app to the Trash, its support files stay behind. Check these folders for names of apps you no longer have:
+
+- `~/Library/Application Support`
+- `~/Library/Containers`
+- `~/Library/Caches`
+
+Only delete a folder if you are sure the app is gone. The full list of locations is in [how to uninstall apps on Mac completely](https://www.iclearer.com/guides/uninstall-apps-mac).
+
+## 5. Find what is still large
+
+This Terminal command lists the 15 largest folders in your Library, biggest last:
+
+```
+du -sh ~/Library/* 2>/dev/null | sort -h | tail -15
+```
+
+Common results are developer tools (Xcode, Docker, simulators), downloaded AI models and message attachments. If you write code, see [free up disk space on a Mac for developers](https://www.iclearer.com/guides/free-up-disk-space-mac-developers).
+
+## What you should not delete
+
+- Anything in `/System`, `/usr` or `/private/var/vm`. macOS manages these.
+- `~/Library/Keychains`, which holds your passwords.
+- Application Support folders for apps you still use. They hold your data, not cache.
+
+## Let iClearer find what is inside System Data
+
+iClearer scans the caches, logs, temporary files and app leftovers that make up most of System Data, and shows the size of each one. Items macOS rebuilds are labelled Safe. Anything larger or system-related is labelled Ask first and starts unticked. Everything you clean goes to the Trash.
+
+## Frequently asked questions
+
+### Why is System Data so large on my Mac?
+
+The usual causes are app caches, Time Machine local snapshots, swap files from running low on memory, and files left behind by apps you deleted. Developer tools such as Xcode and Docker can also add tens of gigabytes.
+
+### Can I delete System Data on a Mac?
+
+Not as a single item. System Data is a category, not a folder. You reduce it by clearing caches and logs, removing Time Machine local snapshots, deleting leftovers from uninstalled apps, and restarting your Mac.
+
+### How much System Data is normal on a Mac?
+
+Apple does not publish a figure. A few tens of gigabytes is common. It is worth investigating when System Data is far larger than that or keeps growing week after week.
+
+### Does restarting a Mac reduce System Data?
+
+Yes. A restart removes temporary files and resets the swap files macOS creates when memory runs low, which are both counted as System Data.
+
+### Is System Data the same as macOS in the storage bar?
+
+No. The macOS category is the operating system and should not be touched. System Data is everything else macOS cannot sort into a category, such as caches, logs and snapshots.
+
+---
+
+# How to clear cache on Mac
+
+URL: https://www.iclearer.com/guides/clear-cache-mac
+
+**Short answer.** To clear app caches on a Mac, quit your apps, open Finder, press Shift-Command-G, go to `~/Library/Caches`, move the contents of the folders you want to clear to the Trash, and empty the Trash. Browser caches are cleared from inside each browser. Deleting caches is safe: apps rebuild them, though the first launch afterwards can be a little slower.
+
+## The kinds of cache on a Mac
+
+| Cache | Where it lives | Safe to clear? |
+| --- | --- | --- |
+| App (user) cache | `~/Library/Caches` | Yes. Apps rebuild it. |
+| Browser cache | Each browser’s own folder, mostly under `~/Library/Caches` | Yes. Pages reload once. |
+| System cache | `/Library/Caches` | Usually. macOS rebuilds it. |
+| Developer caches | `~/.npm`, `~/Library/Caches/Homebrew`, Xcode DerivedData | Yes. Tools download or rebuild. |
+
+## Clear app caches
+
+1. Quit the apps whose cache you want to clear.
+2. In Finder, press Shift-Command-G.
+3. Type `~/Library/Caches` and press Return.
+4. Press Command-J and tick Calculate All Sizes to see which folders are big.
+5. Open a large folder and move its contents to the Trash. Keeping the folder itself avoids permission problems.
+6. Empty the Trash to get the space back.
+
+## Clear browser caches
+
+### Safari
+
+1. Open Safari → Settings → Advanced and tick Show features for web developers. On older versions it is called Show Develop menu in menu bar.
+2. Choose Develop → Empty Caches, or press Option-Command-E.
+
+### Chrome
+
+1. Press Shift-Command-Delete.
+2. Tick Cached images and files, choose a time range and confirm.
+
+### Firefox
+
+1. Open Firefox → Settings → Privacy & Security.
+2. Under Cookies and Site Data, click Clear Data, tick the cached files option and confirm.
+
+Note: clearing the cache does not sign you out. Clearing cookies does, so leave that box unticked if you want to stay logged in.
+
+## Clear system caches
+
+System caches live in `/Library/Caches` (no `~` at the start). macOS and shared components rebuild them, and they are usually small. You will be asked for your password to remove them. Leave `/System/Library/Caches` alone, because macOS protects and manages it.
+
+## Is it safe, and how often should you do it?
+
+Clearing caches is safe. The trade-off is speed: caches exist so apps do not have to download or rebuild the same data, so the first launch after clearing can be slower and the cache will grow back.
+
+That is why you do not need to clear caches on a schedule. Do it when you are short on space, or when one app is misbehaving and a fresh cache might fix it.
+
+## Clear every cache in one pass with iClearer
+
+iClearer finds app caches, browser caches, system caches, logs and developer caches in one scan and shows how much space each one uses. Caches your Mac rebuilds are labelled Safe. You tick what goes, and it moves to the Trash so you can undo it.
+
+## Frequently asked questions
+
+### Is it safe to delete everything in ~/Library/Caches?
+
+Yes. Everything in ~/Library/Caches is data apps can recreate. Quit your apps first, and delete the contents of the folders rather than the folders themselves. Apps may open more slowly the first time afterwards.
+
+### Will clearing the cache delete my passwords or log me out?
+
+No. Caches hold temporary copies of data, not passwords. Passwords are stored in Keychain. You are only signed out of websites if you also clear cookies.
+
+### Does clearing the cache make a Mac faster?
+
+Not usually. It frees disk space and can fix an app that is behaving oddly, but caches exist to make apps faster, so apps can feel slower until the cache rebuilds. A Mac with a nearly full disk does run better once space is freed.
+
+### How often should I clear the cache on my Mac?
+
+Only when you need the space or an app is misbehaving. There is no benefit to clearing caches on a fixed schedule, because they grow back as you use your apps.
+
+### Where are cache files stored on a Mac?
+
+App caches are in ~/Library/Caches, system caches are in /Library/Caches, and browsers keep theirs in their own folders, mostly under ~/Library/Caches. In Finder, press Shift-Command-G and type the path to open any of them.
+
+---
+
+# Free up disk space on a Mac for developers
+
+URL: https://www.iclearer.com/guides/free-up-disk-space-mac-developers
+
+**Short answer.** On a developer’s Mac, most reclaimable space is in build caches and package downloads, and nearly all of it is safe to delete because the tools rebuild it. The biggest wins are usually Xcode DerivedData and simulators, Docker images and build cache, npm, pnpm and Yarn caches, Homebrew downloads, and downloaded AI models.
+
+```
+rm -rf ~/Library/Developer/Xcode/DerivedData
+xcrun simctl delete unavailable
+npm cache clean --force
+brew cleanup --prune=all
+pip cache purge
+docker system prune
+```
+
+## Xcode
+
+| What | Path | Safe? |
+| --- | --- | --- |
+| DerivedData (build cache) | `~/Library/Developer/Xcode/DerivedData` | Yes. Rebuilt on the next build. |
+| iOS DeviceSupport | `~/Library/Developer/Xcode/iOS DeviceSupport` | Yes. Recreated when you connect a device. |
+| Simulator data | `~/Library/Developer/CoreSimulator` | Ask first. You lose simulator app data. |
+| Archives | `~/Library/Developer/Xcode/Archives` | Keep archives of builds you shipped; they hold the symbols for crash reports. |
+
+```
+rm -rf ~/Library/Developer/Xcode/DerivedData
+xcrun simctl delete unavailable
+```
+
+The second command removes simulators for runtimes you no longer have installed. To remove whole simulator runtimes, open Xcode → Settings → Components (called Platforms in Xcode 15).
+
+## Node: npm, pnpm, Yarn and node_modules
+
+```
+npm cache clean --force
+pnpm store prune
+yarn cache clean
+```
+
+Old `node_modules` folders in projects you no longer work on add up quickly. This lists the 20 largest:
+
+```
+find ~ -name node_modules -type d -prune -exec du -sh {} + 2>/dev/null | sort -h | tail -20
+```
+
+Deleting a `node_modules` folder is safe. Run your package manager’s install command to bring it back.
+
+## Python and AI tooling
+
+```
+pip cache purge
+uv cache clean
+```
+
+Many tools also write to `~/.cache`, including Hugging Face downloads. Downloaded models are often the largest thing on the disk. For Ollama:
+
+```
+ollama list
+ollama rm <model-name>
+```
+
+Note: models are safe to remove but slow to get back. You will have to download them again.
+
+## Homebrew
+
+```
+brew cleanup --prune=all
+brew autoremove
+```
+
+The first removes old versions and every cached download. The second removes dependencies nothing needs any more.
+
+## Docker
+
+See what Docker is using first:
+
+```
+docker system df
+```
+
+Then remove stopped containers, unused networks, dangling images and build cache:
+
+```
+docker system prune
+```
+
+Careful: `docker system prune -a --volumes` also removes every image not used by a running container and all unused volumes. Volumes can hold database data that cannot be rebuilt.
+
+Docker Desktop keeps everything inside one disk image, so Finder shows a single large file. Use the Docker commands rather than deleting that file by hand.
+
+## CocoaPods and Gradle
+
+```
+pod cache clean --all
+rm -rf ~/.gradle/caches
+```
+
+Both download what they need on the next build.
+
+## Cursor and VS Code
+
+The caches are safe to clear: `~/Library/Application Support/Cursor/Cache`, `~/Library/Application Support/Cursor/CachedData` and `~/Library/Application Support/Code/Cache`.
+
+Do not delete the `User` folder next to them. It holds your settings, keybindings, extensions state and chat history.
+
+## What to never delete
+
+- `~/.ssh` — your SSH keys
+- `.env` files and API tokens
+- `.git` folders — your commit history
+- `~/Library/Keychains` — signing certificates and passwords
+- Editor `User` folders — settings and chats
+- Docker volumes that hold data you need
+
+## iClearer has a Builders pack for this
+
+iClearer’s Builders screen finds npm, pnpm, Yarn, pip and Homebrew caches, Xcode DerivedData, CocoaPods and Gradle caches, Cursor and VS Code caches, iOS Simulator data, Docker data and Ollama models, with the size of each. Rebuildable caches are labelled Safe; simulators, Docker and models are Ask first. API tokens, SSH keys, `.env` files and git repositories can never be selected.
+
+## Frequently asked questions
+
+### Is it safe to delete Xcode DerivedData?
+
+Yes. DerivedData is Xcode’s build cache and index. Deleting it is safe; Xcode rebuilds it the next time you build, so that build will take longer than usual.
+
+### Is it safe to delete the npm cache?
+
+Yes. The npm cache in ~/.npm holds downloaded packages. Run npm cache clean --force to clear it. npm downloads packages again when you next install them.
+
+### What does docker system prune remove?
+
+It removes stopped containers, unused networks, dangling images and build cache. It does not remove volumes or images that are still tagged unless you add -a and --volumes, which can delete data you want to keep.
+
+### Why is my Mac storage full after installing Xcode?
+
+Xcode itself is large, and it adds simulator runtimes, device support files and a DerivedData build cache that grows with every project. Deleting DerivedData and unused simulators usually returns the most space.
+
+### How do I find which developer folders are using the most space?
+
+Run du -sh ~/Library/Developer ~/.npm ~/.cache ~/.gradle ~/.docker 2>/dev/null in Terminal to see the size of the common ones, or use a disk cleaner such as iClearer that lists developer caches by size.
+
+---
+
+# How to uninstall apps on Mac completely
+
+URL: https://www.iclearer.com/guides/uninstall-apps-mac
+
+**Short answer.** To uninstall an app on a Mac, open Finder → Applications, drag the app to the Trash and empty the Trash. That removes the app itself but leaves its support files behind in your Library folder. To remove an app completely, also delete its folders in `~/Library/Application Support`, `~/Library/Caches`, `~/Library/Containers` and its file in `~/Library/Preferences`.
+
+## 1. Remove the app
+
+1. Quit the app. If it will not quit, press Option-Command-Esc and force quit it.
+2. Open Finder → Applications.
+3. Drag the app to the Trash, or select it and press Command-Delete.
+4. Empty the Trash.
+
+## 2. Where leftovers live
+
+Apps store their data outside the app itself, and macOS does not remove it when the app goes. These are the usual places:
+
+| Folder | What is in it |
+| --- | --- |
+| `~/Library/Application Support` | App data, often the largest leftover |
+| `~/Library/Caches` | Cached files |
+| `~/Library/Containers` and `~/Library/Group Containers` | Data for sandboxed and App Store apps |
+| `~/Library/Preferences` | Settings files ending in `.plist` |
+| `~/Library/Logs` | Log files |
+| `~/Library/Saved Application State` | Window positions from the last session |
+| `~/Library/LaunchAgents` | Helpers that start when you log in |
+
+## 3. Find an app’s leftover files
+
+Leftovers are named after the app or after its bundle identifier, which looks like `com.company.appname`. Before you delete the app, get its identifier in Terminal (replace Slack with the app’s name):
+
+```
+osascript -e 'id of app "Slack"'
+```
+
+Then, in Finder, press Shift-Command-G, open each folder in the table above, and look for the app’s name or identifier. Move what you find to the Trash.
+
+Check the name twice. Several apps from the same company can share a folder, so make sure a folder belongs only to the app you removed.
+
+## Apps with their own uninstaller
+
+Some apps install drivers, system extensions or background services. These usually ship an uninstaller, either inside the app’s folder in Applications or as a download from the developer. Use it, because it removes parts that dragging to the Trash cannot.
+
+Apps that came with macOS, such as Safari and Mail, are protected by the system and cannot be removed.
+
+## Uninstall an app and its leftovers in one click
+
+iClearer’s Apps screen lists your apps with the size of the app and the size of its leftovers, and shows which ones you have not opened in months. Uninstalling removes the app and everything it left behind, and it all goes to the Trash so you can restore it. The app list is free; uninstalling is part of the paid plan.
+
+## Frequently asked questions
+
+### Does dragging an app to the Trash uninstall it completely?
+
+No. It removes the app itself, but support files, caches, preferences and containers stay in your Library folder. They can take up more space than the app did.
+
+### Where are leftover app files stored on a Mac?
+
+Mostly in ~/Library/Application Support, ~/Library/Caches, ~/Library/Containers, ~/Library/Preferences and ~/Library/Logs. They are named after the app or its bundle identifier, such as com.company.appname.
+
+### How do I uninstall an app that will not delete?
+
+The app is probably still running. Quit it, or press Option-Command-Esc to force quit it, then try again. If macOS asks for a password, you need an administrator account to remove it.
+
+### Can I delete the apps that came with my Mac?
+
+Not the ones that are part of macOS, such as Safari, Mail and Messages. They are protected by the system and take no extra space you can reclaim.
+
+### Is it safe to delete leftover files from uninstalled apps?
+
+Yes, as long as the folder belongs only to the app you removed. Deleting leftovers also deletes that app’s settings and saved data, so keep them if you plan to reinstall the app and want your settings back.
+
+---
+
+# How to find large files on Mac
+
+URL: https://www.iclearer.com/guides/find-large-files-mac
+
+**Short answer.** The quickest way to find large files on a Mac is System Settings → General → Storage: click the i next to Documents and open the Large Files tab. You can also search by size in Finder (press Command-F and add a File Size filter) or list every file over 1 GB in Terminal with `find ~ -type f -size +1G`.
+
+## 1. Storage settings
+
+1. Open the Apple menu → System Settings → General → Storage.
+2. Click the i next to Documents.
+3. Open the Large Files tab. Files are sorted biggest first, with the date you last opened them.
+4. Select a file and click Delete, or Show in Finder to look at it first.
+
+The Downloads tab in the same window is worth a look too.
+
+## 2. Finder search by file size
+
+1. Open a Finder window and press Command-F.
+2. Make sure the search covers This Mac.
+3. Click the first filter menu (it says Kind) and choose Other…
+4. Find File Size in the list, tick it and click OK.
+5. Set the filter to is greater than 1 GB.
+
+Lower the number to 500 MB to see more. By default Finder’s search leaves out hidden and system folders, so it will not show files inside the Library.
+
+## 3. Terminal
+
+This lists every file over 1 GB in your home folder, with its size, including hidden ones:
+
+```
+find ~ -type f -size +1G -exec ls -lh {} + 2>/dev/null
+```
+
+To see which folders are largest instead:
+
+```
+du -sh ~/* 2>/dev/null | sort -h | tail -15
+```
+
+## What is usually big
+
+- Videos and screen recordings in Movies, Desktop and Downloads
+- Virtual machines from Parallels, VMware or UTM
+- Disk images and installers (`.dmg`, `.iso`, `.pkg`)
+- Old iPhone and iPad backups in `~/Library/Application Support/MobileSync/Backup`
+- Archives you already unzipped
+- Downloaded AI models and other developer files, covered in [the developer guide](https://www.iclearer.com/guides/free-up-disk-space-mac-developers)
+
+## Before you delete
+
+- Select a file and press Space to preview it with Quick Look.
+- Move files to the Trash rather than deleting them outright, and empty the Trash once you are sure.
+- For anything you cannot replace, check that your Time Machine or iCloud backup is recent first.
+
+## See every large file and where your space went
+
+iClearer’s Large & Old Files screen lists the biggest files you have not opened in months, and its Storage Map breaks your whole disk down by category. Preview a file with Quick Look before it moves, and everything you remove goes to the Trash. The free plan shows the kind and size of your top five; names, locations and Quick Look are part of the paid plan.
+
+## Frequently asked questions
+
+### How do I see what is taking up space on my Mac?
+
+Open System Settings → General → Storage. The bar shows space by category, and the i button next to each category lists what is inside. For a folder-by-folder view, run du -sh ~/* in Terminal or use a storage map tool.
+
+### How do I find files larger than 1 GB on a Mac?
+
+In Finder, press Command-F, add a File Size filter and set it to is greater than 1 GB. In Terminal, run find ~ -type f -size +1G to list them, including files in hidden folders.
+
+### Why can I not find the large files using my storage?
+
+They are probably in hidden folders. By default Finder’s search leaves out the Library folder, where caches, app data, device backups and developer files live. Use the Terminal command or a tool that scans the Library.
+
+### Is it safe to delete large files in the Library folder?
+
+Sometimes. Caches and old device backups are safe to remove, but Application Support folders hold data for apps you use. Check what a file belongs to before you delete it, and move it to the Trash first so you can put it back.
+
+### What file types usually take the most space on a Mac?
+
+Videos, virtual machines, disk images, old iPhone backups and photo libraries. On developer Macs, simulator data, Docker images and downloaded AI models are often larger still.

@@ -6,6 +6,7 @@ import {
   type IclearerFeedback,
 } from "./lib/iclearerDownloads";
 import { startCheckout, signup } from "./lib/licenseApi";
+import seedFeedback from "./seedFeedback.json";
 
 const DMG_URL = "/downloads/iClearer.dmg";
 const LEAD_KEY = "iclearer-download-lead";
@@ -15,28 +16,9 @@ type Mode = "buy" | "create";
 
 type Lead = { email: string; marketing?: boolean };
 
-const SEED_FEEDBACK: IclearerFeedback[] = [
-  {
-    name: "Israel Afolabi",
-    text: "Thank you so much for this product, I have downloaded and used it. Well done.",
-  },
-  {
-    name: "Benjamin Mpano",
-    text: "Thank you so much, this saved me almost 30GBs of cache.",
-  },
-  {
-    name: "Digital Dreams",
-    text: "I mean… the fuck. This worked. Thank you so much.",
-  },
-  {
-    name: "Chris Eminence",
-    text: "You will get one canopy to yourself alone on my wedding day. God bless you.",
-  },
-  {
-    name: "Emmanuel Eves",
-    text: "Works perfectly. I recovered around 98GB total mostly Xcode cache, browser cache and old system logs. Cleaned my Mac in seconds, no problems. Best cleaner I've tried.",
-  },
-];
+// Shared with scripts/seo/build.mjs, which pre-renders these into index.html
+// so reviews exist for crawlers that do not run JavaScript.
+const SEED_FEEDBACK: IclearerFeedback[] = seedFeedback;
 
 const AVATAR_TONES = [
   ["#7fb8e6", "#2d6da4"],

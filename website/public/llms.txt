@@ -1,0 +1,39 @@
+# iClearer
+
+> iClearer is a Mac cleaner that finds the hidden caches, logs, app leftovers, developer files and large files filling your Mac, shows exactly how much space you will free, and moves what you choose to the Trash. It runs on macOS 13 Ventura or later, on Intel and Apple silicon. Scanning is free; the free plan includes 500 MB of cleanup.
+
+Key facts:
+
+- Product: iClearer, a Mac cleaner app (disk cleanup utility for macOS). Website: https://www.iclearer.com/
+- Not to be confused with "iCleaner" or other similarly named apps. The name is iClearer, with "clear".
+- Price: free to scan, 500 MB of free cleanup. Unlimited cleanup from $29.99 per year, $4.99 per month or $79.99 once, for 1 Mac. Plans for 2 and 5 Macs are available.
+- Refunds: 14-day money-back guarantee.
+- Safety: every item is labelled Safe or Ask first, everything goes to the Trash with undo, and Keychain, accounts, tokens, SSH keys, .env files and git repositories can never be selected.
+- For developers: cleans npm, pnpm, Yarn, pip, Homebrew, Xcode DerivedData, CocoaPods, Gradle, Cursor and VS Code caches, plus iOS Simulator data, Docker data and Ollama models.
+- Current version: 1.0.1. Download: https://www.iclearer.com/downloads/iClearer.dmg
+- Support: iclearerglobal@gmail.com
+
+## Product
+
+- [iClearer home](https://www.iclearer.com/): what it does, screenshots, pricing, install steps and FAQ
+- [Pricing](https://www.iclearer.com/#pricing): free plan and paid plans for 1, 2 or 5 Macs
+- [Install guide](https://www.iclearer.com/#install): how to install the DMG on macOS
+
+## Guides
+
+- [Mac storage full? How to free up space safely](https://www.iclearer.com/guides/mac-storage-full): Startup disk almost full? See what is using your Mac’s storage, then clear caches, System Data, large files and developer junk safely, step by step.
+- [How to clear System Data on Mac](https://www.iclearer.com/guides/clear-system-data-mac): System Data taking up too much space? Learn what it contains and how to shrink it safely: caches, logs, Time Machine snapshots and app leftovers.
+- [How to clear cache on Mac](https://www.iclearer.com/guides/clear-cache-mac): Clear app, browser and system caches on a Mac safely. Step-by-step for Finder, Safari, Chrome and Firefox, plus what is safe to delete and what is not.
+- [Free up disk space on a Mac for developers](https://www.iclearer.com/guides/free-up-disk-space-mac-developers): Reclaim tens of gigabytes on a developer Mac. Safe commands to clear Xcode DerivedData, npm, pnpm, pip, Homebrew, Docker, simulators and AI model caches.
+- [How to uninstall apps on Mac completely](https://www.iclearer.com/guides/uninstall-apps-mac): Dragging an app to the Trash leaves files behind. See where Mac app leftovers live and how to remove an app completely, with its caches and settings.
+- [How to find large files on Mac](https://www.iclearer.com/guides/find-large-files-mac): Three ways to find the biggest files on your Mac: Storage settings, Finder search by file size, and a Terminal command. See what is safe to delete.
+
+## Policies
+
+- [Privacy Policy](https://www.iclearer.com/privacy)
+- [Terms of Service](https://www.iclearer.com/terms)
+- [Refund Policy](https://www.iclearer.com/refund)
+
+## Optional
+
+- [Full text of this site for AI assistants](https://www.iclearer.com/llms-full.txt)

@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Mac Storage Full? How to Free Up Space Safely | iClearer</title>
+    <meta name="description" content="Startup disk almost full? See what is using your Mac’s storage, then clear caches, System Data, large files and developer junk safely, step by step." />
+    <link rel="canonical" href="https://www.iclearer.com/guides/mac-storage-full" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="theme-color" content="#3B7CB0" />
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="iClearer" />
+    <meta property="og:title" content="Mac Storage Full? How to Free Up Space Safely | iClearer" />
+    <meta property="og:description" content="Startup disk almost full? See what is using your Mac’s storage, then clear caches, System Data, large files and developer junk safely, step by step." />
+    <meta property="og:url" content="https://www.iclearer.com/guides/mac-storage-full" />
+    <meta property="og:image" content="https://www.iclearer.com/og.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="iClearer, the Mac cleaner. Clear space. Keep control." />
+    <meta property="og:locale" content="en_US" />
+    <meta property="article:modified_time" content="2026-11-12" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Mac Storage Full? How to Free Up Space Safely | iClearer" />
+    <meta name="twitter:description" content="Startup disk almost full? See what is using your Mac’s storage, then clear caches, System Data, large files and developer junk safely, step by step." />
+    <meta name="twitter:image" content="https://www.iclearer.com/og.png" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/assets/png/favicon-48.png" />
+    <link rel="apple-touch-icon" href="/assets/png/apple-touch-icon-180.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" />
+    <link rel="stylesheet" href="/guide.css" />
+    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"iClearer","item":"https://www.iclearer.com/"},{"@type":"ListItem","position":2,"name":"Guides","item":"https://www.iclearer.com/guides"},{"@type":"ListItem","position":3,"name":"Mac storage full? How to free up space safely","item":"https://www.iclearer.com/guides/mac-storage-full"}]},{"@type":"Article","@id":"https://www.iclearer.com/guides/mac-storage-full#article","headline":"Mac storage full? How to free up space safely","description":"Startup disk almost full? See what is using your Mac’s storage, then clear caches, System Data, large files and developer junk safely, step by step.","image":"https://www.iclearer.com/og.png","datePublished":"2026-11-12","dateModified":"2026-11-12","inLanguage":"en","mainEntityOfPage":"https://www.iclearer.com/guides/mac-storage-full","author":{"@type":"Organization","@id":"https://www.iclearer.com/#organization","name":"iClearer","url":"https://www.iclearer.com/"},"publisher":{"@type":"Organization","@id":"https://www.iclearer.com/#organization","name":"iClearer","logo":{"@type":"ImageObject","url":"https://www.iclearer.com/assets/png/icon-glass-light-512.png"}},"about":{"@id":"https://www.iclearer.com/#app"}},{"@type":"FAQPage","@id":"https://www.iclearer.com/guides/mac-storage-full#faq","mainEntity":[{"@type":"Question","name":"Why is my Mac storage full when I have nothing on it?","acceptedAnswer":{"@type":"Answer","text":"Most of the space is in places Finder hides by default. The Library folder holds app caches, logs and files left behind by apps you deleted, and System Data holds Time Machine local snapshots and swap files. Open System Settings → General → Storage to see the breakdown."}},{"@type":"Question","name":"How much free space should a Mac have?","acceptedAnswer":{"@type":"Answer","text":"A common rule of thumb is to keep at least 10–15% of the disk free. macOS needs room for swap files, updates and local snapshots, and major macOS upgrades often need 20 GB or more of free space to install."}},{"@type":"Question","name":"Does emptying the Trash free up space on a Mac?","acceptedAnswer":{"@type":"Answer","text":"Yes. Files in the Trash still count against your storage until you empty it. If the free space does not change straight away, a Time Machine local snapshot may still be holding the files; macOS removes those snapshots automatically when it needs the space."}},{"@type":"Question","name":"What is the fastest way to free up space on a Mac?","acceptedAnswer":{"@type":"Answer","text":"Empty the Trash, delete old installers from Downloads, and clear the largest folders in ~/Library/Caches. A cleaner app such as iClearer does the same in one scan and shows the size of each item before anything is removed."}},{"@type":"Question","name":"Is it safe to use a Mac cleaner app?","acceptedAnswer":{"@type":"Answer","text":"It depends on the app. Look for one that shows exactly what it will remove, moves files to the Trash instead of deleting them, and cannot touch passwords or personal documents. iClearer labels every item Safe or Ask first, moves everything to the Trash with undo, and never selects Keychain, accounts, tokens or git repositories."}}]}]}</script>
+  </head>
+  <body>
+    <header class="g-hd">
+      <a class="g-logo" href="/"><img src="/assets/png/icon-glass-light-120.png" width="36" height="36" alt="" />iClearer</a>
+      <nav class="g-nav" aria-label="Main">
+        <a href="/guides" class="g-keep">Guides</a>
+        <a href="/#features">Features</a>
+        <a href="/#pricing">Pricing</a>
+        <a class="g-btn" href="/downloads/iClearer.dmg" download="iClearer.dmg">Download Free</a>
+      </nav>
+    </header>
+
+    <main>
+      <nav class="g-bc" aria-label="Breadcrumb"><a href="/">iClearer</a> › <a href="/guides">Guides</a> › Mac storage full: what to do</nav>
+      <article>
+        <h1>Mac storage full? How to free up space safely</h1>
+        <p class="g-meta">Updated <time datetime="2026-11-12">12 November 2026</time> · By the iClearer team</p>
+
+        <div class="g-answer">
+          <h2>Short answer</h2>
+          <p>If your Mac says <b>“Your disk is almost full”</b>, open <b>System Settings → General → Storage</b> to see what is using the space. Then remove what is safe first: empty the Trash, delete old downloads and installers, clear app caches and logs, remove old iPhone backups, and delete large files you no longer need. Developers usually get the most space back from Xcode, npm, Homebrew and Docker caches. Try to keep at least 10–15% of the disk free.</p>
+        </div>
+
+        <nav class="g-toc" aria-label="On this page">
+          <b>On this page</b>
+          <ol>
+            <li><a href="#check">See what is using your storage</a></li>
+            <li><a href="#quick-wins">Quick wins that take five minutes</a></li>
+            <li><a href="#caches">Clear app caches and logs</a></li>
+            <li><a href="#system-data">Shrink System Data</a></li>
+            <li><a href="#large-files">Find large and old files</a></li>
+            <li><a href="#apps">Remove apps you do not use</a></li>
+            <li><a href="#developers">If you write code</a></li>
+            <li><a href="#do-not-delete">What you should not delete</a></li>
+            <li><a href="#faq">Frequently asked questions</a></li>
+          </ol>
+        </nav>
+
+<h2 id="check">1. See what is using your storage</h2>
+<p>Before you delete anything, look at the breakdown macOS gives you.</p>
+<ol>
+  <li>Open the Apple menu and choose <b>System Settings</b>.</li>
+  <li>Click <b>General</b>, then <b>Storage</b>.</li>
+  <li>Wait for the coloured bar to finish calculating, then click the <b>i</b> button next to a category to see what is inside it.</li>
+</ol>
+<p>On macOS 12 Monterey or earlier, choose Apple menu → About This Mac → Storage → Manage instead.</p>
+
+<h2 id="quick-wins">2. Quick wins that take five minutes</h2>
+<ul>
+  <li><b>Empty the Trash.</b> Files in the Trash still take up space. Right-click the Trash in the Dock and choose Empty Trash.</li>
+  <li><b>Clear out Downloads.</b> Open Downloads in Finder, switch to List view and sort by Size. Old installers (<code>.dmg</code> and <code>.pkg</code> files) and zip archives are usually safe to delete once the app is installed.</li>
+  <li><b>Use the built-in recommendations.</b> In Storage settings, turn on Empty Trash Automatically and Optimize Storage. Store in iCloud helps too if you pay for iCloud space.</li>
+  <li><b>Restart your Mac.</b> A restart clears temporary files and the swap files macOS creates when memory runs low.</li>
+</ul>
+
+<h2 id="caches">3. Clear app caches and logs</h2>
+<p>Apps keep caches so they load faster, and those caches can grow to many gigabytes. They are safe to remove because apps rebuild them.</p>
+<ol>
+  <li>Quit the apps you have open.</li>
+  <li>In Finder, press <kbd>Shift</kbd> <kbd>Command</kbd> <kbd>G</kbd> and enter <code>~/Library/Caches</code>.</li>
+  <li>Press <kbd>Command</kbd> <kbd>J</kbd> and tick <b>Calculate All Sizes</b> so Finder shows how big each folder is.</li>
+  <li>Move the contents of the largest folders to the Trash.</li>
+  <li>Repeat for <code>~/Library/Logs</code>, then empty the Trash.</li>
+</ol>
+<p>The full walkthrough, including browser caches, is in <a href="/guides/clear-cache-mac">how to clear cache on Mac</a>.</p>
+
+<h2 id="system-data">4. Shrink System Data</h2>
+<p>System Data is the grey catch-all in the storage bar. It holds caches, logs, Time Machine local snapshots, swap files and files left behind by apps. You cannot delete the category in one go, but you can shrink what is inside it. See <a href="/guides/clear-system-data-mac">how to clear System Data on Mac</a>.</p>
+
+<h2 id="large-files">5. Find large and old files</h2>
+<p>A few forgotten files often hold more space than every cache combined: old videos, virtual machines, disk images and archives. In Storage settings, click the <b>i</b> next to Documents and open <b>Large Files</b>. There are two more methods in <a href="/guides/find-large-files-mac">how to find large files on Mac</a>.</p>
+
+<h2 id="apps">6. Remove apps you do not use</h2>
+<p>Dragging an app to the Trash removes the app but leaves its support files, caches and preferences in your Library folder. <a href="/guides/uninstall-apps-mac">How to uninstall apps on Mac completely</a> lists where those leftovers live.</p>
+
+<h2 id="developers">7. If you write code</h2>
+<p>Build caches and package downloads are usually the biggest space users on a developer’s Mac. These commands are safe because the tools download or rebuild what they need:</p>
+<pre><code>rm -rf ~/Library/Developer/Xcode/DerivedData
+npm cache clean --force
+brew cleanup --prune=all
+pip cache purge
+docker system prune</code></pre>
+<p>More tools and what each command removes: <a href="/guides/free-up-disk-space-mac-developers">free up disk space on a Mac for developers</a>.</p>
+
+<h2 id="do-not-delete">What you should not delete</h2>
+<div class="g-tbl"><table>
+  <tr><th>Leave this alone</th><th>Why</th></tr>
+  <tr><td><code>/System</code> and <code>/usr</code></td><td>These are macOS itself.</td></tr>
+  <tr><td><code>~/Library/Keychains</code></td><td>Your saved passwords and certificates.</td></tr>
+  <tr><td><code>~/Library/Application Support</code> folders for apps you still use</td><td>This is app data, not cache. Deleting it can erase settings, projects or chat history.</td></tr>
+  <tr><td><code>~/.ssh</code>, <code>.env</code> files and <code>.git</code> folders</td><td>Keys, secrets and your project history.</td></tr>
+  <tr><td>Your only iPhone or iPad backup</td><td>It cannot be rebuilt. Keep the most recent one.</td></tr>
+</table></div>
+
+        <section class="g-cta" aria-labelledby="cta">
+          <h2 id="cta">The faster way: scan once with iClearer</h2>
+          <p>iClearer does every step on this page in one scan. It lists caches, logs, leftovers, developer files and large files with their sizes, labels each one <b>Safe</b> or <b>Ask first</b>, and moves what you choose to the Trash so you can undo it. Keychain, accounts, tokens and git repositories can never be selected.</p>
+          <div class="g-cta-row">
+            <a class="g-btn lg green" href="/downloads/iClearer.dmg" download="iClearer.dmg">Download Free</a>
+            <a class="g-btn lg ol" href="/#pricing">See pricing</a>
+          </div>
+          <small>Scanning is free on every Mac and the free plan includes 500 MB of cleanup. Unlimited cleanup starts at $29.99 per year for one Mac, with a 14-day money-back guarantee. Needs macOS 13 Ventura or later, Intel or Apple silicon.</small>
+        </section>
+
+        <section class="g-faq">
+          <h2 id="faq">Frequently asked questions</h2>
+          <h3>Why is my Mac storage full when I have nothing on it?</h3>
+          <p>Most of the space is in places Finder hides by default. The Library folder holds app caches, logs and files left behind by apps you deleted, and System Data holds Time Machine local snapshots and swap files. Open System Settings → General → Storage to see the breakdown.</p>
+          <h3>How much free space should a Mac have?</h3>
+          <p>A common rule of thumb is to keep at least 10–15% of the disk free. macOS needs room for swap files, updates and local snapshots, and major macOS upgrades often need 20 GB or more of free space to install.</p>
+          <h3>Does emptying the Trash free up space on a Mac?</h3>
+          <p>Yes. Files in the Trash still count against your storage until you empty it. If the free space does not change straight away, a Time Machine local snapshot may still be holding the files; macOS removes those snapshots automatically when it needs the space.</p>
+          <h3>What is the fastest way to free up space on a Mac?</h3>
+          <p>Empty the Trash, delete old installers from Downloads, and clear the largest folders in ~/Library/Caches. A cleaner app such as iClearer does the same in one scan and shows the size of each item before anything is removed.</p>
+          <h3>Is it safe to use a Mac cleaner app?</h3>
+          <p>It depends on the app. Look for one that shows exactly what it will remove, moves files to the Trash instead of deleting them, and cannot touch passwords or personal documents. iClearer labels every item Safe or Ask first, moves everything to the Trash with undo, and never selects Keychain, accounts, tokens or git repositories.</p>
+        </section>
+
+        <section class="g-rel">
+          <h2>Related guides</h2>
+          <ul>
+            <li><a href="/guides/clear-system-data-mac">How to clear System Data on Mac<span>System Data taking up too much space? Learn what it contains and how to shrink it safely: caches, logs, Time Machine snapshots and app leftovers.</span></a></li>
+            <li><a href="/guides/clear-cache-mac">How to clear cache on Mac<span>Clear app, browser and system caches on a Mac safely. Step-by-step for Finder, Safari, Chrome and Firefox, plus what is safe to delete and what is not.</span></a></li>
+            <li><a href="/guides/find-large-files-mac">How to find large files on Mac<span>Three ways to find the biggest files on your Mac: Storage settings, Finder search by file size, and a Terminal command. See what is safe to delete.</span></a></li>
+          </ul>
+        </section>
+      </article>
+    </main>
+
+    <footer class="g-ft">
+      <div class="g-ft-in">
+        <a href="/">iClearer home</a>
+        <a href="/guides">Guides</a>
+        <a href="/#pricing">Pricing</a>
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms of Service</a>
+        <a href="/refund">Refund Policy</a>
+        <a href="mailto:iclearerglobal@gmail.com">iclearerglobal@gmail.com</a>
+        <p>Copyright © 2026 iClearer. iClearer is not affiliated with Apple Inc. Mac, macOS, MacBook, iMac, Xcode and iPhone are trademarks of Apple Inc.</p>
+      </div>
+    </footer>
+  </body>
+</html>

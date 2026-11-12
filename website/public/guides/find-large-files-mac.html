@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>How to Find Large Files on Mac (3 Ways) | iClearer</title>
+    <meta name="description" content="Three ways to find the biggest files on your Mac: Storage settings, Finder search by file size, and a Terminal command. See what is safe to delete." />
+    <link rel="canonical" href="https://www.iclearer.com/guides/find-large-files-mac" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="theme-color" content="#3B7CB0" />
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="iClearer" />
+    <meta property="og:title" content="How to Find Large Files on Mac (3 Ways) | iClearer" />
+    <meta property="og:description" content="Three ways to find the biggest files on your Mac: Storage settings, Finder search by file size, and a Terminal command. See what is safe to delete." />
+    <meta property="og:url" content="https://www.iclearer.com/guides/find-large-files-mac" />
+    <meta property="og:image" content="https://www.iclearer.com/og.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="iClearer, the Mac cleaner. Clear space. Keep control." />
+    <meta property="og:locale" content="en_US" />
+    <meta property="article:modified_time" content="2026-11-12" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="How to Find Large Files on Mac (3 Ways) | iClearer" />
+    <meta name="twitter:description" content="Three ways to find the biggest files on your Mac: Storage settings, Finder search by file size, and a Terminal command. See what is safe to delete." />
+    <meta name="twitter:image" content="https://www.iclearer.com/og.png" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/assets/png/favicon-48.png" />
+    <link rel="apple-touch-icon" href="/assets/png/apple-touch-icon-180.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" />
+    <link rel="stylesheet" href="/guide.css" />
+    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"iClearer","item":"https://www.iclearer.com/"},{"@type":"ListItem","position":2,"name":"Guides","item":"https://www.iclearer.com/guides"},{"@type":"ListItem","position":3,"name":"How to find large files on Mac","item":"https://www.iclearer.com/guides/find-large-files-mac"}]},{"@type":"Article","@id":"https://www.iclearer.com/guides/find-large-files-mac#article","headline":"How to find large files on Mac","description":"Three ways to find the biggest files on your Mac: Storage settings, Finder search by file size, and a Terminal command. See what is safe to delete.","image":"https://www.iclearer.com/og.png","datePublished":"2026-11-12","dateModified":"2026-11-12","inLanguage":"en","mainEntityOfPage":"https://www.iclearer.com/guides/find-large-files-mac","author":{"@type":"Organization","@id":"https://www.iclearer.com/#organization","name":"iClearer","url":"https://www.iclearer.com/"},"publisher":{"@type":"Organization","@id":"https://www.iclearer.com/#organization","name":"iClearer","logo":{"@type":"ImageObject","url":"https://www.iclearer.com/assets/png/icon-glass-light-512.png"}},"about":{"@id":"https://www.iclearer.com/#app"}},{"@type":"FAQPage","@id":"https://www.iclearer.com/guides/find-large-files-mac#faq","mainEntity":[{"@type":"Question","name":"How do I see what is taking up space on my Mac?","acceptedAnswer":{"@type":"Answer","text":"Open System Settings → General → Storage. The bar shows space by category, and the i button next to each category lists what is inside. For a folder-by-folder view, run du -sh ~/* in Terminal or use a storage map tool."}},{"@type":"Question","name":"How do I find files larger than 1 GB on a Mac?","acceptedAnswer":{"@type":"Answer","text":"In Finder, press Command-F, add a File Size filter and set it to is greater than 1 GB. In Terminal, run find ~ -type f -size +1G to list them, including files in hidden folders."}},{"@type":"Question","name":"Why can I not find the large files using my storage?","acceptedAnswer":{"@type":"Answer","text":"They are probably in hidden folders. By default Finder’s search leaves out the Library folder, where caches, app data, device backups and developer files live. Use the Terminal command or a tool that scans the Library."}},{"@type":"Question","name":"Is it safe to delete large files in the Library folder?","acceptedAnswer":{"@type":"Answer","text":"Sometimes. Caches and old device backups are safe to remove, but Application Support folders hold data for apps you use. Check what a file belongs to before you delete it, and move it to the Trash first so you can put it back."}},{"@type":"Question","name":"What file types usually take the most space on a Mac?","acceptedAnswer":{"@type":"Answer","text":"Videos, virtual machines, disk images, old iPhone backups and photo libraries. On developer Macs, simulator data, Docker images and downloaded AI models are often larger still."}}]}]}</script>
+  </head>
+  <body>
+    <header class="g-hd">
+      <a class="g-logo" href="/"><img src="/assets/png/icon-glass-light-120.png" width="36" height="36" alt="" />iClearer</a>
+      <nav class="g-nav" aria-label="Main">
+        <a href="/guides" class="g-keep">Guides</a>
+        <a href="/#features">Features</a>
+        <a href="/#pricing">Pricing</a>
+        <a class="g-btn" href="/downloads/iClearer.dmg" download="iClearer.dmg">Download Free</a>
+      </nav>
+    </header>
+
+    <main>
+      <nav class="g-bc" aria-label="Breadcrumb"><a href="/">iClearer</a> › <a href="/guides">Guides</a> › Find large files on Mac</nav>
+      <article>
+        <h1>How to find large files on Mac</h1>
+        <p class="g-meta">Updated <time datetime="2026-11-12">12 November 2026</time> · By the iClearer team</p>
+
+        <div class="g-answer">
+          <h2>Short answer</h2>
+          <p>The quickest way to find large files on a Mac is <b>System Settings → General → Storage</b>: click the <b>i</b> next to Documents and open the <b>Large Files</b> tab. You can also search by size in Finder (press <kbd>Command</kbd> <kbd>F</kbd> and add a <b>File Size</b> filter) or list every file over 1 GB in Terminal with <code>find ~ -type f -size +1G</code>.</p>
+        </div>
+
+        <nav class="g-toc" aria-label="On this page">
+          <b>On this page</b>
+          <ol>
+            <li><a href="#settings">Storage settings</a></li>
+            <li><a href="#finder">Finder search by file size</a></li>
+            <li><a href="#terminal">Terminal</a></li>
+            <li><a href="#usual">What is usually big</a></li>
+            <li><a href="#before">Before you delete</a></li>
+            <li><a href="#faq">Frequently asked questions</a></li>
+          </ol>
+        </nav>
+
+<h2 id="settings">1. Storage settings</h2>
+<ol>
+  <li>Open the Apple menu → <b>System Settings → General → Storage</b>.</li>
+  <li>Click the <b>i</b> next to <b>Documents</b>.</li>
+  <li>Open the <b>Large Files</b> tab. Files are sorted biggest first, with the date you last opened them.</li>
+  <li>Select a file and click Delete, or Show in Finder to look at it first.</li>
+</ol>
+<p>The <b>Downloads</b> tab in the same window is worth a look too.</p>
+
+<h2 id="finder">2. Finder search by file size</h2>
+<ol>
+  <li>Open a Finder window and press <kbd>Command</kbd> <kbd>F</kbd>.</li>
+  <li>Make sure the search covers <b>This Mac</b>.</li>
+  <li>Click the first filter menu (it says Kind) and choose <b>Other…</b></li>
+  <li>Find <b>File Size</b> in the list, tick it and click OK.</li>
+  <li>Set the filter to <b>is greater than</b> 1 <b>GB</b>.</li>
+</ol>
+<p>Lower the number to 500 MB to see more. By default Finder’s search leaves out hidden and system folders, so it will not show files inside the Library.</p>
+
+<h2 id="terminal">3. Terminal</h2>
+<p>This lists every file over 1 GB in your home folder, with its size, including hidden ones:</p>
+<pre><code>find ~ -type f -size +1G -exec ls -lh {} + 2>/dev/null</code></pre>
+<p>To see which <i>folders</i> are largest instead:</p>
+<pre><code>du -sh ~/* 2>/dev/null | sort -h | tail -15</code></pre>
+
+<h2 id="usual">What is usually big</h2>
+<ul>
+  <li><b>Videos and screen recordings</b> in Movies, Desktop and Downloads</li>
+  <li><b>Virtual machines</b> from Parallels, VMware or UTM</li>
+  <li><b>Disk images and installers</b> (<code>.dmg</code>, <code>.iso</code>, <code>.pkg</code>)</li>
+  <li><b>Old iPhone and iPad backups</b> in <code>~/Library/Application Support/MobileSync/Backup</code></li>
+  <li><b>Archives</b> you already unzipped</li>
+  <li><b>Downloaded AI models</b> and other developer files, covered in <a href="/guides/free-up-disk-space-mac-developers">the developer guide</a></li>
+</ul>
+
+<h2 id="before">Before you delete</h2>
+<ul>
+  <li>Select a file and press <kbd>Space</kbd> to preview it with Quick Look.</li>
+  <li>Move files to the Trash rather than deleting them outright, and empty the Trash once you are sure.</li>
+  <li>For anything you cannot replace, check that your Time Machine or iCloud backup is recent first.</li>
+</ul>
+
+        <section class="g-cta" aria-labelledby="cta">
+          <h2 id="cta">See every large file and where your space went</h2>
+          <p>iClearer’s Large &amp; Old Files screen lists the biggest files you have not opened in months, and its Storage Map breaks your whole disk down by category. Preview a file with Quick Look before it moves, and everything you remove goes to the Trash. The free plan shows the kind and size of your top five; names, locations and Quick Look are part of the paid plan.</p>
+          <div class="g-cta-row">
+            <a class="g-btn lg green" href="/downloads/iClearer.dmg" download="iClearer.dmg">Download Free</a>
+            <a class="g-btn lg ol" href="/#pricing">See pricing</a>
+          </div>
+          <small>Scanning is free on every Mac and the free plan includes 500 MB of cleanup. Unlimited cleanup starts at $29.99 per year for one Mac, with a 14-day money-back guarantee. Needs macOS 13 Ventura or later, Intel or Apple silicon.</small>
+        </section>
+
+        <section class="g-faq">
+          <h2 id="faq">Frequently asked questions</h2>
+          <h3>How do I see what is taking up space on my Mac?</h3>
+          <p>Open System Settings → General → Storage. The bar shows space by category, and the i button next to each category lists what is inside. For a folder-by-folder view, run du -sh ~/* in Terminal or use a storage map tool.</p>
+          <h3>How do I find files larger than 1 GB on a Mac?</h3>
+          <p>In Finder, press Command-F, add a File Size filter and set it to is greater than 1 GB. In Terminal, run find ~ -type f -size +1G to list them, including files in hidden folders.</p>
+          <h3>Why can I not find the large files using my storage?</h3>
+          <p>They are probably in hidden folders. By default Finder’s search leaves out the Library folder, where caches, app data, device backups and developer files live. Use the Terminal command or a tool that scans the Library.</p>
+          <h3>Is it safe to delete large files in the Library folder?</h3>
+          <p>Sometimes. Caches and old device backups are safe to remove, but Application Support folders hold data for apps you use. Check what a file belongs to before you delete it, and move it to the Trash first so you can put it back.</p>
+          <h3>What file types usually take the most space on a Mac?</h3>
+          <p>Videos, virtual machines, disk images, old iPhone backups and photo libraries. On developer Macs, simulator data, Docker images and downloaded AI models are often larger still.</p>
+        </section>
+
+        <section class="g-rel">
+          <h2>Related guides</h2>
+          <ul>
+            <li><a href="/guides/mac-storage-full">Mac storage full? How to free up space safely<span>Startup disk almost full? See what is using your Mac’s storage, then clear caches, System Data, large files and developer junk safely, step by step.</span></a></li>
+            <li><a href="/guides/uninstall-apps-mac">How to uninstall apps on Mac completely<span>Dragging an app to the Trash leaves files behind. See where Mac app leftovers live and how to remove an app completely, with its caches and settings.</span></a></li>
+            <li><a href="/guides/clear-system-data-mac">How to clear System Data on Mac<span>System Data taking up too much space? Learn what it contains and how to shrink it safely: caches, logs, Time Machine snapshots and app leftovers.</span></a></li>
+          </ul>
+        </section>
+      </article>
+    </main>
+
+    <footer class="g-ft">
+      <div class="g-ft-in">
+        <a href="/">iClearer home</a>
+        <a href="/guides">Guides</a>
+        <a href="/#pricing">Pricing</a>
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms of Service</a>
+        <a href="/refund">Refund Policy</a>
+        <a href="mailto:iclearerglobal@gmail.com">iclearerglobal@gmail.com</a>
+        <p>Copyright © 2026 iClearer. iClearer is not affiliated with Apple Inc. Mac, macOS, MacBook, iMac, Xcode and iPhone are trademarks of Apple Inc.</p>
+      </div>
+    </footer>
+  </body>
+</html>

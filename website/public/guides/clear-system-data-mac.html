@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>How to Clear System Data on Mac (Safely) | iClearer</title>
+    <meta name="description" content="System Data taking up too much space? Learn what it contains and how to shrink it safely: caches, logs, Time Machine snapshots and app leftovers." />
+    <link rel="canonical" href="https://www.iclearer.com/guides/clear-system-data-mac" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="theme-color" content="#3B7CB0" />
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="iClearer" />
+    <meta property="og:title" content="How to Clear System Data on Mac (Safely) | iClearer" />
+    <meta property="og:description" content="System Data taking up too much space? Learn what it contains and how to shrink it safely: caches, logs, Time Machine snapshots and app leftovers." />
+    <meta property="og:url" content="https://www.iclearer.com/guides/clear-system-data-mac" />
+    <meta property="og:image" content="https://www.iclearer.com/og.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="iClearer, the Mac cleaner. Clear space. Keep control." />
+    <meta property="og:locale" content="en_US" />
+    <meta property="article:modified_time" content="2026-11-12" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="How to Clear System Data on Mac (Safely) | iClearer" />
+    <meta name="twitter:description" content="System Data taking up too much space? Learn what it contains and how to shrink it safely: caches, logs, Time Machine snapshots and app leftovers." />
+    <meta name="twitter:image" content="https://www.iclearer.com/og.png" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/assets/png/favicon-48.png" />
+    <link rel="apple-touch-icon" href="/assets/png/apple-touch-icon-180.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" />
+    <link rel="stylesheet" href="/guide.css" />
+    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"iClearer","item":"https://www.iclearer.com/"},{"@type":"ListItem","position":2,"name":"Guides","item":"https://www.iclearer.com/guides"},{"@type":"ListItem","position":3,"name":"How to clear System Data on Mac","item":"https://www.iclearer.com/guides/clear-system-data-mac"}]},{"@type":"Article","@id":"https://www.iclearer.com/guides/clear-system-data-mac#article","headline":"How to clear System Data on Mac","description":"System Data taking up too much space? Learn what it contains and how to shrink it safely: caches, logs, Time Machine snapshots and app leftovers.","image":"https://www.iclearer.com/og.png","datePublished":"2026-11-12","dateModified":"2026-11-12","inLanguage":"en","mainEntityOfPage":"https://www.iclearer.com/guides/clear-system-data-mac","author":{"@type":"Organization","@id":"https://www.iclearer.com/#organization","name":"iClearer","url":"https://www.iclearer.com/"},"publisher":{"@type":"Organization","@id":"https://www.iclearer.com/#organization","name":"iClearer","logo":{"@type":"ImageObject","url":"https://www.iclearer.com/assets/png/icon-glass-light-512.png"}},"about":{"@id":"https://www.iclearer.com/#app"}},{"@type":"FAQPage","@id":"https://www.iclearer.com/guides/clear-system-data-mac#faq","mainEntity":[{"@type":"Question","name":"Why is System Data so large on my Mac?","acceptedAnswer":{"@type":"Answer","text":"The usual causes are app caches, Time Machine local snapshots, swap files from running low on memory, and files left behind by apps you deleted. Developer tools such as Xcode and Docker can also add tens of gigabytes."}},{"@type":"Question","name":"Can I delete System Data on a Mac?","acceptedAnswer":{"@type":"Answer","text":"Not as a single item. System Data is a category, not a folder. You reduce it by clearing caches and logs, removing Time Machine local snapshots, deleting leftovers from uninstalled apps, and restarting your Mac."}},{"@type":"Question","name":"How much System Data is normal on a Mac?","acceptedAnswer":{"@type":"Answer","text":"Apple does not publish a figure. A few tens of gigabytes is common. It is worth investigating when System Data is far larger than that or keeps growing week after week."}},{"@type":"Question","name":"Does restarting a Mac reduce System Data?","acceptedAnswer":{"@type":"Answer","text":"Yes. A restart removes temporary files and resets the swap files macOS creates when memory runs low, which are both counted as System Data."}},{"@type":"Question","name":"Is System Data the same as macOS in the storage bar?","acceptedAnswer":{"@type":"Answer","text":"No. The macOS category is the operating system and should not be touched. System Data is everything else macOS cannot sort into a category, such as caches, logs and snapshots."}}]}]}</script>
+  </head>
+  <body>
+    <header class="g-hd">
+      <a class="g-logo" href="/"><img src="/assets/png/icon-glass-light-120.png" width="36" height="36" alt="" />iClearer</a>
+      <nav class="g-nav" aria-label="Main">
+        <a href="/guides" class="g-keep">Guides</a>
+        <a href="/#features">Features</a>
+        <a href="/#pricing">Pricing</a>
+        <a class="g-btn" href="/downloads/iClearer.dmg" download="iClearer.dmg">Download Free</a>
+      </nav>
+    </header>
+
+    <main>
+      <nav class="g-bc" aria-label="Breadcrumb"><a href="/">iClearer</a> › <a href="/guides">Guides</a> › Clear System Data on Mac</nav>
+      <article>
+        <h1>How to clear System Data on Mac</h1>
+        <p class="g-meta">Updated <time datetime="2026-11-12">12 November 2026</time> · By the iClearer team</p>
+
+        <div class="g-answer">
+          <h2>Short answer</h2>
+          <p><b>System Data</b> is the catch-all category in Mac storage for files macOS does not sort anywhere else: caches, logs, temporary files, Time Machine local snapshots, swap files and files left behind by apps. You cannot delete the category directly. You shrink it by <b>restarting your Mac, clearing <code>~/Library/Caches</code> and <code>~/Library/Logs</code>, removing Time Machine local snapshots, and deleting leftovers from apps you uninstalled</b>.</p>
+        </div>
+
+        <nav class="g-toc" aria-label="On this page">
+          <b>On this page</b>
+          <ol>
+            <li><a href="#what">What System Data is</a></li>
+            <li><a href="#restart">Restart your Mac</a></li>
+            <li><a href="#caches">Clear caches and logs</a></li>
+            <li><a href="#snapshots">Remove Time Machine local snapshots</a></li>
+            <li><a href="#leftovers">Delete leftovers from apps you removed</a></li>
+            <li><a href="#find">Find what is still large</a></li>
+            <li><a href="#do-not-delete">What you should not delete</a></li>
+            <li><a href="#faq">Frequently asked questions</a></li>
+          </ol>
+        </nav>
+
+<h2 id="what">What System Data is</h2>
+<p>Open <b>System Settings → General → Storage</b> and you will see a grey section called System Data. On older versions of macOS it was called “Other”. It contains:</p>
+<ul>
+  <li>App caches, system caches and temporary files</li>
+  <li>Log files</li>
+  <li>Time Machine local snapshots</li>
+  <li>Virtual memory (swap) files and the sleep image</li>
+  <li>App support files, plug-ins and extensions, including files left by apps you deleted</li>
+</ul>
+<p>It is separate from the <b>macOS</b> category, which is the operating system itself and should be left alone.</p>
+
+<h2 id="restart">1. Restart your Mac</h2>
+<p>Start here because it costs nothing. A restart deletes temporary files and resets the swap files macOS builds up when memory runs low. If your Mac has been on for weeks, this alone can return several gigabytes.</p>
+
+<h2 id="caches">2. Clear caches and logs</h2>
+<ol>
+  <li>Quit your open apps.</li>
+  <li>In Finder, press <kbd>Shift</kbd> <kbd>Command</kbd> <kbd>G</kbd>, type <code>~/Library/Caches</code> and press Return.</li>
+  <li>Press <kbd>Command</kbd> <kbd>J</kbd> and tick <b>Calculate All Sizes</b>.</li>
+  <li>Move the contents of the largest folders to the Trash.</li>
+  <li>Do the same in <code>~/Library/Logs</code>, then empty the Trash.</li>
+</ol>
+<p>Apps rebuild their caches the next time you open them. More detail in <a href="/guides/clear-cache-mac">how to clear cache on Mac</a>.</p>
+
+<h2 id="snapshots">3. Remove Time Machine local snapshots</h2>
+<p>If you use Time Machine, macOS keeps local snapshots on your startup disk so you can restore files when the backup drive is not connected. macOS deletes them automatically when it needs space, but you can remove them yourself. Open Terminal and list them:</p>
+<pre><code>tmutil listlocalsnapshots /</code></pre>
+<p>Delete one by its date stamp:</p>
+<pre><code>sudo tmutil deletelocalsnapshots 2026-11-01-093000</code></pre>
+<p>Or ask macOS to free about 20 GB of snapshot space:</p>
+<pre><code>tmutil thinlocalsnapshots / 20000000000 4</code></pre>
+<p class="g-note"><b>Note:</b> local snapshots are not your Time Machine backup. Deleting them does not touch the backups on your external drive.</p>
+
+<h2 id="leftovers">4. Delete leftovers from apps you removed</h2>
+<p>When you drag an app to the Trash, its support files stay behind. Check these folders for names of apps you no longer have:</p>
+<ul>
+  <li><code>~/Library/Application Support</code></li>
+  <li><code>~/Library/Containers</code></li>
+  <li><code>~/Library/Caches</code></li>
+</ul>
+<p>Only delete a folder if you are sure the app is gone. The full list of locations is in <a href="/guides/uninstall-apps-mac">how to uninstall apps on Mac completely</a>.</p>
+
+<h2 id="find">5. Find what is still large</h2>
+<p>This Terminal command lists the 15 largest folders in your Library, biggest last:</p>
+<pre><code>du -sh ~/Library/* 2>/dev/null | sort -h | tail -15</code></pre>
+<p>Common results are developer tools (Xcode, Docker, simulators), downloaded AI models and message attachments. If you write code, see <a href="/guides/free-up-disk-space-mac-developers">free up disk space on a Mac for developers</a>.</p>
+
+<h2 id="do-not-delete">What you should not delete</h2>
+<ul>
+  <li>Anything in <code>/System</code>, <code>/usr</code> or <code>/private/var/vm</code>. macOS manages these.</li>
+  <li><code>~/Library/Keychains</code>, which holds your passwords.</li>
+  <li>Application Support folders for apps you still use. They hold your data, not cache.</li>
+</ul>
+
+        <section class="g-cta" aria-labelledby="cta">
+          <h2 id="cta">Let iClearer find what is inside System Data</h2>
+          <p>iClearer scans the caches, logs, temporary files and app leftovers that make up most of System Data, and shows the size of each one. Items macOS rebuilds are labelled <b>Safe</b>. Anything larger or system-related is labelled <b>Ask first</b> and starts unticked. Everything you clean goes to the Trash.</p>
+          <div class="g-cta-row">
+            <a class="g-btn lg green" href="/downloads/iClearer.dmg" download="iClearer.dmg">Download Free</a>
+            <a class="g-btn lg ol" href="/#pricing">See pricing</a>
+          </div>
+          <small>Scanning is free on every Mac and the free plan includes 500 MB of cleanup. Unlimited cleanup starts at $29.99 per year for one Mac, with a 14-day money-back guarantee. Needs macOS 13 Ventura or later, Intel or Apple silicon.</small>
+        </section>
+
+        <section class="g-faq">
+          <h2 id="faq">Frequently asked questions</h2>
+          <h3>Why is System Data so large on my Mac?</h3>
+          <p>The usual causes are app caches, Time Machine local snapshots, swap files from running low on memory, and files left behind by apps you deleted. Developer tools such as Xcode and Docker can also add tens of gigabytes.</p>
+          <h3>Can I delete System Data on a Mac?</h3>
+          <p>Not as a single item. System Data is a category, not a folder. You reduce it by clearing caches and logs, removing Time Machine local snapshots, deleting leftovers from uninstalled apps, and restarting your Mac.</p>
+          <h3>How much System Data is normal on a Mac?</h3>
+          <p>Apple does not publish a figure. A few tens of gigabytes is common. It is worth investigating when System Data is far larger than that or keeps growing week after week.</p>
+          <h3>Does restarting a Mac reduce System Data?</h3>
+          <p>Yes. A restart removes temporary files and resets the swap files macOS creates when memory runs low, which are both counted as System Data.</p>
+          <h3>Is System Data the same as macOS in the storage bar?</h3>
+          <p>No. The macOS category is the operating system and should not be touched. System Data is everything else macOS cannot sort into a category, such as caches, logs and snapshots.</p>
+        </section>
+
+        <section class="g-rel">
+          <h2>Related guides</h2>
+          <ul>
+            <li><a href="/guides/mac-storage-full">Mac storage full? How to free up space safely<span>Startup disk almost full? See what is using your Mac’s storage, then clear caches, System Data, large files and developer junk safely, step by step.</span></a></li>
+            <li><a href="/guides/clear-cache-mac">How to clear cache on Mac<span>Clear app, browser and system caches on a Mac safely. Step-by-step for Finder, Safari, Chrome and Firefox, plus what is safe to delete and what is not.</span></a></li>
+            <li><a href="/guides/uninstall-apps-mac">How to uninstall apps on Mac completely<span>Dragging an app to the Trash leaves files behind. See where Mac app leftovers live and how to remove an app completely, with its caches and settings.</span></a></li>
+          </ul>
+        </section>
+      </article>
+    </main>
+
+    <footer class="g-ft">
+      <div class="g-ft-in">
+        <a href="/">iClearer home</a>
+        <a href="/guides">Guides</a>
+        <a href="/#pricing">Pricing</a>
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms of Service</a>
+        <a href="/refund">Refund Policy</a>
+        <a href="mailto:iclearerglobal@gmail.com">iclearerglobal@gmail.com</a>
+        <p>Copyright © 2026 iClearer. iClearer is not affiliated with Apple Inc. Mac, macOS, MacBook, iMac, Xcode and iPhone are trademarks of Apple Inc.</p>
+      </div>
+    </footer>
+  </body>
+</html>

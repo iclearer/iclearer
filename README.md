@@ -59,6 +59,17 @@ npm run dev
 
 Open http://127.0.0.1:5173/
 
+### SEO and guides
+
+`npm run build` runs `scripts/seo/build.mjs` first and `scripts/seo/check.mjs` last.
+
+- `scripts/seo/site.mjs` — prices, version and product facts used everywhere. Update it when prices or the version change.
+- `scripts/seo/guides.mjs` — the content of every page under `/guides`. Add a guide here; the page, sitemap entry, `llms.txt` entry and homepage card are generated.
+- Generated (do not edit by hand): `public/guides/*.html`, `public/sitemap.xml`, `public/llms.txt`, `public/llms-full.txt`, and the blocks between `<!-- seo:… -->` markers in `index.html`.
+- FAQ structured data is read from the visible FAQ in `index.html`. Add `data-noschema` to a `<details>` to keep it out.
+- The check fails the build on broken links, structured data that does not match the page, or prices that differ between `site.mjs`, the homepage and `landing-proto.js`.
+- After publishing a new guide, tell search engines: `node scripts/seo/indexnow.mjs`.
+
 ## Mac app
 
 ```bash

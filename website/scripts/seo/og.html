@@ -1,0 +1,109 @@
+<!doctype html>
+<!--
+  Source for public/og.png (the 1200×630 image shown when a link is shared).
+  Regenerate from the website folder with:
+
+  "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless=new \
+    --hide-scrollbars --force-device-scale-factor=1 --window-size=1200,630 \
+    --screenshot=public/og.png "file://$PWD/scripts/seo/og.html"
+-->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+      }
+      body {
+        width: 1200px;
+        height: 630px;
+        overflow: hidden;
+        font-family: -apple-system, "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
+        color: #fff;
+        background: linear-gradient(135deg, #4a8fd4 0%, #3b7cb0 45%, #1c4f86 100%);
+        position: relative;
+      }
+      .glow {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(80px);
+      }
+      .g1 {
+        left: -120px;
+        top: -160px;
+        width: 620px;
+        height: 520px;
+        background: #86d0c2;
+        opacity: 0.45;
+      }
+      .g2 {
+        right: -140px;
+        bottom: -220px;
+        width: 700px;
+        height: 560px;
+        background: #2a6dba;
+        opacity: 0.9;
+      }
+      .in {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        gap: 64px;
+        padding: 0 84px;
+      }
+      img {
+        width: 300px;
+        height: 300px;
+        flex: none;
+        filter: drop-shadow(0 30px 40px rgba(10, 44, 90, 0.45));
+      }
+      .kk {
+        font-size: 26px;
+        font-weight: 600;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        opacity: 0.9;
+      }
+      h1 {
+        margin: 18px 0 26px;
+        font-size: 84px;
+        line-height: 1.04;
+        font-weight: 700;
+        letter-spacing: -0.035em;
+        text-shadow: 0 2px 24px rgba(16, 60, 116, 0.35);
+      }
+      p {
+        font-size: 31px;
+        line-height: 1.35;
+        font-weight: 500;
+        opacity: 0.95;
+      }
+      .ft {
+        position: absolute;
+        left: 84px;
+        right: 84px;
+        bottom: 44px;
+        display: flex;
+        justify-content: space-between;
+        font-size: 24px;
+        font-weight: 600;
+        opacity: 0.92;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="glow g1"></div>
+    <div class="glow g2"></div>
+    <div class="in">
+      <img src="../../public/assets/png/icon-glass-light-1024.png" alt="" />
+      <div>
+        <div class="kk">Mac storage full?</div>
+        <h1>Clear space.<br />Keep control.</h1>
+        <p>The Mac cleaner that shows what it found<br />and moves it to the Trash. Free to scan.</p>
+      </div>
+    </div>
+    <div class="ft"><span>iClearer</span><span>www.iclearer.com</span></div>
+  </body>
+</html>

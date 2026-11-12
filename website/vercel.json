@@ -1,9 +1,30 @@
 {
+  "trailingSlash": false,
   "rewrites": [
-    { "source": "/terms", "destination": "/terms.html" },
-    { "source": "/privacy", "destination": "/privacy.html" },
-    { "source": "/refund", "destination": "/refund.html" },
-    { "source": "/refund-policy", "destination": "/refund.html" }
+    {
+      "source": "/terms",
+      "destination": "/terms.html"
+    },
+    {
+      "source": "/privacy",
+      "destination": "/privacy.html"
+    },
+    {
+      "source": "/refund",
+      "destination": "/refund.html"
+    },
+    {
+      "source": "/refund-policy",
+      "destination": "/refund.html"
+    },
+    {
+      "source": "/guides",
+      "destination": "/guides/index.html"
+    },
+    {
+      "source": "/guides/:slug",
+      "destination": "/guides/:slug.html"
+    }
   ],
   "redirects": [
     {
@@ -24,6 +45,16 @@
     {
       "source": "/refund-policy.html",
       "destination": "/refund",
+      "permanent": true
+    },
+    {
+      "source": "/guides/index.html",
+      "destination": "/guides",
+      "permanent": true
+    },
+    {
+      "source": "/guides/(.*)\\.html",
+      "destination": "/guides/$1",
       "permanent": true
     }
   ]
