@@ -32,6 +32,17 @@
   ],
   "redirects": [
     {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "iclearer.vercel.app"
+        }
+      ],
+      "destination": "https://www.iclearer.com/",
+      "permanent": true
+    },
+    {
       "source": "/:path*",
       "has": [
         {
