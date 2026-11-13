@@ -2,6 +2,8 @@
 
 Clear space. Keep control.
 
+Website: [www.iclearer.com](https://www.iclearer.com) · [What is iClearer?](https://www.iclearer.com/about) · [Mac storage guides](https://www.iclearer.com/guides)
+
 Native Mac disk cleaner plus marketing site. Finds caches and leftovers, shows what you’ll free, and moves it to Trash.
 
 Official repo for the Mac app, marketing site, design handoff, and Supabase schema.

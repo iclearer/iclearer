@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>How to Delete Xcode DerivedData (Is It Safe?) | iClearer</title>
+    <meta name="description" content="Xcode DerivedData can grow to tens of gigabytes. It is safe to delete. See where it is, three ways to clear it, and what else Xcode leaves on your disk." />
+    <link rel="canonical" href="https://www.iclearer.com/guides/delete-xcode-derived-data" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="theme-color" content="#3B7CB0" />
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="iClearer" />
+    <meta property="og:title" content="How to Delete Xcode DerivedData (Is It Safe?) | iClearer" />
+    <meta property="og:description" content="Xcode DerivedData can grow to tens of gigabytes. It is safe to delete. See where it is, three ways to clear it, and what else Xcode leaves on your disk." />
+    <meta property="og:url" content="https://www.iclearer.com/guides/delete-xcode-derived-data" />
+    <meta property="og:image" content="https://www.iclearer.com/og.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="iClearer, the Mac cleaner. Clear space. Keep control." />
+    <meta property="og:locale" content="en_US" />
+    <meta property="article:modified_time" content="2026-11-12" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="How to Delete Xcode DerivedData (Is It Safe?) | iClearer" />
+    <meta name="twitter:description" content="Xcode DerivedData can grow to tens of gigabytes. It is safe to delete. See where it is, three ways to clear it, and what else Xcode leaves on your disk." />
+    <meta name="twitter:image" content="https://www.iclearer.com/og.png" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/assets/png/favicon-48.png" />
+    <link rel="apple-touch-icon" href="/assets/png/apple-touch-icon-180.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" />
+    <link rel="stylesheet" href="/guide.css" />
+    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"iClearer","item":"https://www.iclearer.com/"},{"@type":"ListItem","position":2,"name":"Guides","item":"https://www.iclearer.com/guides"},{"@type":"ListItem","position":3,"name":"How to delete Xcode DerivedData","item":"https://www.iclearer.com/guides/delete-xcode-derived-data"}]},{"@type":"Article","@id":"https://www.iclearer.com/guides/delete-xcode-derived-data#article","headline":"How to delete Xcode DerivedData","description":"Xcode DerivedData can grow to tens of gigabytes. It is safe to delete. See where it is, three ways to clear it, and what else Xcode leaves on your disk.","image":"https://www.iclearer.com/og.png","datePublished":"2026-11-12","dateModified":"2026-11-12","inLanguage":"en","mainEntityOfPage":"https://www.iclearer.com/guides/delete-xcode-derived-data","author":{"@type":"Organization","@id":"https://www.iclearer.com/#organization","name":"iClearer","url":"https://www.iclearer.com/"},"publisher":{"@type":"Organization","@id":"https://www.iclearer.com/#organization","name":"iClearer","logo":{"@type":"ImageObject","url":"https://www.iclearer.com/assets/png/icon-glass-light-512.png"}},"about":{"@id":"https://www.iclearer.com/#app"}},{"@type":"FAQPage","@id":"https://www.iclearer.com/guides/delete-xcode-derived-data#faq","mainEntity":[{"@type":"Question","name":"Is it safe to delete Xcode DerivedData?","acceptedAnswer":{"@type":"Answer","text":"Yes. DerivedData contains only files Xcode generates: build products, indexes, module caches and logs. Xcode recreates them on the next build. Your source code, project files and signing certificates are stored elsewhere."}},{"@type":"Question","name":"Where is Xcode DerivedData located?","acceptedAnswer":{"@type":"Answer","text":"In ~/Library/Developer/Xcode/DerivedData, unless you changed it in Xcode → Settings → Locations. Each project has its own folder inside."}},{"@type":"Question","name":"What happens after I delete DerivedData?","acceptedAnswer":{"@type":"Answer","text":"The next build of each project is a full build, so it takes longer, and Xcode re-indexes the project and resolves Swift packages again. After that, build times return to normal."}},{"@type":"Question","name":"How often should I delete DerivedData?","acceptedAnswer":{"@type":"Answer","text":"When you need the space or when Xcode shows build errors that a clean build does not fix. There is no need to delete it on a schedule, because it speeds up your builds."}},{"@type":"Question","name":"Does deleting DerivedData fix Xcode build errors?","acceptedAnswer":{"@type":"Answer","text":"Often, yes. Stale module caches and indexes in DerivedData can cause errors that do not match your code. Deleting the folder forces Xcode to rebuild everything from scratch."}}]}]}</script>
+  </head>
+  <body>
+    <header class="g-hd">
+      <a class="g-logo" href="/"><img src="/assets/png/icon-glass-light-120.png" width="36" height="36" alt="" />iClearer</a>
+      <nav class="g-nav" aria-label="Main">
+        <a href="/guides" class="g-keep">Guides</a>
+        <a href="/#features">Features</a>
+        <a href="/#pricing">Pricing</a>
+        <a class="g-btn" href="/downloads/iClearer.dmg" download="iClearer.dmg">Download Free</a>
+      </nav>
+    </header>
+
+    <main>
+      <nav class="g-bc" aria-label="Breadcrumb"><a href="/">iClearer</a> › <a href="/guides">Guides</a> › Delete Xcode DerivedData</nav>
+      <article>
+        <h1>How to delete Xcode DerivedData</h1>
+        <p class="g-meta">Updated <time datetime="2026-11-12">12 November 2026</time> · By the iClearer team</p>
+
+        <div class="g-answer">
+          <h2>Short answer</h2>
+          <p><b>Yes, it is safe to delete Xcode DerivedData.</b> It holds build products, indexes and logs that Xcode recreates the next time you build. Quit Xcode, then run:</p>
+<pre><code>rm -rf ~/Library/Developer/Xcode/DerivedData</code></pre>
+<p>The first build of each project afterwards takes longer, and Swift packages are resolved again. Your source code and project settings are not stored there.</p>
+        </div>
+
+        <nav class="g-toc" aria-label="On this page">
+          <b>On this page</b>
+          <ol>
+            <li><a href="#what">What DerivedData is</a></li>
+            <li><a href="#size">Check how big it is</a></li>
+            <li><a href="#delete">Three ways to delete it</a></li>
+            <li><a href="#more">What else Xcode leaves behind</a></li>
+            <li><a href="#faq">Frequently asked questions</a></li>
+          </ol>
+        </nav>
+
+<h2 id="what">What DerivedData is</h2>
+<p>DerivedData is where Xcode keeps everything it generates from your projects: compiled build products, the code index, module caches, build logs and checked-out Swift packages. It lives at:</p>
+<pre><code>~/Library/Developer/Xcode/DerivedData</code></pre>
+<p>There is one folder per project, named after the project followed by a random string. Folders for projects you deleted or have not opened in a year are still there.</p>
+
+<h2 id="size">Check how big it is</h2>
+<pre><code>du -sh ~/Library/Developer/Xcode/DerivedData</code></pre>
+<p>To see it per project, largest last:</p>
+<pre><code>du -sh ~/Library/Developer/Xcode/DerivedData/* | sort -h</code></pre>
+
+<h2 id="delete">Three ways to delete it</h2>
+<h3>1. Terminal</h3>
+<p>Quit Xcode first, then:</p>
+<pre><code>rm -rf ~/Library/Developer/Xcode/DerivedData</code></pre>
+<p>Xcode creates the folder again when it next opens.</p>
+
+<h3>2. From Xcode settings</h3>
+<ol>
+  <li>Open <b>Xcode → Settings → Locations</b>.</li>
+  <li>Click the small arrow next to the Derived Data path. Finder opens with the folder selected.</li>
+  <li>Quit Xcode, then move the DerivedData folder, or the project folders inside it, to the Trash.</li>
+</ol>
+
+<h3>3. One project only</h3>
+<p>With the project open, choose <b>Product → Clean Build Folder</b> or press <kbd>Shift</kbd> <kbd>Command</kbd> <kbd>K</kbd>. This removes the build products for that project and leaves the others alone.</p>
+
+<h2 id="more">What else Xcode leaves behind</h2>
+<div class="g-tbl"><table>
+  <tr><th>What</th><th>Path</th><th>Safe to delete?</th></tr>
+  <tr><td>iOS DeviceSupport</td><td><code>~/Library/Developer/Xcode/iOS DeviceSupport</code></td><td>Yes. Recreated when you connect a device.</td></tr>
+  <tr><td>Xcode cache</td><td><code>~/Library/Caches/com.apple.dt.Xcode</code></td><td>Yes.</td></tr>
+  <tr><td>Simulator devices</td><td><code>~/Library/Developer/CoreSimulator/Devices</code></td><td>Use the commands below. You lose apps and data installed in simulators.</td></tr>
+  <tr><td>Archives</td><td><code>~/Library/Developer/Xcode/Archives</code></td><td>Keep archives of builds you shipped. They hold the symbols for crash reports.</td></tr>
+</table></div>
+<p>Remove simulators whose runtime is no longer installed:</p>
+<pre><code>xcrun simctl delete unavailable</code></pre>
+<p>List simulator runtimes and delete one you no longer test against (Xcode 15 or later):</p>
+<pre><code>xcrun simctl runtime list
+xcrun simctl runtime delete &lt;identifier&gt;</code></pre>
+<p>You can also remove runtimes in Xcode → Settings → Components (called Platforms in Xcode 15).</p>
+
+        <section class="g-cta" aria-labelledby="cta">
+          <h2 id="cta">iClearer clears DerivedData with one tick</h2>
+          <p>iClearer’s Builders screen shows Xcode DerivedData with its size, labelled <b>Safe</b> because Xcode rebuilds it. iOS Simulator data is listed too, labelled <b>Ask first</b>. What you clean goes to the Trash, and git repositories, signing keys and <code>.env</code> files can never be selected.</p>
+          <div class="g-cta-row">
+            <a class="g-btn lg green" href="/downloads/iClearer.dmg" download="iClearer.dmg">Download Free</a>
+            <a class="g-btn lg ol" href="/#pricing">See pricing</a>
+          </div>
+          <small>Scanning is free on every Mac and the free plan includes 500 MB of cleanup. Unlimited cleanup starts at $29.99 per year for one Mac, with a 14-day money-back guarantee. Needs macOS 13 Ventura or later, Intel or Apple silicon.</small>
+        </section>
+
+        <section class="g-faq">
+          <h2 id="faq">Frequently asked questions</h2>
+          <h3>Is it safe to delete Xcode DerivedData?</h3>
+          <p>Yes. DerivedData contains only files Xcode generates: build products, indexes, module caches and logs. Xcode recreates them on the next build. Your source code, project files and signing certificates are stored elsewhere.</p>
+          <h3>Where is Xcode DerivedData located?</h3>
+          <p>In ~/Library/Developer/Xcode/DerivedData, unless you changed it in Xcode → Settings → Locations. Each project has its own folder inside.</p>
+          <h3>What happens after I delete DerivedData?</h3>
+          <p>The next build of each project is a full build, so it takes longer, and Xcode re-indexes the project and resolves Swift packages again. After that, build times return to normal.</p>
+          <h3>How often should I delete DerivedData?</h3>
+          <p>When you need the space or when Xcode shows build errors that a clean build does not fix. There is no need to delete it on a schedule, because it speeds up your builds.</p>
+          <h3>Does deleting DerivedData fix Xcode build errors?</h3>
+          <p>Often, yes. Stale module caches and indexes in DerivedData can cause errors that do not match your code. Deleting the folder forces Xcode to rebuild everything from scratch.</p>
+        </section>
+
+        <section class="g-rel">
+          <h2>Related guides</h2>
+          <ul>
+            <li><a href="/guides/free-up-disk-space-mac-developers">Free up disk space on a Mac for developers<span>Reclaim tens of gigabytes on a developer Mac. Safe commands to clear Xcode DerivedData, npm, pnpm, pip, Homebrew, Docker, simulators and AI model caches.</span></a></li>
+            <li><a href="/guides/docker-disk-space-mac">Docker taking up too much space on Mac<span>Docker Desktop stores everything in one growing disk image on your Mac. See what is using the space and the safe commands to reclaim it, without losing data.</span></a></li>
+            <li><a href="/guides/clear-npm-cache-node-modules-mac">How to clear npm cache and node_modules on Mac<span>Free up disk space from Node.js on a Mac: clear the npm, pnpm, Yarn and Bun caches, find and delete old node_modules folders, and remove old Node versions.</span></a></li>
+          </ul>
+        </section>
+      </article>
+    </main>
+
+    <footer class="g-ft">
+      <div class="g-ft-in">
+        <a href="/">iClearer home</a>
+        <a href="/about">About iClearer</a>
+        <a href="/guides">Guides</a>
+        <a href="/#pricing">Pricing</a>
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms of Service</a>
+        <a href="/refund">Refund Policy</a>
+        <a href="mailto:iclearerglobal@gmail.com">iclearerglobal@gmail.com</a>
+        <p>Copyright © 2026 iClearer. iClearer is not affiliated with Apple Inc. Mac, macOS, MacBook, iMac, Xcode and iPhone are trademarks of Apple Inc.</p>
+      </div>
+    </footer>
+  </body>
+</html>

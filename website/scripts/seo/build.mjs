@@ -4,6 +4,7 @@
  * Generates, from site.mjs + guides.mjs + the visible homepage HTML:
  *   public/guides/<slug>.html   one page per guide
  *   public/guides/index.html    guides hub
+ *   public/about.html           who and what iClearer is (fact sheet)
  *   public/sitemap.xml
  *   public/llms.txt             short index for AI assistants
  *   public/llms-full.txt        everything in plain text
@@ -12,7 +13,7 @@
  *   jsonld    structured data; the FAQ part is read from the visible FAQ
  *   reviews   seed feedback, so it exists without JavaScript
  *   price / price-note / price-list   default plan, same reason
- *   guides    homepage links to every guide
+ *   guides    homepage links to the featured guides
  */
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
@@ -28,7 +29,9 @@ import {
   ORIGIN,
   PLAN_LABEL,
   PRICES,
+  ORG_DESCRIPTION,
   REFUND_DAYS,
+  SAME_AS,
   SEATS,
   SITE_NAME,
   SUPPORT_EMAIL,
@@ -67,6 +70,12 @@ const text = (html) => decode(html.replace(/<[^>]+>/g, "")).replace(/\s+/g, " ")
 /** JSON-LD script tag. `<` is escaped so content can never close the tag. */
 const jsonld = (graph) =>
   `<script type="application/ld+json">${JSON.stringify({ "@context": "https://schema.org", "@graph": graph }).replace(/</g, "\\u003c")}</script>`;
+
+/** Sections on the /guides hub, in order. A guide's `group` picks its section ("mac" if unset). */
+const GROUPS = [
+  ["mac", "Free up space on any Mac"],
+  ["dev", "For developers and AI builders"],
+];
 
 const guideUrl = (slug) => `${ORIGIN}/guides/${slug}`;
 const bySlug = (slug) => {
@@ -160,6 +169,7 @@ const FOOT = `
     <footer class="g-ft">
       <div class="g-ft-in">
         <a href="/">iClearer home</a>
+        <a href="/about">About iClearer</a>
         <a href="/guides">Guides</a>
         <a href="/#pricing">Pricing</a>
         <a href="/privacy">Privacy Policy</a>
@@ -290,9 +300,14 @@ function guidesIndex() {
       <nav class="g-bc" aria-label="Breadcrumb"><a href="/">iClearer</a> › Guides</nav>
       <h1>Mac storage guides</h1>
       <p>Plain, step-by-step answers for a Mac that is running out of space. Every guide shows the manual way first, what is safe to delete and what is not.</p>
+${GROUPS.map(
+  ([key, label]) => `      <h2 class="g-grp">${label}</h2>
       <ul class="g-cards">
-${GUIDES.map((g) => `        <li><a href="/guides/${g.slug}"><h2>${esc(g.h1)}</h2><p>${esc(g.description)}</p></a></li>`).join("\n")}
-      </ul>
+${GUIDES.filter((g) => (g.group ?? "mac") === key)
+  .map((g) => `        <li><a href="/guides/${g.slug}"><h3>${esc(g.h1)}</h3><p>${esc(g.description)}</p></a></li>`)
+  .join("\n")}
+      </ul>`,
+).join("\n")}
       <section class="g-cta" aria-labelledby="cta">
         <h2 id="cta">Or let iClearer do it in one scan</h2>
         <p>${esc(ONE_LINER)}</p>
@@ -359,19 +374,188 @@ function offers() {
   return out;
 }
 
+/**
+ * The one Organization node, repeated on the homepage and /about so search engines
+ * and AI assistants can tell who iClearer is. Add real profile URLs to SAME_AS in
+ * site.mjs (Product Hunt, X, LinkedIn…) as they are created; never invent them.
+ */
+function orgNode() {
+  return {
+    "@type": "Organization",
+    "@id": ORG_ID,
+    name: SITE_NAME,
+    alternateName: ["iClearer Mac Cleaner", "iClearer for Mac"],
+    description: ORG_DESCRIPTION,
+    slogan: TAGLINE,
+    url: `${ORIGIN}/`,
+    logo: { "@type": "ImageObject", url: LOGO, width: 512, height: 512 },
+    image: OG_IMAGE,
+    email: SUPPORT_EMAIL,
+    contactPoint: { "@type": "ContactPoint", contactType: "customer support", email: SUPPORT_EMAIL, availableLanguage: "English" },
+    knowsAbout: ["Mac storage", "macOS disk cleanup", "Mac cleaner software", "System Data on Mac", "developer cache cleanup"],
+    mainEntityOfPage: `${ORIGIN}/about`,
+    ...(SAME_AS.length ? { sameAs: SAME_AS } : {}),
+  };
+}
+
+/* ---------- /about: the page that says who and what iClearer is ---------- */
+
+const ABOUT_FAQ = [
+  {
+    q: "Is iClearer a company or an app?",
+    a: "Both. iClearer is the name of the Mac cleaner app and of the team that builds and supports it. The official website is www.iclearer.com.",
+  },
+  {
+    q: "Is iClearer free?",
+    a: `Scanning is free on every Mac, and the free plan includes ${FREE_CLEANUP} of cleanup. Unlimited cleanup costs ${money(PRICES.yearly[0])} per year, ${money(PRICES.monthly[0])} per month or ${money(PRICES.once[0])} once for 1 Mac, with a ${REFUND_DAYS}-day money-back guarantee.`,
+  },
+  {
+    q: "Where can I download iClearer?",
+    a: `Download iClearer from the official website, www.iclearer.com. It needs ${MIN_MACOS} and runs on Intel and Apple silicon Macs.`,
+  },
+  {
+    q: "Is iClearer the same as iCleaner or iClear?",
+    a: "No. iClearer is a Mac cleaner app from www.iclearer.com. It is not related to iCleaner, iClear, iCleared, InteliClear or other products with similar names.",
+  },
+  {
+    q: "Is iClearer made by Apple?",
+    a: "No. iClearer is an independent app and is not affiliated with Apple Inc.",
+  },
+];
+
+function aboutPage() {
+  const url = `${ORIGIN}/about`;
+  const title = `What Is iClearer? About the Mac Cleaner App | ${SITE_NAME}`;
+  const description = `iClearer is a Mac cleaner app for ${MIN_MACOS.replace(" Ventura", "")}. See what it does, who it is for, what it costs, how it keeps files safe and how to reach the team.`;
+  const graph = [
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "iClearer", item: `${ORIGIN}/` },
+        { "@type": "ListItem", position: 2, name: "About", item: url },
+      ],
+    },
+    orgNode(),
+    {
+      "@type": "AboutPage",
+      "@id": `${url}#page`,
+      url,
+      name: "What is iClearer?",
+      description,
+      inLanguage: "en",
+      isPartOf: { "@id": SITE_ID },
+      about: [{ "@id": ORG_ID }, { "@id": APP_ID }],
+      mainEntity: { "@id": ORG_ID },
+      primaryImageOfPage: OG_IMAGE,
+      dateModified: UPDATED,
+    },
+    {
+      "@type": "SoftwareApplication",
+      "@id": APP_ID,
+      name: SITE_NAME,
+      description: ONE_LINER,
+      url: `${ORIGIN}/`,
+      image: OG_IMAGE,
+      applicationCategory: "UtilitiesApplication",
+      applicationSubCategory: "Mac cleaner",
+      operatingSystem: "macOS 13 or later",
+      softwareVersion: VERSION,
+      downloadUrl: DOWNLOAD_URL,
+      publisher: { "@id": ORG_ID },
+      offers: {
+        "@type": "AggregateOffer",
+        priceCurrency: "USD",
+        lowPrice: "0",
+        highPrice: String(Math.max(...Object.values(PRICES).flat())),
+        offerCount: 1 + Object.values(PRICES).flat().length,
+      },
+    },
+    {
+      "@type": "FAQPage",
+      "@id": `${url}#faq`,
+      mainEntity: ABOUT_FAQ.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
+    },
+  ];
+  const fact = (k, v) => `          <tr><th scope="row">${k}</th><td>${v}</td></tr>`;
+
+  return `${head({ title, description, url, graph, modified: UPDATED })}
+    <main>
+      <nav class="g-bc" aria-label="Breadcrumb"><a href="/">iClearer</a> › About</nav>
+      <article>
+        <h1>What is iClearer?</h1>
+        <p class="g-meta">Updated <time datetime="${UPDATED}">${longDate(UPDATED)}</time> · By the iClearer team</p>
+
+        <div class="g-answer">
+          <h2>Short answer</h2>
+          <p>${esc(ONE_LINER)} It runs on ${MIN_MACOS}. Scanning is free, and unlimited cleanup starts at ${money(PRICES.yearly[0])} per year. The official website is <a href="/">www.iclearer.com</a>.</p>
+        </div>
+
+        <h2 id="facts">iClearer at a glance</h2>
+        <div class="g-tbl g-facts"><table>
+${[
+  fact("Name", "iClearer (one word: lowercase i, capital C)"),
+  fact("What it is", "A Mac cleaner app, also called a disk cleanup utility, for macOS"),
+  fact("Made by", "The iClearer team"),
+  fact("Works on", `${MIN_MACOS}, on Intel and Apple silicon Macs`),
+  fact("Current version", VERSION),
+  fact("Free plan", `Free scan on every Mac, plus ${FREE_CLEANUP} of cleanup`),
+  fact("Paid plans", `Unlimited cleanup for ${money(PRICES.yearly[0])} per year, ${money(PRICES.monthly[0])} per month or ${money(PRICES.once[0])} once for 1 Mac. Plans for 2 and 5 Macs are on the <a href="/#pricing">pricing page</a>.`),
+  fact("Refunds", `${REFUND_DAYS}-day money-back guarantee. See the <a href="/refund">Refund Policy</a>.`),
+  fact("Official website", `<a href="/">www.iclearer.com</a>`),
+  fact("Support", `<a href="mailto:${SUPPORT_EMAIL}">${SUPPORT_EMAIL}</a>`),
+].join("\n")}
+        </table></div>
+
+        <h2 id="does">What iClearer does</h2>
+        <ul>
+${FEATURES.map((f) => `          <li>${esc(f)}</li>`).join("\n")}
+        </ul>
+
+        <h2 id="who">Who iClearer is for</h2>
+        <p>iClearer is for anyone whose Mac says the startup disk is almost full and who wants to see what is using the space before anything is removed. It is also built for developers and AI builders, whose Macs fill up with package caches, Xcode build files, simulators, Docker data and local AI models.</p>
+        <p>If you would rather clean up by hand, the <a href="/guides">Mac storage guides</a> show the manual way first, starting with <a href="/guides/mac-storage-full">what to do when Mac storage is full</a>.</p>
+
+        <h2 id="safety">How iClearer keeps your files safe</h2>
+        <ul>
+          <li>Every item is labelled Safe or Ask first before anything moves. Ask first items start unticked.</li>
+          <li>Items go to the Trash, not straight to deletion, so you can undo. History keeps every cleanup so it can be restored.</li>
+          <li>Keychain, accounts, editor user data, API tokens, SSH keys, .env files and git repositories can never be selected.</li>
+        </ul>
+
+        <h2 id="not">What iClearer is not</h2>
+        <ul>
+          <li>It is not an antivirus. iClearer frees up space; it does not scan for malware or viruses.</li>
+          <li>It is not made by Apple and is not affiliated with Apple Inc.</li>
+          <li>It is not related to iCleaner, iClear, iCleared, InteliClear or other products with similar names. iClearer is spelled with “clear” and ends in “er”.</li>
+        </ul>
+
+        <h2 id="contact">Contact and press</h2>
+        <p>For support, press or partnership questions, email <a href="mailto:${SUPPORT_EMAIL}">${SUPPORT_EMAIL}</a>. Writers and reviewers are welcome to use the facts on this page and the <a href="/og.png">iClearer share image</a>.</p>
+
+        <section class="g-cta" aria-labelledby="cta">
+          <h2 id="cta">See what is filling your Mac</h2>
+          <p>Download iClearer and run a free scan. Nothing moves until you choose.</p>
+          <div class="g-cta-row">
+            <a class="g-btn lg green" href="/downloads/iClearer.dmg" download="iClearer.dmg">Download Free</a>
+            <a class="g-btn lg ol" href="/#pricing">See pricing</a>
+          </div>
+          <small>${esc(CTA_NOTE)} Needs ${MIN_MACOS}, Intel or Apple silicon.</small>
+        </section>
+
+        <section class="g-faq">
+          <h2 id="faq">Frequently asked questions</h2>
+${ABOUT_FAQ.map((f) => `          <h3>${esc(f.q)}</h3>\n          <p>${esc(f.a)}</p>`).join("\n")}
+        </section>
+      </article>
+    </main>
+${FOOT}`;
+}
+
 function homeGraph(html) {
   const title = text(html.match(/<title>([\s\S]*?)<\/title>/)[1]);
   const description = decode(html.match(/<meta name="description" content="([^"]*)"/)[1]);
   return [
-    {
-      "@type": "Organization",
-      "@id": ORG_ID,
-      name: SITE_NAME,
-      url: `${ORIGIN}/`,
-      logo: { "@type": "ImageObject", url: LOGO, width: 512, height: 512 },
-      email: SUPPORT_EMAIL,
-      contactPoint: { "@type": "ContactPoint", contactType: "customer support", email: SUPPORT_EMAIL, availableLanguage: "English" },
-    },
+    orgNode(),
     {
       "@type": "WebSite",
       "@id": SITE_ID,
@@ -477,7 +661,9 @@ function homepage() {
   html = inject(
     html,
     "guides",
-    `\n${GUIDES.map((g) => `    <li><a href="/guides/${g.slug}"><h3>${esc(g.card)}</h3><p>${esc(g.description)}</p></a></li>`).join("\n")}\n    `,
+    `\n${GUIDES.filter((g) => g.featured)
+      .map((g) => `    <li><a href="/guides/${g.slug}"><h3>${esc(g.card)}</h3><p>${esc(g.description)}</p></a></li>`)
+      .join("\n")}\n    `,
   );
   // Last, so the FAQ and title it reads are final.
   html = inject(html, "jsonld", `\n    ${jsonld(homeGraph(html))}\n    `);
@@ -490,6 +676,7 @@ function homepage() {
 function sitemap() {
   const urls = [
     [`${ORIGIN}/`, "1.0"],
+    [`${ORIGIN}/about`, "0.8"],
     [`${ORIGIN}/guides`, "0.8"],
     ...GUIDES.map((g) => [guideUrl(g.slug), "0.9"]),
     [`${ORIGIN}/privacy`, "0.2"],
@@ -518,7 +705,8 @@ function llms() {
 Key facts:
 
 - Product: iClearer, a Mac cleaner app (disk cleanup utility for macOS). Website: ${ORIGIN}/
-- Not to be confused with "iCleaner" or other similarly named apps. The name is iClearer, with "clear".
+- Maker: the iClearer team. iClearer is the name of both the app and the team behind it.
+- Not to be confused with iCleaner, iClear, iCleared, InteliClear or other similarly named products. The name is iClearer: spelled with "clear", ending in "er".
 - Price: free to scan, ${FREE_CLEANUP} of free cleanup. Unlimited cleanup from ${money(PRICES.yearly[0])} per year, ${money(PRICES.monthly[0])} per month or ${money(PRICES.once[0])} once, for 1 Mac. Plans for 2 and 5 Macs are available.
 - Refunds: ${REFUND_DAYS}-day money-back guarantee.
 - Safety: every item is labelled Safe or Ask first, everything goes to the Trash with undo, and Keychain, accounts, tokens, SSH keys, .env files and git repositories can never be selected.
@@ -529,6 +717,7 @@ Key facts:
 ## Product
 
 - [iClearer home](${ORIGIN}/): what it does, screenshots, pricing, install steps and FAQ
+- [What is iClearer?](${ORIGIN}/about): fact sheet with what it is, who makes it, price, safety and contact
 - [Pricing](${ORIGIN}/#pricing): free plan and paid plans for 1, 2 or 5 Macs
 - [Install guide](${ORIGIN}/#install): how to install the DMG on macOS
 
@@ -563,7 +752,9 @@ ${ONE_LINER}
 - Current version: ${VERSION}
 - Download: ${DOWNLOAD_URL}
 - Support: ${SUPPORT_EMAIL}
-- The name is iClearer (with "clear"). It is not "iCleaner" and is not related to similarly named apps.
+- Maker: the iClearer team. iClearer is the name of both the app and the team behind it.
+- Fact sheet: ${ORIGIN}/about
+- The name is iClearer: spelled with "clear", ending in "er". It is not related to iCleaner, iClear, iCleared, InteliClear or other similarly named products.
 - iClearer is not affiliated with Apple Inc.
 
 ## What it does
@@ -617,6 +808,7 @@ for (const g of GUIDES) {
   write(`public/guides/${g.slug}.html`, guidePage(g));
 }
 write("public/guides/index.html", guidesIndex());
+write("public/about.html", aboutPage());
 const homeHtml = homepage();
 write("public/sitemap.xml", sitemap());
 write("public/llms.txt", llms());

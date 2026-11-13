@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Clear npm Cache and node_modules on Mac | iClearer</title>
+    <meta name="description" content="Free up disk space from Node.js on a Mac: clear the npm, pnpm, Yarn and Bun caches, find and delete old node_modules folders, and remove old Node versions." />
+    <link rel="canonical" href="https://www.iclearer.com/guides/clear-npm-cache-node-modules-mac" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="theme-color" content="#3B7CB0" />
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="iClearer" />
+    <meta property="og:title" content="Clear npm Cache and node_modules on Mac | iClearer" />
+    <meta property="og:description" content="Free up disk space from Node.js on a Mac: clear the npm, pnpm, Yarn and Bun caches, find and delete old node_modules folders, and remove old Node versions." />
+    <meta property="og:url" content="https://www.iclearer.com/guides/clear-npm-cache-node-modules-mac" />
+    <meta property="og:image" content="https://www.iclearer.com/og.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="iClearer, the Mac cleaner. Clear space. Keep control." />
+    <meta property="og:locale" content="en_US" />
+    <meta property="article:modified_time" content="2026-11-12" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Clear npm Cache and node_modules on Mac | iClearer" />
+    <meta name="twitter:description" content="Free up disk space from Node.js on a Mac: clear the npm, pnpm, Yarn and Bun caches, find and delete old node_modules folders, and remove old Node versions." />
+    <meta name="twitter:image" content="https://www.iclearer.com/og.png" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/assets/png/favicon-48.png" />
+    <link rel="apple-touch-icon" href="/assets/png/apple-touch-icon-180.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" />
+    <link rel="stylesheet" href="/guide.css" />
+    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"iClearer","item":"https://www.iclearer.com/"},{"@type":"ListItem","position":2,"name":"Guides","item":"https://www.iclearer.com/guides"},{"@type":"ListItem","position":3,"name":"How to clear npm cache and node_modules on Mac","item":"https://www.iclearer.com/guides/clear-npm-cache-node-modules-mac"}]},{"@type":"Article","@id":"https://www.iclearer.com/guides/clear-npm-cache-node-modules-mac#article","headline":"How to clear npm cache and node_modules on Mac","description":"Free up disk space from Node.js on a Mac: clear the npm, pnpm, Yarn and Bun caches, find and delete old node_modules folders, and remove old Node versions.","image":"https://www.iclearer.com/og.png","datePublished":"2026-11-12","dateModified":"2026-11-12","inLanguage":"en","mainEntityOfPage":"https://www.iclearer.com/guides/clear-npm-cache-node-modules-mac","author":{"@type":"Organization","@id":"https://www.iclearer.com/#organization","name":"iClearer","url":"https://www.iclearer.com/"},"publisher":{"@type":"Organization","@id":"https://www.iclearer.com/#organization","name":"iClearer","logo":{"@type":"ImageObject","url":"https://www.iclearer.com/assets/png/icon-glass-light-512.png"}},"about":{"@id":"https://www.iclearer.com/#app"}},{"@type":"FAQPage","@id":"https://www.iclearer.com/guides/clear-npm-cache-node-modules-mac#faq","mainEntity":[{"@type":"Question","name":"Is it safe to clear the npm cache?","acceptedAnswer":{"@type":"Answer","text":"Yes. The npm cache in ~/.npm holds downloaded package files. After you clear it with npm cache clean --force, npm downloads packages again the next time you install them. Your projects are not affected."}},{"@type":"Question","name":"Where is the npm cache on a Mac?","acceptedAnswer":{"@type":"Answer","text":"In ~/.npm, with the package data in ~/.npm/_cacache. Run npm config get cache to confirm the location on your Mac."}},{"@type":"Question","name":"Is it safe to delete node_modules?","acceptedAnswer":{"@type":"Answer","text":"Yes, for your own projects. node_modules contains installed dependencies that are listed in package.json. Run npm install, pnpm install or yarn in the project folder to recreate it."}},{"@type":"Question","name":"How do I find all node_modules folders on my Mac?","acceptedAnswer":{"@type":"Answer","text":"Run find ~ -name node_modules -type d -prune in Terminal. Add -exec du -sh {} + to see the size of each one."}},{"@type":"Question","name":"Why does npm cache clean need --force?","acceptedAnswer":{"@type":"Answer","text":"npm’s cache checks and repairs itself, so npm treats clearing it as unnecessary for fixing problems and asks you to confirm with --force. Clearing it to free disk space is a normal use."}}]}]}</script>
+  </head>
+  <body>
+    <header class="g-hd">
+      <a class="g-logo" href="/"><img src="/assets/png/icon-glass-light-120.png" width="36" height="36" alt="" />iClearer</a>
+      <nav class="g-nav" aria-label="Main">
+        <a href="/guides" class="g-keep">Guides</a>
+        <a href="/#features">Features</a>
+        <a href="/#pricing">Pricing</a>
+        <a class="g-btn" href="/downloads/iClearer.dmg" download="iClearer.dmg">Download Free</a>
+      </nav>
+    </header>
+
+    <main>
+      <nav class="g-bc" aria-label="Breadcrumb"><a href="/">iClearer</a> › <a href="/guides">Guides</a> › Clear npm cache and node_modules</nav>
+      <article>
+        <h1>How to clear npm cache and node_modules on Mac</h1>
+        <p class="g-meta">Updated <time datetime="2026-11-12">12 November 2026</time> · By the iClearer team</p>
+
+        <div class="g-answer">
+          <h2>Short answer</h2>
+          <p>To clear the npm cache on a Mac, run <code>npm cache clean --force</code>. The cache lives in <code>~/.npm</code> and is safe to delete; npm downloads packages again when you next install. Old <code>node_modules</code> folders usually take far more space than the cache. Find them with:</p>
+<pre><code>find ~ -name node_modules -type d -prune -exec du -sh {} + 2>/dev/null | sort -h | tail -20</code></pre>
+        </div>
+
+        <nav class="g-toc" aria-label="On this page">
+          <b>On this page</b>
+          <ol>
+            <li><a href="#npm">npm cache</a></li>
+            <li><a href="#others">pnpm, Yarn and Bun</a></li>
+            <li><a href="#node-modules">Find and delete node_modules</a></li>
+            <li><a href="#versions">Old Node versions</a></li>
+            <li><a href="#faq">Frequently asked questions</a></li>
+          </ol>
+        </nav>
+
+<h2 id="npm">npm cache</h2>
+<p>See how big it is:</p>
+<pre><code>du -sh ~/.npm</code></pre>
+<p>Clear it:</p>
+<pre><code>npm cache clean --force</code></pre>
+<p>npm asks for <code>--force</code> because the cache repairs itself and rarely needs clearing for correctness. Clearing it to get disk space back is fine. To remove only what is no longer needed and check the rest:</p>
+<pre><code>npm cache verify</code></pre>
+
+<h2 id="others">pnpm, Yarn and Bun</h2>
+<div class="g-tbl"><table>
+  <tr><th>Tool</th><th>Clear command</th><th>Find the folder</th></tr>
+  <tr><td>pnpm</td><td><code>pnpm store prune</code></td><td><code>pnpm store path</code></td></tr>
+  <tr><td>Yarn 1</td><td><code>yarn cache clean</code></td><td><code>yarn cache dir</code></td></tr>
+  <tr><td>Yarn 2 and later</td><td><code>yarn cache clean --all</code></td><td><code>yarn config get cacheFolder</code></td></tr>
+  <tr><td>Bun</td><td><code>bun pm cache rm</code></td><td><code>bun pm cache</code></td></tr>
+</table></div>
+<p><code>pnpm store prune</code> only removes packages that no project on your Mac still uses, so it is safe to run at any time.</p>
+
+<h2 id="node-modules">Find and delete node_modules</h2>
+<p>Every project has its own <code>node_modules</code> folder, often several hundred megabytes. Projects you finished long ago still have theirs. List the 20 largest:</p>
+<pre><code>find ~ -name node_modules -type d -prune -exec du -sh {} + 2>/dev/null | sort -h | tail -20</code></pre>
+<p>Delete one by its path:</p>
+<pre><code>rm -rf ~/code/old-project/node_modules</code></pre>
+<p>To delete every <code>node_modules</code> folder under one projects folder, move into it first:</p>
+<pre><code>cd ~/code
+find . -name node_modules -type d -prune -exec rm -rf {} +</code></pre>
+<p class="g-note"><b>Careful:</b> the last command deletes without asking. Run it only inside a folder of your own projects, never in your home folder, because some installed apps and tools keep a <code>node_modules</code> folder they need.</p>
+<p>Deleting <code>node_modules</code> is safe for your own projects. Run <code>npm install</code>, <code>pnpm install</code> or <code>yarn</code> in the project to bring it back.</p>
+
+<h2 id="versions">Old Node versions</h2>
+<p>If you use nvm, each installed Node version is kept in <code>~/.nvm/versions</code>. List them and remove the ones you no longer need:</p>
+<pre><code>nvm ls
+nvm uninstall 16</code></pre>
+
+        <section class="g-cta" aria-labelledby="cta">
+          <h2 id="cta">iClearer finds the npm, pnpm and Yarn caches for you</h2>
+          <p>iClearer’s Builders screen shows the npm cache, pnpm store and Yarn cache with their sizes, labelled <b>Safe</b> because your package manager downloads what it needs again. What you clean goes to the Trash. Git repositories, <code>.env</code> files and API tokens can never be selected.</p>
+          <div class="g-cta-row">
+            <a class="g-btn lg green" href="/downloads/iClearer.dmg" download="iClearer.dmg">Download Free</a>
+            <a class="g-btn lg ol" href="/#pricing">See pricing</a>
+          </div>
+          <small>Scanning is free on every Mac and the free plan includes 500 MB of cleanup. Unlimited cleanup starts at $29.99 per year for one Mac, with a 14-day money-back guarantee. Needs macOS 13 Ventura or later, Intel or Apple silicon.</small>
+        </section>
+
+        <section class="g-faq">
+          <h2 id="faq">Frequently asked questions</h2>
+          <h3>Is it safe to clear the npm cache?</h3>
+          <p>Yes. The npm cache in ~/.npm holds downloaded package files. After you clear it with npm cache clean --force, npm downloads packages again the next time you install them. Your projects are not affected.</p>
+          <h3>Where is the npm cache on a Mac?</h3>
+          <p>In ~/.npm, with the package data in ~/.npm/_cacache. Run npm config get cache to confirm the location on your Mac.</p>
+          <h3>Is it safe to delete node_modules?</h3>
+          <p>Yes, for your own projects. node_modules contains installed dependencies that are listed in package.json. Run npm install, pnpm install or yarn in the project folder to recreate it.</p>
+          <h3>How do I find all node_modules folders on my Mac?</h3>
+          <p>Run find ~ -name node_modules -type d -prune in Terminal. Add -exec du -sh {} + to see the size of each one.</p>
+          <h3>Why does npm cache clean need --force?</h3>
+          <p>npm’s cache checks and repairs itself, so npm treats clearing it as unnecessary for fixing problems and asks you to confirm with --force. Clearing it to free disk space is a normal use.</p>
+        </section>
+
+        <section class="g-rel">
+          <h2>Related guides</h2>
+          <ul>
+            <li><a href="/guides/free-up-disk-space-mac-developers">Free up disk space on a Mac for developers<span>Reclaim tens of gigabytes on a developer Mac. Safe commands to clear Xcode DerivedData, npm, pnpm, pip, Homebrew, Docker, simulators and AI model caches.</span></a></li>
+            <li><a href="/guides/delete-xcode-derived-data">How to delete Xcode DerivedData<span>Xcode DerivedData can grow to tens of gigabytes. It is safe to delete. See where it is, three ways to clear it, and what else Xcode leaves on your disk.</span></a></li>
+            <li><a href="/guides/docker-disk-space-mac">Docker taking up too much space on Mac<span>Docker Desktop stores everything in one growing disk image on your Mac. See what is using the space and the safe commands to reclaim it, without losing data.</span></a></li>
+          </ul>
+        </section>
+      </article>
+    </main>
+
+    <footer class="g-ft">
+      <div class="g-ft-in">
+        <a href="/">iClearer home</a>
+        <a href="/about">About iClearer</a>
+        <a href="/guides">Guides</a>
+        <a href="/#pricing">Pricing</a>
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms of Service</a>
+        <a href="/refund">Refund Policy</a>
+        <a href="mailto:iclearerglobal@gmail.com">iclearerglobal@gmail.com</a>
+        <p>Copyright © 2026 iClearer. iClearer is not affiliated with Apple Inc. Mac, macOS, MacBook, iMac, Xcode and iPhone are trademarks of Apple Inc.</p>
+      </div>
+    </footer>
+  </body>
+</html>

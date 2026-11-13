@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Delete Ollama Models on Mac and Free Up Space | iClearer</title>
+    <meta name="description" content="Local AI models are often the largest files on a Mac. See where Ollama, LM Studio and Hugging Face store models, how to delete them, and how to move them." />
+    <link rel="canonical" href="https://www.iclearer.com/guides/delete-ollama-models-mac" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="theme-color" content="#3B7CB0" />
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="iClearer" />
+    <meta property="og:title" content="Delete Ollama Models on Mac and Free Up Space | iClearer" />
+    <meta property="og:description" content="Local AI models are often the largest files on a Mac. See where Ollama, LM Studio and Hugging Face store models, how to delete them, and how to move them." />
+    <meta property="og:url" content="https://www.iclearer.com/guides/delete-ollama-models-mac" />
+    <meta property="og:image" content="https://www.iclearer.com/og.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="iClearer, the Mac cleaner. Clear space. Keep control." />
+    <meta property="og:locale" content="en_US" />
+    <meta property="article:modified_time" content="2026-11-12" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Delete Ollama Models on Mac and Free Up Space | iClearer" />
+    <meta name="twitter:description" content="Local AI models are often the largest files on a Mac. See where Ollama, LM Studio and Hugging Face store models, how to delete them, and how to move them." />
+    <meta name="twitter:image" content="https://www.iclearer.com/og.png" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/assets/png/favicon-48.png" />
+    <link rel="apple-touch-icon" href="/assets/png/apple-touch-icon-180.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" />
+    <link rel="stylesheet" href="/guide.css" />
+    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"iClearer","item":"https://www.iclearer.com/"},{"@type":"ListItem","position":2,"name":"Guides","item":"https://www.iclearer.com/guides"},{"@type":"ListItem","position":3,"name":"How to delete Ollama models on Mac","item":"https://www.iclearer.com/guides/delete-ollama-models-mac"}]},{"@type":"Article","@id":"https://www.iclearer.com/guides/delete-ollama-models-mac#article","headline":"How to delete Ollama models on Mac","description":"Local AI models are often the largest files on a Mac. See where Ollama, LM Studio and Hugging Face store models, how to delete them, and how to move them.","image":"https://www.iclearer.com/og.png","datePublished":"2026-11-12","dateModified":"2026-11-12","inLanguage":"en","mainEntityOfPage":"https://www.iclearer.com/guides/delete-ollama-models-mac","author":{"@type":"Organization","@id":"https://www.iclearer.com/#organization","name":"iClearer","url":"https://www.iclearer.com/"},"publisher":{"@type":"Organization","@id":"https://www.iclearer.com/#organization","name":"iClearer","logo":{"@type":"ImageObject","url":"https://www.iclearer.com/assets/png/icon-glass-light-512.png"}},"about":{"@id":"https://www.iclearer.com/#app"}},{"@type":"FAQPage","@id":"https://www.iclearer.com/guides/delete-ollama-models-mac#faq","mainEntity":[{"@type":"Question","name":"Where does Ollama store models on a Mac?","acceptedAnswer":{"@type":"Answer","text":"In ~/.ollama/models, inside your home folder. The blobs folder holds the model data and the manifests folder records which files belong to which model. You can change the location with the OLLAMA_MODELS environment variable."}},{"@type":"Question","name":"How do I delete an Ollama model?","acceptedAnswer":{"@type":"Answer","text":"Run ollama list to see the installed models, then ollama rm followed by the name, for example ollama rm llama3.2. Ollama removes the model’s files unless another model still uses them."}},{"@type":"Question","name":"Is it safe to delete the ~/.ollama/models folder?","acceptedAnswer":{"@type":"Answer","text":"Yes, but it removes every model at once. Nothing else breaks; you download models again with ollama pull. To remove just some models, use ollama rm instead."}},{"@type":"Question","name":"How much disk space do local AI models use?","acceptedAnswer":{"@type":"Answer","text":"Usually between 2 GB and 50 GB each, depending on the model size and quantization. A few models can easily use more space than everything else in your home folder."}},{"@type":"Question","name":"Can I move Ollama models to an external drive?","acceptedAnswer":{"@type":"Answer","text":"Yes. Set OLLAMA_MODELS to a folder on the external drive, for the Mac app with launchctl setenv OLLAMA_MODELS followed by the path, then restart Ollama. The drive must be connected whenever you use Ollama."}}]}]}</script>
+  </head>
+  <body>
+    <header class="g-hd">
+      <a class="g-logo" href="/"><img src="/assets/png/icon-glass-light-120.png" width="36" height="36" alt="" />iClearer</a>
+      <nav class="g-nav" aria-label="Main">
+        <a href="/guides" class="g-keep">Guides</a>
+        <a href="/#features">Features</a>
+        <a href="/#pricing">Pricing</a>
+        <a class="g-btn" href="/downloads/iClearer.dmg" download="iClearer.dmg">Download Free</a>
+      </nav>
+    </header>
+
+    <main>
+      <nav class="g-bc" aria-label="Breadcrumb"><a href="/">iClearer</a> › <a href="/guides">Guides</a> › Delete Ollama and local AI models</nav>
+      <article>
+        <h1>How to delete Ollama models on Mac</h1>
+        <p class="g-meta">Updated <time datetime="2026-11-12">12 November 2026</time> · By the iClearer team</p>
+
+        <div class="g-answer">
+          <h2>Short answer</h2>
+          <p>Ollama stores models on a Mac in <code>~/.ollama/models</code>. To delete one, run <code>ollama list</code> to see each model and its size, then <code>ollama rm</code> followed by the model name, for example <code>ollama rm llama3.2</code>. Models are safe to delete. To use one again you download it again with <code>ollama pull</code>.</p>
+        </div>
+
+        <nav class="g-toc" aria-label="On this page">
+          <b>On this page</b>
+          <ol>
+            <li><a href="#ollama">Ollama</a></li>
+            <li><a href="#move">Move Ollama models to another drive</a></li>
+            <li><a href="#lm-studio">LM Studio</a></li>
+            <li><a href="#hugging-face">Hugging Face cache</a></li>
+            <li><a href="#faq">Frequently asked questions</a></li>
+          </ol>
+        </nav>
+
+<h2 id="ollama">Ollama</h2>
+<p>List your models with their sizes:</p>
+<pre><code>ollama list</code></pre>
+<p>Delete one:</p>
+<pre><code>ollama rm llama3.2</code></pre>
+<p>See the total on disk:</p>
+<pre><code>du -sh ~/.ollama/models</code></pre>
+<p>Use <code>ollama rm</code> rather than deleting files in Finder. Models share layers with each other, and Ollama only removes the files no other model still uses.</p>
+
+<h2 id="move">Move Ollama models to another drive</h2>
+<p>If you want to keep your models but not on the startup disk, set the <code>OLLAMA_MODELS</code> environment variable to a folder on an external drive. For the Ollama Mac app:</p>
+<pre><code>launchctl setenv OLLAMA_MODELS /Volumes/External/ollama-models</code></pre>
+<p>Quit and reopen Ollama afterwards. The setting lasts until you restart your Mac, so run the command again after a restart. Models you already downloaded stay in the old folder until you move or delete them.</p>
+
+<h2 id="lm-studio">LM Studio</h2>
+<p>LM Studio keeps models in <code>~/.lmstudio/models</code>. Older versions used <code>~/.cache/lm-studio/models</code>. Delete models from the <b>My Models</b> view in the app, which shows the size of each.</p>
+
+<h2 id="hugging-face">Hugging Face cache</h2>
+<p>Python libraries such as Transformers and Diffusers download models to <code>~/.cache/huggingface/hub</code>. Check the size:</p>
+<pre><code>du -sh ~/.cache/huggingface</code></pre>
+<p>Choose what to delete from an interactive list:</p>
+<pre><code>huggingface-cli delete-cache</code></pre>
+<p>Deleting the folder is also safe. Models download again when a script asks for them.</p>
+
+        <section class="g-cta" aria-labelledby="cta">
+          <h2 id="cta">iClearer shows what your AI tools are using</h2>
+          <p>iClearer’s Builders screen lists Ollama models and the <code>~/.cache</code> folder with their sizes. Models are labelled <b>Ask first</b>, because getting one back means downloading it again. What you remove goes to the Trash, and API tokens and <code>.env</code> files can never be selected.</p>
+          <div class="g-cta-row">
+            <a class="g-btn lg green" href="/downloads/iClearer.dmg" download="iClearer.dmg">Download Free</a>
+            <a class="g-btn lg ol" href="/#pricing">See pricing</a>
+          </div>
+          <small>Scanning is free on every Mac and the free plan includes 500 MB of cleanup. Unlimited cleanup starts at $29.99 per year for one Mac, with a 14-day money-back guarantee. Needs macOS 13 Ventura or later, Intel or Apple silicon.</small>
+        </section>
+
+        <section class="g-faq">
+          <h2 id="faq">Frequently asked questions</h2>
+          <h3>Where does Ollama store models on a Mac?</h3>
+          <p>In ~/.ollama/models, inside your home folder. The blobs folder holds the model data and the manifests folder records which files belong to which model. You can change the location with the OLLAMA_MODELS environment variable.</p>
+          <h3>How do I delete an Ollama model?</h3>
+          <p>Run ollama list to see the installed models, then ollama rm followed by the name, for example ollama rm llama3.2. Ollama removes the model’s files unless another model still uses them.</p>
+          <h3>Is it safe to delete the ~/.ollama/models folder?</h3>
+          <p>Yes, but it removes every model at once. Nothing else breaks; you download models again with ollama pull. To remove just some models, use ollama rm instead.</p>
+          <h3>How much disk space do local AI models use?</h3>
+          <p>Usually between 2 GB and 50 GB each, depending on the model size and quantization. A few models can easily use more space than everything else in your home folder.</p>
+          <h3>Can I move Ollama models to an external drive?</h3>
+          <p>Yes. Set OLLAMA_MODELS to a folder on the external drive, for the Mac app with launchctl setenv OLLAMA_MODELS followed by the path, then restart Ollama. The drive must be connected whenever you use Ollama.</p>
+        </section>
+
+        <section class="g-rel">
+          <h2>Related guides</h2>
+          <ul>
+            <li><a href="/guides/free-up-disk-space-mac-developers">Free up disk space on a Mac for developers<span>Reclaim tens of gigabytes on a developer Mac. Safe commands to clear Xcode DerivedData, npm, pnpm, pip, Homebrew, Docker, simulators and AI model caches.</span></a></li>
+            <li><a href="/guides/docker-disk-space-mac">Docker taking up too much space on Mac<span>Docker Desktop stores everything in one growing disk image on your Mac. See what is using the space and the safe commands to reclaim it, without losing data.</span></a></li>
+            <li><a href="/guides/find-large-files-mac">How to find large files on Mac<span>Three ways to find the biggest files on your Mac: Storage settings, Finder search by file size, and a Terminal command. See what is safe to delete.</span></a></li>
+          </ul>
+        </section>
+      </article>
+    </main>
+
+    <footer class="g-ft">
+      <div class="g-ft-in">
+        <a href="/">iClearer home</a>
+        <a href="/about">About iClearer</a>
+        <a href="/guides">Guides</a>
+        <a href="/#pricing">Pricing</a>
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms of Service</a>
+        <a href="/refund">Refund Policy</a>
+        <a href="mailto:iclearerglobal@gmail.com">iclearerglobal@gmail.com</a>
+        <p>Copyright © 2026 iClearer. iClearer is not affiliated with Apple Inc. Mac, macOS, MacBook, iMac, Xcode and iPhone are trademarks of Apple Inc.</p>
+      </div>
+    </footer>
+  </body>
+</html>

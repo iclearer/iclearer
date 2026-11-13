@@ -139,14 +139,21 @@ function checkPage(file, { path, indexable = true }) {
 
 /* Pages */
 checkPage("index.html", { path: "/" });
+checkPage("about.html", { path: "/about" });
 checkPage("guides/index.html", { path: "/guides" });
 for (const g of GUIDES) checkPage(`guides/${g.slug}.html`, { path: `/guides/${g.slug}` });
 for (const p of ["terms", "privacy", "refund"]) checkPage(`${p}.html`, { path: `/${p}` });
 checkPage("404.html", { path: "/404", indexable: false });
 
-/* Every generated guide is linked from the homepage. */
+/* Every guide is reachable: the hub links all of them, the homepage links the hub and the featured ones. */
 const home = readFileSync(join(DIST, "index.html"), "utf8");
-for (const g of GUIDES) if (!home.includes(`href="/guides/${g.slug}"`)) err("/", `homepage does not link to /guides/${g.slug}`);
+const hub = readFileSync(join(DIST, "guides/index.html"), "utf8");
+if (!home.includes('href="/guides"')) err("/", "homepage does not link to /guides");
+if (!home.includes('href="/about"')) err("/", "homepage does not link to /about");
+for (const g of GUIDES) {
+  if (!hub.includes(`href="/guides/${g.slug}"`)) err("/guides", `hub does not link to /guides/${g.slug}`);
+  if (g.featured && !home.includes(`href="/guides/${g.slug}"`)) err("/", `homepage does not link to featured guide /guides/${g.slug}`);
+}
 
 /* Prices on the page, in the pricing script and in site.mjs must agree. */
 const homeText = visible(home);
@@ -168,6 +175,7 @@ for (const loc of locs) {
   if (!loc.startsWith(ORIGIN)) err("/sitemap.xml", `URL is not on ${ORIGIN}: ${loc}`);
   else if (!exists(loc.slice(ORIGIN.length))) err("/sitemap.xml", `URL does not resolve: ${loc}`);
 }
+if (!locs.includes(`${ORIGIN}/about`)) err("/sitemap.xml", "missing /about");
 for (const g of GUIDES) if (!locs.includes(`${ORIGIN}/guides/${g.slug}`)) err("/sitemap.xml", `missing /guides/${g.slug}`);
 
 for (const f of ["llms.txt", "llms-full.txt"]) {
@@ -192,4 +200,4 @@ if (errors.length) {
   console.error(`seo check: ${errors.length} error(s).`);
   process.exit(1);
 }
-console.log(`seo check: ok (${6 + GUIDES.length} pages, ${locs.length} sitemap URLs${warnings.length ? `, ${warnings.length} warning(s)` : ""})`);
+console.log(`seo check: ok (${7 + GUIDES.length} pages, ${locs.length} sitemap URLs${warnings.length ? `, ${warnings.length} warning(s)` : ""})`);

@@ -30,6 +30,16 @@ export const TAGLINE = "Clear space. Keep control.";
 export const ONE_LINER =
   "iClearer is a Mac cleaner that finds the hidden caches, logs, app leftovers, developer files and large files filling your Mac, shows exactly how much space you will free, and moves what you choose to the Trash.";
 
+export const ORG_DESCRIPTION =
+  "iClearer is the team behind iClearer, a Mac cleaner app for macOS that finds what is filling a Mac and frees up storage safely.";
+
+/**
+ * Official iClearer profiles on other sites (Product Hunt, X, LinkedIn, YouTube…).
+ * These go into the Organization "sameAs" so search engines and AI assistants can
+ * connect them to this site. Only real, live profile URLs. Leave empty until they exist.
+ */
+export const SAME_AS = [];
+
 /** Only features that exist in the shipping Mac app. */
 export const FEATURES = [
   "Scans for app caches, system caches, logs and temporary files",

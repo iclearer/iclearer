@@ -85,7 +85,7 @@ docker system prune</code></pre>
 </table></div>
 <pre><code>rm -rf ~/Library/Developer/Xcode/DerivedData
 xcrun simctl delete unavailable</code></pre>
-<p>The second command removes simulators for runtimes you no longer have installed. To remove whole simulator runtimes, open Xcode → Settings → Components (called Platforms in Xcode 15).</p>
+<p>The second command removes simulators for runtimes you no longer have installed. To remove whole simulator runtimes, open Xcode → Settings → Components (called Platforms in Xcode 15). More detail: <a href="/guides/delete-xcode-derived-data">how to delete Xcode DerivedData</a>.</p>
 
 <h2 id="node">Node: npm, pnpm, Yarn and node_modules</h2>
 <pre><code>npm cache clean --force
@@ -93,7 +93,7 @@ pnpm store prune
 yarn cache clean</code></pre>
 <p>Old <code>node_modules</code> folders in projects you no longer work on add up quickly. This lists the 20 largest:</p>
 <pre><code>find ~ -name node_modules -type d -prune -exec du -sh {} + 2>/dev/null | sort -h | tail -20</code></pre>
-<p>Deleting a <code>node_modules</code> folder is safe. Run your package manager’s install command to bring it back.</p>
+<p>Deleting a <code>node_modules</code> folder is safe. Run your package manager’s install command to bring it back. More detail: <a href="/guides/clear-npm-cache-node-modules-mac">how to clear npm cache and node_modules</a>.</p>
 
 <h2 id="python">Python and AI tooling</h2>
 <pre><code>pip cache purge
@@ -102,6 +102,7 @@ uv cache clean</code></pre>
 <pre><code>ollama list
 ollama rm &lt;model-name&gt;</code></pre>
 <p class="g-note"><b>Note:</b> models are safe to remove but slow to get back. You will have to download them again.</p>
+<p>Where each tool keeps its models: <a href="/guides/delete-ollama-models-mac">delete Ollama models on Mac</a>.</p>
 
 <h2 id="homebrew">Homebrew</h2>
 <pre><code>brew cleanup --prune=all
@@ -114,7 +115,7 @@ brew autoremove</code></pre>
 <p>Then remove stopped containers, unused networks, dangling images and build cache:</p>
 <pre><code>docker system prune</code></pre>
 <p class="g-note"><b>Careful:</b> <code>docker system prune -a --volumes</code> also removes every image not used by a running container and all unused volumes. Volumes can hold database data that cannot be rebuilt.</p>
-<p>Docker Desktop keeps everything inside one disk image, so Finder shows a single large file. Use the Docker commands rather than deleting that file by hand.</p>
+<p>Docker Desktop keeps everything inside one disk image, so Finder shows a single large file. Use the Docker commands rather than deleting that file by hand. More detail: <a href="/guides/docker-disk-space-mac">Docker taking up too much space on Mac</a>.</p>
 
 <h2 id="mobile">CocoaPods and Gradle</h2>
 <pre><code>pod cache clean --all
@@ -162,9 +163,9 @@ rm -rf ~/.gradle/caches</code></pre>
         <section class="g-rel">
           <h2>Related guides</h2>
           <ul>
-            <li><a href="/guides/mac-storage-full">Mac storage full? How to free up space safely<span>Startup disk almost full? See what is using your Mac’s storage, then clear caches, System Data, large files and developer junk safely, step by step.</span></a></li>
-            <li><a href="/guides/clear-cache-mac">How to clear cache on Mac<span>Clear app, browser and system caches on a Mac safely. Step-by-step for Finder, Safari, Chrome and Firefox, plus what is safe to delete and what is not.</span></a></li>
-            <li><a href="/guides/clear-system-data-mac">How to clear System Data on Mac<span>System Data taking up too much space? Learn what it contains and how to shrink it safely: caches, logs, Time Machine snapshots and app leftovers.</span></a></li>
+            <li><a href="/guides/delete-xcode-derived-data">How to delete Xcode DerivedData<span>Xcode DerivedData can grow to tens of gigabytes. It is safe to delete. See where it is, three ways to clear it, and what else Xcode leaves on your disk.</span></a></li>
+            <li><a href="/guides/docker-disk-space-mac">Docker taking up too much space on Mac<span>Docker Desktop stores everything in one growing disk image on your Mac. See what is using the space and the safe commands to reclaim it, without losing data.</span></a></li>
+            <li><a href="/guides/clear-npm-cache-node-modules-mac">How to clear npm cache and node_modules on Mac<span>Free up disk space from Node.js on a Mac: clear the npm, pnpm, Yarn and Bun caches, find and delete old node_modules folders, and remove old Node versions.</span></a></li>
           </ul>
         </section>
       </article>
@@ -173,6 +174,7 @@ rm -rf ~/.gradle/caches</code></pre>
     <footer class="g-ft">
       <div class="g-ft-in">
         <a href="/">iClearer home</a>
+        <a href="/about">About iClearer</a>
         <a href="/guides">Guides</a>
         <a href="/#pricing">Pricing</a>
         <a href="/privacy">Privacy Policy</a>

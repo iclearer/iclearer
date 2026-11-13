@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Docker Taking Up Too Much Space on Mac? Fix It | iClearer</title>
+    <meta name="description" content="Docker Desktop stores everything in one growing disk image on your Mac. See what is using the space and the safe commands to reclaim it, without losing data." />
+    <link rel="canonical" href="https://www.iclearer.com/guides/docker-disk-space-mac" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="theme-color" content="#3B7CB0" />
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="iClearer" />
+    <meta property="og:title" content="Docker Taking Up Too Much Space on Mac? Fix It | iClearer" />
+    <meta property="og:description" content="Docker Desktop stores everything in one growing disk image on your Mac. See what is using the space and the safe commands to reclaim it, without losing data." />
+    <meta property="og:url" content="https://www.iclearer.com/guides/docker-disk-space-mac" />
+    <meta property="og:image" content="https://www.iclearer.com/og.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="iClearer, the Mac cleaner. Clear space. Keep control." />
+    <meta property="og:locale" content="en_US" />
+    <meta property="article:modified_time" content="2026-11-12" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Docker Taking Up Too Much Space on Mac? Fix It | iClearer" />
+    <meta name="twitter:description" content="Docker Desktop stores everything in one growing disk image on your Mac. See what is using the space and the safe commands to reclaim it, without losing data." />
+    <meta name="twitter:image" content="https://www.iclearer.com/og.png" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/assets/png/favicon-48.png" />
+    <link rel="apple-touch-icon" href="/assets/png/apple-touch-icon-180.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" />
+    <link rel="stylesheet" href="/guide.css" />
+    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"iClearer","item":"https://www.iclearer.com/"},{"@type":"ListItem","position":2,"name":"Guides","item":"https://www.iclearer.com/guides"},{"@type":"ListItem","position":3,"name":"Docker taking up too much space on Mac","item":"https://www.iclearer.com/guides/docker-disk-space-mac"}]},{"@type":"Article","@id":"https://www.iclearer.com/guides/docker-disk-space-mac#article","headline":"Docker taking up too much space on Mac","description":"Docker Desktop stores everything in one growing disk image on your Mac. See what is using the space and the safe commands to reclaim it, without losing data.","image":"https://www.iclearer.com/og.png","datePublished":"2026-11-12","dateModified":"2026-11-12","inLanguage":"en","mainEntityOfPage":"https://www.iclearer.com/guides/docker-disk-space-mac","author":{"@type":"Organization","@id":"https://www.iclearer.com/#organization","name":"iClearer","url":"https://www.iclearer.com/"},"publisher":{"@type":"Organization","@id":"https://www.iclearer.com/#organization","name":"iClearer","logo":{"@type":"ImageObject","url":"https://www.iclearer.com/assets/png/icon-glass-light-512.png"}},"about":{"@id":"https://www.iclearer.com/#app"}},{"@type":"FAQPage","@id":"https://www.iclearer.com/guides/docker-disk-space-mac#faq","mainEntity":[{"@type":"Question","name":"Why is Docker taking up so much space on my Mac?","acceptedAnswer":{"@type":"Answer","text":"Docker Desktop stores every image, container, volume and build cache layer in one disk image file, and the file grows as you pull and build. Old images and build cache are usually the largest part. Run docker system df to see the breakdown."}},{"@type":"Question","name":"Is it safe to run docker system prune?","acceptedAnswer":{"@type":"Answer","text":"Yes for most setups. It removes stopped containers, unused networks, dangling images and build cache. It does not remove volumes or tagged images unless you add --volumes or -a."}},{"@type":"Question","name":"Where is Docker.raw on a Mac?","acceptedAnswer":{"@type":"Answer","text":"In ~/Library/Containers/com.docker.docker/Data/vms/0/data/Docker.raw. It is a sparse file, so Finder may show its maximum size. Run du -h on the file to see how much disk space it really uses."}},{"@type":"Question","name":"Can I delete Docker.raw?","acceptedAnswer":{"@type":"Answer","text":"Only if you want to lose everything in Docker. Deleting the file removes all images, containers and volumes. Use docker system prune, or Clean / Purge data in Docker Desktop, instead."}},{"@type":"Question","name":"Does docker system prune delete volumes?","acceptedAnswer":{"@type":"Answer","text":"No, not by default. Volumes are only removed if you add the --volumes flag or run docker volume prune. Volumes often hold database data, so check docker volume ls before removing them."}}]}]}</script>
+  </head>
+  <body>
+    <header class="g-hd">
+      <a class="g-logo" href="/"><img src="/assets/png/icon-glass-light-120.png" width="36" height="36" alt="" />iClearer</a>
+      <nav class="g-nav" aria-label="Main">
+        <a href="/guides" class="g-keep">Guides</a>
+        <a href="/#features">Features</a>
+        <a href="/#pricing">Pricing</a>
+        <a class="g-btn" href="/downloads/iClearer.dmg" download="iClearer.dmg">Download Free</a>
+      </nav>
+    </header>
+
+    <main>
+      <nav class="g-bc" aria-label="Breadcrumb"><a href="/">iClearer</a> › <a href="/guides">Guides</a> › Reclaim Docker disk space</nav>
+      <article>
+        <h1>Docker taking up too much space on Mac</h1>
+        <p class="g-meta">Updated <time datetime="2026-11-12">12 November 2026</time> · By the iClearer team</p>
+
+        <div class="g-answer">
+          <h2>Short answer</h2>
+          <p>Docker Desktop for Mac keeps all images, containers, volumes and build cache inside one disk image file, which grows as you use Docker. To reclaim space, see what is using it with <code>docker system df</code>, then remove what is unused with <code>docker system prune</code>. Add <code>-a</code> to also remove images no container is using. <b>Do not delete the disk image file by hand</b>: that removes everything, including volumes.</p>
+        </div>
+
+        <nav class="g-toc" aria-label="On this page">
+          <b>On this page</b>
+          <ol>
+            <li><a href="#where">Where Docker stores data on a Mac</a></li>
+            <li><a href="#check">See what is using the space</a></li>
+            <li><a href="#prune">Reclaim space safely</a></li>
+            <li><a href="#shrink">If the disk image does not shrink</a></li>
+            <li><a href="#colima">Colima</a></li>
+            <li><a href="#faq">Frequently asked questions</a></li>
+          </ol>
+        </nav>
+
+<h2 id="where">Where Docker stores data on a Mac</h2>
+<p>Docker Desktop runs a small Linux virtual machine, and everything Docker stores sits in that machine’s disk image:</p>
+<pre><code>~/Library/Containers/com.docker.docker/Data/vms/0/data/Docker.raw</code></pre>
+<p>The file is sparse, so Finder can show a size far larger than what it really uses. To see the real figure:</p>
+<pre><code>du -h ~/Library/Containers/com.docker.docker/Data/vms/0/data/Docker.raw</code></pre>
+
+<h2 id="check">See what is using the space</h2>
+<pre><code>docker system df</code></pre>
+<p>This shows the space used by images, containers, local volumes and build cache, and how much of each is reclaimable. Add <code>-v</code> for a line-by-line list.</p>
+
+<h2 id="prune">Reclaim space safely</h2>
+<p>Work down this list and stop when you have enough space back.</p>
+<div class="g-tbl"><table>
+  <tr><th>Command</th><th>Removes</th><th>Risk</th></tr>
+  <tr><td><code>docker builder prune</code></td><td>Build cache</td><td>None. Next builds are slower.</td></tr>
+  <tr><td><code>docker container prune</code></td><td>Stopped containers</td><td>You lose anything written inside those containers.</td></tr>
+  <tr><td><code>docker image prune</code></td><td>Dangling images (untagged)</td><td>None.</td></tr>
+  <tr><td><code>docker image prune -a</code></td><td>Every image not used by a container</td><td>Images are pulled or built again when needed.</td></tr>
+  <tr><td><code>docker system prune</code></td><td>Stopped containers, unused networks, dangling images, build cache</td><td>Low.</td></tr>
+  <tr><td><code>docker volume prune</code></td><td>Unused anonymous volumes (add <code>-a</code> for named ones)</td><td>High. Volumes hold database data that cannot be rebuilt.</td></tr>
+</table></div>
+<p class="g-note"><b>Careful:</b> <code>docker system prune -a --volumes</code> does all of the above at once. Check <code>docker volume ls</code> first, and do not run it if a stopped container owns data you need.</p>
+
+<h2 id="shrink">If the disk image does not shrink</h2>
+<p>Docker Desktop hands freed space back to macOS, but it can take a little while after a prune. If the file is still large:</p>
+<ul>
+  <li>Restart Docker Desktop and check again with <code>du -h</code>, not Finder.</li>
+  <li>Lower the disk limit in <b>Docker Desktop → Settings → Resources</b>. Reducing the limit deletes the disk image and everything in it, so only do this if you can rebuild or pull everything again.</li>
+  <li>To start completely fresh, use <b>Troubleshoot → Clean / Purge data</b> in Docker Desktop. This removes all images, containers and volumes.</li>
+</ul>
+
+<h2 id="colima">Colima</h2>
+<p>Colima keeps its virtual machine disks in <code>~/.colima</code>. The same <code>docker</code> prune commands work. To remove a Colima machine and its disk entirely:</p>
+<pre><code>colima delete</code></pre>
+
+        <section class="g-cta" aria-labelledby="cta">
+          <h2 id="cta">See Docker next to your other developer files</h2>
+          <p>iClearer’s Builders screen lists Colima and Docker folders in your home folder with their sizes, labelled <b>Ask first</b> because they can hold data that cannot be rebuilt. For Docker Desktop’s disk image, use the Docker commands above. iClearer also clears the caches that sit beside Docker on most developer Macs: Xcode DerivedData, npm, pnpm, Yarn, pip, Homebrew and Gradle.</p>
+          <div class="g-cta-row">
+            <a class="g-btn lg green" href="/downloads/iClearer.dmg" download="iClearer.dmg">Download Free</a>
+            <a class="g-btn lg ol" href="/#pricing">See pricing</a>
+          </div>
+          <small>Scanning is free on every Mac and the free plan includes 500 MB of cleanup. Unlimited cleanup starts at $29.99 per year for one Mac, with a 14-day money-back guarantee. Needs macOS 13 Ventura or later, Intel or Apple silicon.</small>
+        </section>
+
+        <section class="g-faq">
+          <h2 id="faq">Frequently asked questions</h2>
+          <h3>Why is Docker taking up so much space on my Mac?</h3>
+          <p>Docker Desktop stores every image, container, volume and build cache layer in one disk image file, and the file grows as you pull and build. Old images and build cache are usually the largest part. Run docker system df to see the breakdown.</p>
+          <h3>Is it safe to run docker system prune?</h3>
+          <p>Yes for most setups. It removes stopped containers, unused networks, dangling images and build cache. It does not remove volumes or tagged images unless you add --volumes or -a.</p>
+          <h3>Where is Docker.raw on a Mac?</h3>
+          <p>In ~/Library/Containers/com.docker.docker/Data/vms/0/data/Docker.raw. It is a sparse file, so Finder may show its maximum size. Run du -h on the file to see how much disk space it really uses.</p>
+          <h3>Can I delete Docker.raw?</h3>
+          <p>Only if you want to lose everything in Docker. Deleting the file removes all images, containers and volumes. Use docker system prune, or Clean / Purge data in Docker Desktop, instead.</p>
+          <h3>Does docker system prune delete volumes?</h3>
+          <p>No, not by default. Volumes are only removed if you add the --volumes flag or run docker volume prune. Volumes often hold database data, so check docker volume ls before removing them.</p>
+        </section>
+
+        <section class="g-rel">
+          <h2>Related guides</h2>
+          <ul>
+            <li><a href="/guides/free-up-disk-space-mac-developers">Free up disk space on a Mac for developers<span>Reclaim tens of gigabytes on a developer Mac. Safe commands to clear Xcode DerivedData, npm, pnpm, pip, Homebrew, Docker, simulators and AI model caches.</span></a></li>
+            <li><a href="/guides/delete-xcode-derived-data">How to delete Xcode DerivedData<span>Xcode DerivedData can grow to tens of gigabytes. It is safe to delete. See where it is, three ways to clear it, and what else Xcode leaves on your disk.</span></a></li>
+            <li><a href="/guides/clear-npm-cache-node-modules-mac">How to clear npm cache and node_modules on Mac<span>Free up disk space from Node.js on a Mac: clear the npm, pnpm, Yarn and Bun caches, find and delete old node_modules folders, and remove old Node versions.</span></a></li>
+          </ul>
+        </section>
+      </article>
+    </main>
+
+    <footer class="g-ft">
+      <div class="g-ft-in">
+        <a href="/">iClearer home</a>
+        <a href="/about">About iClearer</a>
+        <a href="/guides">Guides</a>
+        <a href="/#pricing">Pricing</a>
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms of Service</a>
+        <a href="/refund">Refund Policy</a>
+        <a href="mailto:iclearerglobal@gmail.com">iclearerglobal@gmail.com</a>
+        <p>Copyright © 2026 iClearer. iClearer is not affiliated with Apple Inc. Mac, macOS, MacBook, iMac, Xcode and iPhone are trademarks of Apple Inc.</p>
+      </div>
+    </footer>
+  </body>
+</html>

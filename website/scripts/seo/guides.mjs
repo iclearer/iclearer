@@ -17,6 +17,7 @@ const ICLEARER_FREE_NOTE =
 export const GUIDES = [
   {
     slug: "mac-storage-full",
+    featured: true,
     title: "Mac Storage Full? How to Free Up Space Safely",
     h1: "Mac storage full? How to free up space safely",
     card: "Mac storage full: what to do",
@@ -116,11 +117,116 @@ docker system prune</code></pre>
         a: "It depends on the app. Look for one that shows exactly what it will remove, moves files to the Trash instead of deleting them, and cannot touch passwords or personal documents. iClearer labels every item Safe or Ask first, moves everything to the Trash with undo, and never selects Keychain, accounts, tokens or git repositories.",
       },
     ],
-    related: ["clear-system-data-mac", "clear-cache-mac", "find-large-files-mac"],
+    related: ["how-to-clean-mac", "clear-system-data-mac", "find-large-files-mac"],
+  },
+
+  {
+    slug: "how-to-clean-mac",
+    featured: true,
+    title: "How to Clean Up Your Mac: 10-Step Checklist",
+    h1: "How to clean up your Mac: a 10-step checklist",
+    card: "How to clean up your Mac",
+    description:
+      "A 10-step checklist to clean up a Mac and free up space: Trash, downloads, unused apps, caches, large files, old backups and more, safest steps first.",
+    answer: `<p>To clean up a Mac, work from the safest step to the most involved: <b>empty the Trash, clear the Downloads folder, uninstall apps you do not use, clear app caches and logs, delete large files you no longer need, and remove old iPhone backups</b>. Check <b>System Settings → General → Storage</b> before and after to see how much space you got back. Everything on this list can be done for free with what is built into macOS.</p>`,
+    toc: [
+      ["checklist", "The 10-step checklist"],
+      ["space", "Steps 1–7: get space back"],
+      ["tidy", "Steps 8–10: keep it tidy"],
+      ["faster", "Will cleaning make my Mac faster?"],
+      ["do-not-delete", "What you should not delete"],
+    ],
+    body: `
+<h2 id="checklist">The 10-step checklist</h2>
+<div class="g-tbl"><table>
+  <tr><th>Step</th><th>What to do</th><th>Typical space back</th></tr>
+  <tr><td>1</td><td>Check what is using your storage</td><td>None, but it tells you where to look</td></tr>
+  <tr><td>2</td><td>Empty the Trash</td><td>Varies</td></tr>
+  <tr><td>3</td><td>Clear the Downloads folder</td><td>Often several GB</td></tr>
+  <tr><td>4</td><td>Uninstall apps you do not use</td><td>Often several GB</td></tr>
+  <tr><td>5</td><td>Clear app caches and logs</td><td>Often several GB</td></tr>
+  <tr><td>6</td><td>Delete large and old files</td><td>Usually the most</td></tr>
+  <tr><td>7</td><td>Remove old iPhone and iPad backups</td><td>Often tens of GB</td></tr>
+  <tr><td>8</td><td>Trim Messages attachments</td><td>Varies</td></tr>
+  <tr><td>9</td><td>Review what opens at login</td><td>None; helps startup time</td></tr>
+  <tr><td>10</td><td>Restart and update macOS</td><td>A little</td></tr>
+</table></div>
+
+<h2 id="space">Steps 1–7: get space back</h2>
+<h3>1. Check what is using your storage</h3>
+<p>Open the Apple menu → <b>System Settings → General → Storage</b>. Wait for the bar to finish calculating and note the free space, so you can compare afterwards. Click the <b>i</b> next to a category to see what is in it.</p>
+
+<h3>2. Empty the Trash</h3>
+<p>Files in the Trash still use space. Right-click the Trash in the Dock and choose <b>Empty Trash</b>. To have macOS do this for you, turn on <b>Empty Trash Automatically</b> in Storage settings; it removes items that have been in the Trash for 30 days.</p>
+
+<h3>3. Clear the Downloads folder</h3>
+<p>Open Downloads in Finder, switch to List view and click the Size column. Installers (<code>.dmg</code>, <code>.pkg</code>) and <code>.zip</code> files you already opened are usually safe to delete.</p>
+
+<h3>4. Uninstall apps you do not use</h3>
+<p>Open Finder → Applications, switch to List view and sort by <b>Date Last Opened</b>. Drag apps you no longer use to the Trash. Their support files stay behind in your Library folder; <a href="/guides/uninstall-apps-mac">how to uninstall apps on Mac completely</a> shows where.</p>
+
+<h3>5. Clear app caches and logs</h3>
+<p>Quit your apps, then in Finder press <kbd>Shift</kbd> <kbd>Command</kbd> <kbd>G</kbd>, go to <code>~/Library/Caches</code> and move the contents of the largest folders to the Trash. Do the same in <code>~/Library/Logs</code>. Apps rebuild caches when they need them. Step-by-step: <a href="/guides/clear-cache-mac">how to clear cache on Mac</a>.</p>
+
+<h3>6. Delete large and old files</h3>
+<p>In Storage settings, click the <b>i</b> next to Documents and open <b>Large Files</b>. Old videos, disk images and virtual machines are the usual finds. More methods: <a href="/guides/find-large-files-mac">how to find large files on Mac</a>.</p>
+
+<h3>7. Remove old iPhone and iPad backups</h3>
+<p>In Storage settings, click the <b>i</b> next to <b>iOS Files</b>, select a backup you no longer need and click Delete. Keep the most recent backup of any device you still use. More detail: <a href="/guides/delete-iphone-backups-mac">how to delete old iPhone backups on Mac</a>.</p>
+
+<h2 id="tidy">Steps 8–10: keep it tidy</h2>
+<h3>8. Trim Messages attachments</h3>
+<p>Photos and videos sent in Messages are stored on your Mac. In Storage settings, click the <b>i</b> next to <b>Messages</b> to see the largest attachments and delete the ones you do not need.</p>
+
+<h3>9. Review what opens at login</h3>
+<p>Open <b>System Settings → General → Login Items</b> (called Login Items &amp; Extensions on newer versions of macOS). Remove apps you do not need at startup. For background items, check which app each one belongs to before you switch it off. This does not free disk space, but your Mac starts faster.</p>
+
+<h3>10. Restart and update macOS</h3>
+<p>A restart clears temporary files and swap files. Then check <b>System Settings → General → Software Update</b>; after an update installs, macOS removes the installer it downloaded.</p>
+
+<h2 id="faster">Will cleaning make my Mac faster?</h2>
+<p>It depends on why it is slow. If the disk is nearly full, yes: macOS needs free space for swap files and updates, and a Mac with only a few gigabytes free can slow down noticeably. If you have plenty of free space, deleting caches will not speed anything up, because caches exist to make apps faster.</p>
+
+<h2 id="do-not-delete">What you should not delete</h2>
+<ul>
+  <li>Anything in <code>/System</code> or <code>/usr</code>. That is macOS.</li>
+  <li><code>~/Library/Keychains</code>, where your passwords are stored.</li>
+  <li><code>~/Library/Application Support</code> folders for apps you still use. They hold your data, not cache.</li>
+  <li>The only backup of a device you still use.</li>
+</ul>
+`,
+    cta: {
+      heading: "Do steps 3 to 7 in one scan",
+      text: `<p>iClearer finds caches, logs, app leftovers, large and old files, unused apps and old iOS backups in one scan, with the size of each. Every item is labelled <b>Safe</b> or <b>Ask first</b>, you tick what goes, and it moves to the Trash so you can undo it.</p>`,
+    },
+    faq: [
+      {
+        q: "How do I clean my Mac for free?",
+        a: "Use what is built into macOS. Open System Settings → General → Storage, empty the Trash, clear the Downloads folder, delete large files from the Documents list, and clear the folders in ~/Library/Caches. None of this needs extra software.",
+      },
+      {
+        q: "Does a Mac have a built-in cleaner?",
+        a: "Not a one-click cleaner. macOS has Storage settings (System Settings → General → Storage), which shows what is using space, lists large files and offers recommendations such as Empty Trash Automatically and Optimize Storage. It does not clear app caches or remove leftovers from deleted apps.",
+      },
+      {
+        q: "How often should I clean up my Mac?",
+        a: "When free space gets low, not on a schedule. A sensible trigger is when less than 10–15% of the disk is free, or when macOS warns that the disk is almost full.",
+      },
+      {
+        q: "Will cleaning my Mac make it faster?",
+        a: "Only if the disk was nearly full. macOS needs free space for swap files and updates, so freeing space on a full disk helps. On a Mac with plenty of free space, clearing caches does not improve speed.",
+      },
+      {
+        q: "What is the safest thing to delete first on a Mac?",
+        a: "The Trash, then old installers and zip files in Downloads, then app caches in ~/Library/Caches. These are either files you already chose to delete or files your apps can recreate.",
+      },
+    ],
+    related: ["mac-storage-full", "clear-cache-mac", "uninstall-apps-mac"],
   },
 
   {
     slug: "clear-system-data-mac",
+    featured: true,
     title: "How to Clear System Data on Mac (Safely)",
     h1: "How to clear System Data on Mac",
     card: "Clear System Data on Mac",
@@ -169,6 +275,7 @@ docker system prune</code></pre>
 <p>Or ask macOS to free about 20 GB of snapshot space:</p>
 <pre><code>tmutil thinlocalsnapshots / 20000000000 4</code></pre>
 <p class="g-note"><b>Note:</b> local snapshots are not your Time Machine backup. Deleting them does not touch the backups on your external drive.</p>
+<p>More ways to remove them, including Disk Utility: <a href="/guides/delete-time-machine-local-snapshots">how to delete Time Machine local snapshots</a>.</p>
 
 <h2 id="leftovers">4. Delete leftovers from apps you removed</h2>
 <p>When you drag an app to the Trash, its support files stay behind. Check these folders for names of apps you no longer have:</p>
@@ -217,11 +324,12 @@ docker system prune</code></pre>
         a: "No. The macOS category is the operating system and should not be touched. System Data is everything else macOS cannot sort into a category, such as caches, logs and snapshots.",
       },
     ],
-    related: ["mac-storage-full", "clear-cache-mac", "uninstall-apps-mac"],
+    related: ["mac-storage-full", "delete-time-machine-local-snapshots", "clear-cache-mac"],
   },
 
   {
     slug: "clear-cache-mac",
+    featured: true,
     title: "How to Clear Cache on Mac: Apps, Browsers, System",
     h1: "How to clear cache on Mac",
     card: "Clear cache on Mac",
@@ -311,6 +419,8 @@ docker system prune</code></pre>
 
   {
     slug: "free-up-disk-space-mac-developers",
+    featured: true,
+    group: "dev",
     title: "Free Up Disk Space on Mac for Developers",
     h1: "Free up disk space on a Mac for developers",
     card: "Free up space for developers",
@@ -344,7 +454,7 @@ docker system prune</code></pre>`,
 </table></div>
 <pre><code>rm -rf ~/Library/Developer/Xcode/DerivedData
 xcrun simctl delete unavailable</code></pre>
-<p>The second command removes simulators for runtimes you no longer have installed. To remove whole simulator runtimes, open Xcode → Settings → Components (called Platforms in Xcode 15).</p>
+<p>The second command removes simulators for runtimes you no longer have installed. To remove whole simulator runtimes, open Xcode → Settings → Components (called Platforms in Xcode 15). More detail: <a href="/guides/delete-xcode-derived-data">how to delete Xcode DerivedData</a>.</p>
 
 <h2 id="node">Node: npm, pnpm, Yarn and node_modules</h2>
 <pre><code>npm cache clean --force
@@ -352,7 +462,7 @@ pnpm store prune
 yarn cache clean</code></pre>
 <p>Old <code>node_modules</code> folders in projects you no longer work on add up quickly. This lists the 20 largest:</p>
 <pre><code>find ~ -name node_modules -type d -prune -exec du -sh {} + 2>/dev/null | sort -h | tail -20</code></pre>
-<p>Deleting a <code>node_modules</code> folder is safe. Run your package manager’s install command to bring it back.</p>
+<p>Deleting a <code>node_modules</code> folder is safe. Run your package manager’s install command to bring it back. More detail: <a href="/guides/clear-npm-cache-node-modules-mac">how to clear npm cache and node_modules</a>.</p>
 
 <h2 id="python">Python and AI tooling</h2>
 <pre><code>pip cache purge
@@ -361,6 +471,7 @@ uv cache clean</code></pre>
 <pre><code>ollama list
 ollama rm &lt;model-name&gt;</code></pre>
 <p class="g-note"><b>Note:</b> models are safe to remove but slow to get back. You will have to download them again.</p>
+<p>Where each tool keeps its models: <a href="/guides/delete-ollama-models-mac">delete Ollama models on Mac</a>.</p>
 
 <h2 id="homebrew">Homebrew</h2>
 <pre><code>brew cleanup --prune=all
@@ -373,7 +484,7 @@ brew autoremove</code></pre>
 <p>Then remove stopped containers, unused networks, dangling images and build cache:</p>
 <pre><code>docker system prune</code></pre>
 <p class="g-note"><b>Careful:</b> <code>docker system prune -a --volumes</code> also removes every image not used by a running container and all unused volumes. Volumes can hold database data that cannot be rebuilt.</p>
-<p>Docker Desktop keeps everything inside one disk image, so Finder shows a single large file. Use the Docker commands rather than deleting that file by hand.</p>
+<p>Docker Desktop keeps everything inside one disk image, so Finder shows a single large file. Use the Docker commands rather than deleting that file by hand. More detail: <a href="/guides/docker-disk-space-mac">Docker taking up too much space on Mac</a>.</p>
 
 <h2 id="mobile">CocoaPods and Gradle</h2>
 <pre><code>pod cache clean --all
@@ -420,7 +531,7 @@ rm -rf ~/.gradle/caches</code></pre>
         a: "Run du -sh ~/Library/Developer ~/.npm ~/.cache ~/.gradle ~/.docker 2>/dev/null in Terminal to see the size of the common ones, or use a disk cleaner such as iClearer that lists developer caches by size.",
       },
     ],
-    related: ["mac-storage-full", "clear-cache-mac", "clear-system-data-mac"],
+    related: ["delete-xcode-derived-data", "docker-disk-space-mac", "clear-npm-cache-node-modules-mac"],
   },
 
   {
@@ -500,6 +611,7 @@ rm -rf ~/.gradle/caches</code></pre>
 
   {
     slug: "find-large-files-mac",
+    featured: true,
     title: "How to Find Large Files on Mac (3 Ways)",
     h1: "How to find large files on Mac",
     card: "Find large files on Mac",
@@ -544,7 +656,7 @@ rm -rf ~/.gradle/caches</code></pre>
   <li><b>Videos and screen recordings</b> in Movies, Desktop and Downloads</li>
   <li><b>Virtual machines</b> from Parallels, VMware or UTM</li>
   <li><b>Disk images and installers</b> (<code>.dmg</code>, <code>.iso</code>, <code>.pkg</code>)</li>
-  <li><b>Old iPhone and iPad backups</b> in <code>~/Library/Application Support/MobileSync/Backup</code></li>
+  <li><b>Old iPhone and iPad backups</b> in <code>~/Library/Application Support/MobileSync/Backup</code> (see <a href="/guides/delete-iphone-backups-mac">how to delete old iPhone backups</a>)</li>
   <li><b>Archives</b> you already unzipped</li>
   <li><b>Downloaded AI models</b> and other developer files, covered in <a href="/guides/free-up-disk-space-mac-developers">the developer guide</a></li>
 </ul>
@@ -582,7 +694,479 @@ rm -rf ~/.gradle/caches</code></pre>
         a: "Videos, virtual machines, disk images, old iPhone backups and photo libraries. On developer Macs, simulator data, Docker images and downloaded AI models are often larger still.",
       },
     ],
-    related: ["mac-storage-full", "uninstall-apps-mac", "clear-system-data-mac"],
+    related: ["mac-storage-full", "delete-iphone-backups-mac", "uninstall-apps-mac"],
+  },
+
+  {
+    slug: "delete-iphone-backups-mac",
+    title: "How to Delete Old iPhone Backups on Mac",
+    h1: "How to delete old iPhone backups on Mac",
+    card: "Delete old iPhone backups",
+    description:
+      "Old iPhone and iPad backups can take tens of gigabytes on a Mac. See where they are stored and three ways to delete them safely, with or without the device.",
+    answer: `<p>To delete old iPhone backups on a Mac, open <b>System Settings → General → Storage</b>, click the <b>i</b> next to <b>iOS Files</b>, select the backup and click <b>Delete</b>. With the iPhone connected, you can also open it in Finder and choose <b>Manage Backups</b>. Backups are stored in <code>~/Library/Application Support/MobileSync/Backup</code>. Deleting a backup removes nothing from the iPhone itself.</p>`,
+    toc: [
+      ["storage", "Delete from Storage settings"],
+      ["finder", "Delete from Finder with the device connected"],
+      ["folder", "Delete from the backup folder"],
+      ["keep", "Which backups to keep"],
+    ],
+    body: `
+<h2 id="storage">1. Delete from Storage settings</h2>
+<p>This works without the device and shows the size of each backup.</p>
+<ol>
+  <li>Open the Apple menu → <b>System Settings → General → Storage</b>.</li>
+  <li>Click the <b>i</b> next to <b>iOS Files</b>. If you do not see iOS Files, there are no device backups on this Mac.</li>
+  <li>Select a backup. The list shows the device name, the date and the size.</li>
+  <li>Click <b>Delete</b> and confirm.</li>
+</ol>
+
+<h2 id="finder">2. Delete from Finder with the device connected</h2>
+<ol>
+  <li>Connect the iPhone or iPad to your Mac with a cable.</li>
+  <li>Open Finder and select the device in the sidebar.</li>
+  <li>In the <b>General</b> tab, click <b>Manage Backups</b>.</li>
+  <li>Select a backup, click <b>Delete Backup</b> and confirm.</li>
+</ol>
+<p>On macOS Mojave or earlier, backups are managed in iTunes instead: iTunes → Preferences → Devices.</p>
+
+<h2 id="folder">3. Delete from the backup folder</h2>
+<ol>
+  <li>In Finder, press <kbd>Shift</kbd> <kbd>Command</kbd> <kbd>G</kbd>.</li>
+  <li>Enter <code>~/Library/Application Support/MobileSync/Backup</code> and press Return.</li>
+  <li>Each folder with a long name of letters and numbers is one backup. Press <kbd>Command</kbd> <kbd>J</kbd> and tick <b>Calculate All Sizes</b> to see how big each one is.</li>
+  <li>Move the ones you do not need to the Trash, then empty the Trash.</li>
+</ol>
+<p class="g-note"><b>Note:</b> folder names do not tell you which device a backup belongs to. Use the Storage settings or Finder method if you have backups of more than one device.</p>
+
+<h2 id="keep">Which backups to keep</h2>
+<ul>
+  <li><b>Keep</b> the most recent backup of every device you still use, unless that device also backs up to iCloud.</li>
+  <li><b>Safe to delete:</b> backups of devices you sold or replaced, and older backups of a device that has a newer one.</li>
+  <li>A backup cannot be rebuilt once it is gone. If you are not sure, copy the folder to an external drive first.</li>
+</ul>
+<p>iCloud backups are separate. They are stored by Apple, not on your Mac, and deleting a backup on your Mac does not affect them.</p>
+`,
+    cta: {
+      heading: "iClearer shows old backups with everything else",
+      text: `<p>iClearer lists old iOS backups alongside caches, logs, leftovers and large files, with the size of each. Because a backup cannot be rebuilt, it is labelled <b>Ask first</b> and starts unticked. Anything you remove goes to the Trash, so you can put it back.</p>`,
+    },
+    faq: [
+      {
+        q: "Is it safe to delete old iPhone backups on a Mac?",
+        a: "Yes, as long as you keep the most recent backup of any device you still use, or that device backs up to iCloud. Deleting a backup removes only the copy on your Mac. Nothing on the iPhone changes.",
+      },
+      {
+        q: "Where are iPhone backups stored on a Mac?",
+        a: "In ~/Library/Application Support/MobileSync/Backup. Each backup is a folder with a long name made of letters and numbers. In Finder, press Shift-Command-G and enter that path to open it.",
+      },
+      {
+        q: "How much space do iPhone backups take on a Mac?",
+        a: "Roughly as much as the data on the device, so often tens of gigabytes each. System Settings → General → Storage → iOS Files shows the exact size of every backup.",
+      },
+      {
+        q: "Does deleting a backup on my Mac delete my iCloud backup?",
+        a: "No. iCloud backups are stored by Apple and are managed separately on the device, under Settings → your name → iCloud. Backups on your Mac and backups in iCloud do not affect each other.",
+      },
+      {
+        q: "Why can I not see iOS Files in Storage settings?",
+        a: "iOS Files only appears when the Mac has at least one device backup or downloaded iOS software update. If it is missing, there are no backups stored on this Mac.",
+      },
+    ],
+    related: ["mac-storage-full", "find-large-files-mac", "clear-system-data-mac"],
+  },
+
+  {
+    slug: "delete-time-machine-local-snapshots",
+    title: "Delete Time Machine Local Snapshots on Mac",
+    h1: "How to delete Time Machine local snapshots on Mac",
+    card: "Delete Time Machine local snapshots",
+    description:
+      "Time Machine local snapshots can hold many gigabytes on your startup disk. See how to list, delete and thin them in Terminal or Disk Utility, safely.",
+    answer: `<p>Time Machine local snapshots are copies of recent changes that macOS keeps on your startup disk for about 24 hours. macOS deletes them automatically when it needs space, but you can remove them yourself. List them with <code>tmutil listlocalsnapshots /</code>, then delete one with <code>sudo tmutil deletelocalsnapshots</code> followed by its date. Deleting local snapshots <b>does not delete your Time Machine backups</b> on the backup drive.</p>`,
+    toc: [
+      ["what", "What local snapshots are"],
+      ["list", "List your snapshots"],
+      ["delete", "Delete snapshots in Terminal"],
+      ["disk-utility", "Delete snapshots in Disk Utility"],
+      ["stop", "Stop new snapshots"],
+    ],
+    body: `
+<h2 id="what">What local snapshots are</h2>
+<p>When Time Machine is set to back up automatically, macOS saves a snapshot of your startup disk about once an hour and keeps each one for up to 24 hours. They let you restore a file even when the backup drive is not plugged in.</p>
+<p>The space they use is counted as available by Finder, because macOS will delete snapshots when something else needs the room. That is why Finder and Storage settings can show different amounts of free space. Sometimes an app or installer still reports that there is not enough space, and removing snapshots by hand fixes that.</p>
+
+<h2 id="list">1. List your snapshots</h2>
+<p>Open Terminal (Applications → Utilities) and run:</p>
+<pre><code>tmutil listlocalsnapshots /</code></pre>
+<p>Each line ends with a date stamp such as <code>2026-11-01-093000</code>. If nothing is listed, there are no local snapshots.</p>
+
+<h2 id="delete">2. Delete snapshots in Terminal</h2>
+<p>Delete one snapshot by its date stamp:</p>
+<pre><code>sudo tmutil deletelocalsnapshots 2026-11-01-093000</code></pre>
+<p>Delete all of them:</p>
+<pre><code>for d in $(tmutil listlocalsnapshotdates / | grep -v :); do sudo tmutil deletelocalsnapshots $d; done</code></pre>
+<p>Or ask macOS to free a set amount. This asks for about 20 GB at the highest urgency:</p>
+<pre><code>tmutil thinlocalsnapshots / 20000000000 4</code></pre>
+<p>You will be asked for your Mac password for the <code>sudo</code> commands. Nothing appears as you type it.</p>
+
+<h2 id="disk-utility">3. Delete snapshots in Disk Utility</h2>
+<ol>
+  <li>Open Disk Utility (Applications → Utilities).</li>
+  <li>Choose <b>View → Show APFS Snapshots</b>.</li>
+  <li>Select your data volume in the sidebar, usually <b>Macintosh HD - Data</b> or <b>Data</b>.</li>
+  <li>Select a snapshot in the list at the bottom and click the <b>minus</b> button.</li>
+</ol>
+<p class="g-note"><b>Note:</b> a snapshot named <code>com.apple.os.update</code> belongs to macOS itself. Leave it alone.</p>
+
+<h2 id="stop">Stop new snapshots</h2>
+<p>Local snapshots are only made while automatic backups are on. To stop them, open <b>System Settings → General → Time Machine → Options</b> and set the backup frequency to <b>Manually</b>. Your Mac will then only back up when you choose Back Up Now, so do this only if you will remember to.</p>
+`,
+    cta: {
+      heading: "Then clear the rest of System Data",
+      text: `<p>iClearer does not remove snapshots; macOS manages those. It finds the other things that fill System Data: app caches, system caches, logs, temporary files and leftovers from apps you removed. Each is listed with its size and a <b>Safe</b> or <b>Ask first</b> label, and what you clean goes to the Trash.</p>`,
+    },
+    faq: [
+      {
+        q: "Is it safe to delete Time Machine local snapshots?",
+        a: "Yes. Local snapshots are short-term copies kept on your startup disk. Deleting them does not delete the backups on your Time Machine drive. You only lose the ability to restore files from the last 24 hours while the backup drive is disconnected.",
+      },
+      {
+        q: "Do local snapshots take up space on a Mac?",
+        a: "Yes, but macOS treats that space as available and deletes snapshots automatically when it is needed. Finder counts it as free, while some apps and Storage settings may not.",
+      },
+      {
+        q: "How long does a Mac keep local snapshots?",
+        a: "Up to 24 hours each. macOS makes roughly one per hour while automatic Time Machine backups are on, and removes older ones or removes them sooner when disk space runs low.",
+      },
+      {
+        q: "How do I delete all local snapshots at once?",
+        a: "Run this in Terminal: for d in $(tmutil listlocalsnapshotdates / | grep -v :); do sudo tmutil deletelocalsnapshots $d; done. It lists every snapshot date and deletes each one.",
+      },
+      {
+        q: "Why do local snapshots come back after I delete them?",
+        a: "macOS creates a new one about every hour while automatic Time Machine backups are on. To stop them, set Time Machine to back up manually in System Settings → General → Time Machine → Options.",
+      },
+    ],
+    related: ["clear-system-data-mac", "mac-storage-full", "clear-cache-mac"],
+  },
+
+  {
+    slug: "delete-xcode-derived-data",
+    group: "dev",
+    title: "How to Delete Xcode DerivedData (Is It Safe?)",
+    h1: "How to delete Xcode DerivedData",
+    card: "Delete Xcode DerivedData",
+    description:
+      "Xcode DerivedData can grow to tens of gigabytes. It is safe to delete. See where it is, three ways to clear it, and what else Xcode leaves on your disk.",
+    answer: `<p><b>Yes, it is safe to delete Xcode DerivedData.</b> It holds build products, indexes and logs that Xcode recreates the next time you build. Quit Xcode, then run:</p>
+<pre><code>rm -rf ~/Library/Developer/Xcode/DerivedData</code></pre>
+<p>The first build of each project afterwards takes longer, and Swift packages are resolved again. Your source code and project settings are not stored there.</p>`,
+    toc: [
+      ["what", "What DerivedData is"],
+      ["size", "Check how big it is"],
+      ["delete", "Three ways to delete it"],
+      ["more", "What else Xcode leaves behind"],
+    ],
+    body: `
+<h2 id="what">What DerivedData is</h2>
+<p>DerivedData is where Xcode keeps everything it generates from your projects: compiled build products, the code index, module caches, build logs and checked-out Swift packages. It lives at:</p>
+<pre><code>~/Library/Developer/Xcode/DerivedData</code></pre>
+<p>There is one folder per project, named after the project followed by a random string. Folders for projects you deleted or have not opened in a year are still there.</p>
+
+<h2 id="size">Check how big it is</h2>
+<pre><code>du -sh ~/Library/Developer/Xcode/DerivedData</code></pre>
+<p>To see it per project, largest last:</p>
+<pre><code>du -sh ~/Library/Developer/Xcode/DerivedData/* | sort -h</code></pre>
+
+<h2 id="delete">Three ways to delete it</h2>
+<h3>1. Terminal</h3>
+<p>Quit Xcode first, then:</p>
+<pre><code>rm -rf ~/Library/Developer/Xcode/DerivedData</code></pre>
+<p>Xcode creates the folder again when it next opens.</p>
+
+<h3>2. From Xcode settings</h3>
+<ol>
+  <li>Open <b>Xcode → Settings → Locations</b>.</li>
+  <li>Click the small arrow next to the Derived Data path. Finder opens with the folder selected.</li>
+  <li>Quit Xcode, then move the DerivedData folder, or the project folders inside it, to the Trash.</li>
+</ol>
+
+<h3>3. One project only</h3>
+<p>With the project open, choose <b>Product → Clean Build Folder</b> or press <kbd>Shift</kbd> <kbd>Command</kbd> <kbd>K</kbd>. This removes the build products for that project and leaves the others alone.</p>
+
+<h2 id="more">What else Xcode leaves behind</h2>
+<div class="g-tbl"><table>
+  <tr><th>What</th><th>Path</th><th>Safe to delete?</th></tr>
+  <tr><td>iOS DeviceSupport</td><td><code>~/Library/Developer/Xcode/iOS DeviceSupport</code></td><td>Yes. Recreated when you connect a device.</td></tr>
+  <tr><td>Xcode cache</td><td><code>~/Library/Caches/com.apple.dt.Xcode</code></td><td>Yes.</td></tr>
+  <tr><td>Simulator devices</td><td><code>~/Library/Developer/CoreSimulator/Devices</code></td><td>Use the commands below. You lose apps and data installed in simulators.</td></tr>
+  <tr><td>Archives</td><td><code>~/Library/Developer/Xcode/Archives</code></td><td>Keep archives of builds you shipped. They hold the symbols for crash reports.</td></tr>
+</table></div>
+<p>Remove simulators whose runtime is no longer installed:</p>
+<pre><code>xcrun simctl delete unavailable</code></pre>
+<p>List simulator runtimes and delete one you no longer test against (Xcode 15 or later):</p>
+<pre><code>xcrun simctl runtime list
+xcrun simctl runtime delete &lt;identifier&gt;</code></pre>
+<p>You can also remove runtimes in Xcode → Settings → Components (called Platforms in Xcode 15).</p>
+`,
+    cta: {
+      heading: "iClearer clears DerivedData with one tick",
+      text: `<p>iClearer’s Builders screen shows Xcode DerivedData with its size, labelled <b>Safe</b> because Xcode rebuilds it. iOS Simulator data is listed too, labelled <b>Ask first</b>. What you clean goes to the Trash, and git repositories, signing keys and <code>.env</code> files can never be selected.</p>`,
+    },
+    faq: [
+      {
+        q: "Is it safe to delete Xcode DerivedData?",
+        a: "Yes. DerivedData contains only files Xcode generates: build products, indexes, module caches and logs. Xcode recreates them on the next build. Your source code, project files and signing certificates are stored elsewhere.",
+      },
+      {
+        q: "Where is Xcode DerivedData located?",
+        a: "In ~/Library/Developer/Xcode/DerivedData, unless you changed it in Xcode → Settings → Locations. Each project has its own folder inside.",
+      },
+      {
+        q: "What happens after I delete DerivedData?",
+        a: "The next build of each project is a full build, so it takes longer, and Xcode re-indexes the project and resolves Swift packages again. After that, build times return to normal.",
+      },
+      {
+        q: "How often should I delete DerivedData?",
+        a: "When you need the space or when Xcode shows build errors that a clean build does not fix. There is no need to delete it on a schedule, because it speeds up your builds.",
+      },
+      {
+        q: "Does deleting DerivedData fix Xcode build errors?",
+        a: "Often, yes. Stale module caches and indexes in DerivedData can cause errors that do not match your code. Deleting the folder forces Xcode to rebuild everything from scratch.",
+      },
+    ],
+    related: ["free-up-disk-space-mac-developers", "docker-disk-space-mac", "clear-npm-cache-node-modules-mac"],
+  },
+
+  {
+    slug: "docker-disk-space-mac",
+    group: "dev",
+    title: "Docker Taking Up Too Much Space on Mac? Fix It",
+    h1: "Docker taking up too much space on Mac",
+    card: "Reclaim Docker disk space",
+    description:
+      "Docker Desktop stores everything in one growing disk image on your Mac. See what is using the space and the safe commands to reclaim it, without losing data.",
+    answer: `<p>Docker Desktop for Mac keeps all images, containers, volumes and build cache inside one disk image file, which grows as you use Docker. To reclaim space, see what is using it with <code>docker system df</code>, then remove what is unused with <code>docker system prune</code>. Add <code>-a</code> to also remove images no container is using. <b>Do not delete the disk image file by hand</b>: that removes everything, including volumes.</p>`,
+    toc: [
+      ["where", "Where Docker stores data on a Mac"],
+      ["check", "See what is using the space"],
+      ["prune", "Reclaim space safely"],
+      ["shrink", "If the disk image does not shrink"],
+      ["colima", "Colima"],
+    ],
+    body: `
+<h2 id="where">Where Docker stores data on a Mac</h2>
+<p>Docker Desktop runs a small Linux virtual machine, and everything Docker stores sits in that machine’s disk image:</p>
+<pre><code>~/Library/Containers/com.docker.docker/Data/vms/0/data/Docker.raw</code></pre>
+<p>The file is sparse, so Finder can show a size far larger than what it really uses. To see the real figure:</p>
+<pre><code>du -h ~/Library/Containers/com.docker.docker/Data/vms/0/data/Docker.raw</code></pre>
+
+<h2 id="check">See what is using the space</h2>
+<pre><code>docker system df</code></pre>
+<p>This shows the space used by images, containers, local volumes and build cache, and how much of each is reclaimable. Add <code>-v</code> for a line-by-line list.</p>
+
+<h2 id="prune">Reclaim space safely</h2>
+<p>Work down this list and stop when you have enough space back.</p>
+<div class="g-tbl"><table>
+  <tr><th>Command</th><th>Removes</th><th>Risk</th></tr>
+  <tr><td><code>docker builder prune</code></td><td>Build cache</td><td>None. Next builds are slower.</td></tr>
+  <tr><td><code>docker container prune</code></td><td>Stopped containers</td><td>You lose anything written inside those containers.</td></tr>
+  <tr><td><code>docker image prune</code></td><td>Dangling images (untagged)</td><td>None.</td></tr>
+  <tr><td><code>docker image prune -a</code></td><td>Every image not used by a container</td><td>Images are pulled or built again when needed.</td></tr>
+  <tr><td><code>docker system prune</code></td><td>Stopped containers, unused networks, dangling images, build cache</td><td>Low.</td></tr>
+  <tr><td><code>docker volume prune</code></td><td>Unused anonymous volumes (add <code>-a</code> for named ones)</td><td>High. Volumes hold database data that cannot be rebuilt.</td></tr>
+</table></div>
+<p class="g-note"><b>Careful:</b> <code>docker system prune -a --volumes</code> does all of the above at once. Check <code>docker volume ls</code> first, and do not run it if a stopped container owns data you need.</p>
+
+<h2 id="shrink">If the disk image does not shrink</h2>
+<p>Docker Desktop hands freed space back to macOS, but it can take a little while after a prune. If the file is still large:</p>
+<ul>
+  <li>Restart Docker Desktop and check again with <code>du -h</code>, not Finder.</li>
+  <li>Lower the disk limit in <b>Docker Desktop → Settings → Resources</b>. Reducing the limit deletes the disk image and everything in it, so only do this if you can rebuild or pull everything again.</li>
+  <li>To start completely fresh, use <b>Troubleshoot → Clean / Purge data</b> in Docker Desktop. This removes all images, containers and volumes.</li>
+</ul>
+
+<h2 id="colima">Colima</h2>
+<p>Colima keeps its virtual machine disks in <code>~/.colima</code>. The same <code>docker</code> prune commands work. To remove a Colima machine and its disk entirely:</p>
+<pre><code>colima delete</code></pre>
+`,
+    cta: {
+      heading: "See Docker next to your other developer files",
+      text: `<p>iClearer’s Builders screen lists Colima and Docker folders in your home folder with their sizes, labelled <b>Ask first</b> because they can hold data that cannot be rebuilt. For Docker Desktop’s disk image, use the Docker commands above. iClearer also clears the caches that sit beside Docker on most developer Macs: Xcode DerivedData, npm, pnpm, Yarn, pip, Homebrew and Gradle.</p>`,
+    },
+    faq: [
+      {
+        q: "Why is Docker taking up so much space on my Mac?",
+        a: "Docker Desktop stores every image, container, volume and build cache layer in one disk image file, and the file grows as you pull and build. Old images and build cache are usually the largest part. Run docker system df to see the breakdown.",
+      },
+      {
+        q: "Is it safe to run docker system prune?",
+        a: "Yes for most setups. It removes stopped containers, unused networks, dangling images and build cache. It does not remove volumes or tagged images unless you add --volumes or -a.",
+      },
+      {
+        q: "Where is Docker.raw on a Mac?",
+        a: "In ~/Library/Containers/com.docker.docker/Data/vms/0/data/Docker.raw. It is a sparse file, so Finder may show its maximum size. Run du -h on the file to see how much disk space it really uses.",
+      },
+      {
+        q: "Can I delete Docker.raw?",
+        a: "Only if you want to lose everything in Docker. Deleting the file removes all images, containers and volumes. Use docker system prune, or Clean / Purge data in Docker Desktop, instead.",
+      },
+      {
+        q: "Does docker system prune delete volumes?",
+        a: "No, not by default. Volumes are only removed if you add the --volumes flag or run docker volume prune. Volumes often hold database data, so check docker volume ls before removing them.",
+      },
+    ],
+    related: ["free-up-disk-space-mac-developers", "delete-xcode-derived-data", "clear-npm-cache-node-modules-mac"],
+  },
+
+  {
+    slug: "clear-npm-cache-node-modules-mac",
+    group: "dev",
+    title: "Clear npm Cache and node_modules on Mac",
+    h1: "How to clear npm cache and node_modules on Mac",
+    card: "Clear npm cache and node_modules",
+    description:
+      "Free up disk space from Node.js on a Mac: clear the npm, pnpm, Yarn and Bun caches, find and delete old node_modules folders, and remove old Node versions.",
+    answer: `<p>To clear the npm cache on a Mac, run <code>npm cache clean --force</code>. The cache lives in <code>~/.npm</code> and is safe to delete; npm downloads packages again when you next install. Old <code>node_modules</code> folders usually take far more space than the cache. Find them with:</p>
+<pre><code>find ~ -name node_modules -type d -prune -exec du -sh {} + 2>/dev/null | sort -h | tail -20</code></pre>`,
+    toc: [
+      ["npm", "npm cache"],
+      ["others", "pnpm, Yarn and Bun"],
+      ["node-modules", "Find and delete node_modules"],
+      ["versions", "Old Node versions"],
+    ],
+    body: `
+<h2 id="npm">npm cache</h2>
+<p>See how big it is:</p>
+<pre><code>du -sh ~/.npm</code></pre>
+<p>Clear it:</p>
+<pre><code>npm cache clean --force</code></pre>
+<p>npm asks for <code>--force</code> because the cache repairs itself and rarely needs clearing for correctness. Clearing it to get disk space back is fine. To remove only what is no longer needed and check the rest:</p>
+<pre><code>npm cache verify</code></pre>
+
+<h2 id="others">pnpm, Yarn and Bun</h2>
+<div class="g-tbl"><table>
+  <tr><th>Tool</th><th>Clear command</th><th>Find the folder</th></tr>
+  <tr><td>pnpm</td><td><code>pnpm store prune</code></td><td><code>pnpm store path</code></td></tr>
+  <tr><td>Yarn 1</td><td><code>yarn cache clean</code></td><td><code>yarn cache dir</code></td></tr>
+  <tr><td>Yarn 2 and later</td><td><code>yarn cache clean --all</code></td><td><code>yarn config get cacheFolder</code></td></tr>
+  <tr><td>Bun</td><td><code>bun pm cache rm</code></td><td><code>bun pm cache</code></td></tr>
+</table></div>
+<p><code>pnpm store prune</code> only removes packages that no project on your Mac still uses, so it is safe to run at any time.</p>
+
+<h2 id="node-modules">Find and delete node_modules</h2>
+<p>Every project has its own <code>node_modules</code> folder, often several hundred megabytes. Projects you finished long ago still have theirs. List the 20 largest:</p>
+<pre><code>find ~ -name node_modules -type d -prune -exec du -sh {} + 2>/dev/null | sort -h | tail -20</code></pre>
+<p>Delete one by its path:</p>
+<pre><code>rm -rf ~/code/old-project/node_modules</code></pre>
+<p>To delete every <code>node_modules</code> folder under one projects folder, move into it first:</p>
+<pre><code>cd ~/code
+find . -name node_modules -type d -prune -exec rm -rf {} +</code></pre>
+<p class="g-note"><b>Careful:</b> the last command deletes without asking. Run it only inside a folder of your own projects, never in your home folder, because some installed apps and tools keep a <code>node_modules</code> folder they need.</p>
+<p>Deleting <code>node_modules</code> is safe for your own projects. Run <code>npm install</code>, <code>pnpm install</code> or <code>yarn</code> in the project to bring it back.</p>
+
+<h2 id="versions">Old Node versions</h2>
+<p>If you use nvm, each installed Node version is kept in <code>~/.nvm/versions</code>. List them and remove the ones you no longer need:</p>
+<pre><code>nvm ls
+nvm uninstall 16</code></pre>
+`,
+    cta: {
+      heading: "iClearer finds the npm, pnpm and Yarn caches for you",
+      text: `<p>iClearer’s Builders screen shows the npm cache, pnpm store and Yarn cache with their sizes, labelled <b>Safe</b> because your package manager downloads what it needs again. What you clean goes to the Trash. Git repositories, <code>.env</code> files and API tokens can never be selected.</p>`,
+    },
+    faq: [
+      {
+        q: "Is it safe to clear the npm cache?",
+        a: "Yes. The npm cache in ~/.npm holds downloaded package files. After you clear it with npm cache clean --force, npm downloads packages again the next time you install them. Your projects are not affected.",
+      },
+      {
+        q: "Where is the npm cache on a Mac?",
+        a: "In ~/.npm, with the package data in ~/.npm/_cacache. Run npm config get cache to confirm the location on your Mac.",
+      },
+      {
+        q: "Is it safe to delete node_modules?",
+        a: "Yes, for your own projects. node_modules contains installed dependencies that are listed in package.json. Run npm install, pnpm install or yarn in the project folder to recreate it.",
+      },
+      {
+        q: "How do I find all node_modules folders on my Mac?",
+        a: "Run find ~ -name node_modules -type d -prune in Terminal. Add -exec du -sh {} + to see the size of each one.",
+      },
+      {
+        q: "Why does npm cache clean need --force?",
+        a: "npm’s cache checks and repairs itself, so npm treats clearing it as unnecessary for fixing problems and asks you to confirm with --force. Clearing it to free disk space is a normal use.",
+      },
+    ],
+    related: ["free-up-disk-space-mac-developers", "delete-xcode-derived-data", "docker-disk-space-mac"],
+  },
+
+  {
+    slug: "delete-ollama-models-mac",
+    group: "dev",
+    title: "Delete Ollama Models on Mac and Free Up Space",
+    h1: "How to delete Ollama models on Mac",
+    card: "Delete Ollama and local AI models",
+    description:
+      "Local AI models are often the largest files on a Mac. See where Ollama, LM Studio and Hugging Face store models, how to delete them, and how to move them.",
+    answer: `<p>Ollama stores models on a Mac in <code>~/.ollama/models</code>. To delete one, run <code>ollama list</code> to see each model and its size, then <code>ollama rm</code> followed by the model name, for example <code>ollama rm llama3.2</code>. Models are safe to delete. To use one again you download it again with <code>ollama pull</code>.</p>`,
+    toc: [
+      ["ollama", "Ollama"],
+      ["move", "Move Ollama models to another drive"],
+      ["lm-studio", "LM Studio"],
+      ["hugging-face", "Hugging Face cache"],
+    ],
+    body: `
+<h2 id="ollama">Ollama</h2>
+<p>List your models with their sizes:</p>
+<pre><code>ollama list</code></pre>
+<p>Delete one:</p>
+<pre><code>ollama rm llama3.2</code></pre>
+<p>See the total on disk:</p>
+<pre><code>du -sh ~/.ollama/models</code></pre>
+<p>Use <code>ollama rm</code> rather than deleting files in Finder. Models share layers with each other, and Ollama only removes the files no other model still uses.</p>
+
+<h2 id="move">Move Ollama models to another drive</h2>
+<p>If you want to keep your models but not on the startup disk, set the <code>OLLAMA_MODELS</code> environment variable to a folder on an external drive. For the Ollama Mac app:</p>
+<pre><code>launchctl setenv OLLAMA_MODELS /Volumes/External/ollama-models</code></pre>
+<p>Quit and reopen Ollama afterwards. The setting lasts until you restart your Mac, so run the command again after a restart. Models you already downloaded stay in the old folder until you move or delete them.</p>
+
+<h2 id="lm-studio">LM Studio</h2>
+<p>LM Studio keeps models in <code>~/.lmstudio/models</code>. Older versions used <code>~/.cache/lm-studio/models</code>. Delete models from the <b>My Models</b> view in the app, which shows the size of each.</p>
+
+<h2 id="hugging-face">Hugging Face cache</h2>
+<p>Python libraries such as Transformers and Diffusers download models to <code>~/.cache/huggingface/hub</code>. Check the size:</p>
+<pre><code>du -sh ~/.cache/huggingface</code></pre>
+<p>Choose what to delete from an interactive list:</p>
+<pre><code>huggingface-cli delete-cache</code></pre>
+<p>Deleting the folder is also safe. Models download again when a script asks for them.</p>
+`,
+    cta: {
+      heading: "iClearer shows what your AI tools are using",
+      text: `<p>iClearer’s Builders screen lists Ollama models and the <code>~/.cache</code> folder with their sizes. Models are labelled <b>Ask first</b>, because getting one back means downloading it again. What you remove goes to the Trash, and API tokens and <code>.env</code> files can never be selected.</p>`,
+    },
+    faq: [
+      {
+        q: "Where does Ollama store models on a Mac?",
+        a: "In ~/.ollama/models, inside your home folder. The blobs folder holds the model data and the manifests folder records which files belong to which model. You can change the location with the OLLAMA_MODELS environment variable.",
+      },
+      {
+        q: "How do I delete an Ollama model?",
+        a: "Run ollama list to see the installed models, then ollama rm followed by the name, for example ollama rm llama3.2. Ollama removes the model’s files unless another model still uses them.",
+      },
+      {
+        q: "Is it safe to delete the ~/.ollama/models folder?",
+        a: "Yes, but it removes every model at once. Nothing else breaks; you download models again with ollama pull. To remove just some models, use ollama rm instead.",
+      },
+      {
+        q: "How much disk space do local AI models use?",
+        a: "Usually between 2 GB and 50 GB each, depending on the model size and quantization. A few models can easily use more space than everything else in your home folder.",
+      },
+      {
+        q: "Can I move Ollama models to an external drive?",
+        a: "Yes. Set OLLAMA_MODELS to a folder on the external drive, for the Mac app with launchctl setenv OLLAMA_MODELS followed by the path, then restart Ollama. The drive must be connected whenever you use Ollama.",
+      },
+    ],
+    related: ["free-up-disk-space-mac-developers", "docker-disk-space-mac", "find-large-files-mac"],
   },
 ];
 

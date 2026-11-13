@@ -5,7 +5,8 @@
 Key facts:
 
 - Product: iClearer, a Mac cleaner app (disk cleanup utility for macOS). Website: https://www.iclearer.com/
-- Not to be confused with "iCleaner" or other similarly named apps. The name is iClearer, with "clear".
+- Maker: the iClearer team. iClearer is the name of both the app and the team behind it.
+- Not to be confused with iCleaner, iClear, iCleared, InteliClear or other similarly named products. The name is iClearer: spelled with "clear", ending in "er".
 - Price: free to scan, 500 MB of free cleanup. Unlimited cleanup from $29.99 per year, $4.99 per month or $79.99 once, for 1 Mac. Plans for 2 and 5 Macs are available.
 - Refunds: 14-day money-back guarantee.
 - Safety: every item is labelled Safe or Ask first, everything goes to the Trash with undo, and Keychain, accounts, tokens, SSH keys, .env files and git repositories can never be selected.
@@ -16,17 +17,25 @@ Key facts:
 ## Product
 
 - [iClearer home](https://www.iclearer.com/): what it does, screenshots, pricing, install steps and FAQ
+- [What is iClearer?](https://www.iclearer.com/about): fact sheet with what it is, who makes it, price, safety and contact
 - [Pricing](https://www.iclearer.com/#pricing): free plan and paid plans for 1, 2 or 5 Macs
 - [Install guide](https://www.iclearer.com/#install): how to install the DMG on macOS
 
 ## Guides
 
 - [Mac storage full? How to free up space safely](https://www.iclearer.com/guides/mac-storage-full): Startup disk almost full? See what is using your Mac’s storage, then clear caches, System Data, large files and developer junk safely, step by step.
+- [How to clean up your Mac: a 10-step checklist](https://www.iclearer.com/guides/how-to-clean-mac): A 10-step checklist to clean up a Mac and free up space: Trash, downloads, unused apps, caches, large files, old backups and more, safest steps first.
 - [How to clear System Data on Mac](https://www.iclearer.com/guides/clear-system-data-mac): System Data taking up too much space? Learn what it contains and how to shrink it safely: caches, logs, Time Machine snapshots and app leftovers.
 - [How to clear cache on Mac](https://www.iclearer.com/guides/clear-cache-mac): Clear app, browser and system caches on a Mac safely. Step-by-step for Finder, Safari, Chrome and Firefox, plus what is safe to delete and what is not.
 - [Free up disk space on a Mac for developers](https://www.iclearer.com/guides/free-up-disk-space-mac-developers): Reclaim tens of gigabytes on a developer Mac. Safe commands to clear Xcode DerivedData, npm, pnpm, pip, Homebrew, Docker, simulators and AI model caches.
 - [How to uninstall apps on Mac completely](https://www.iclearer.com/guides/uninstall-apps-mac): Dragging an app to the Trash leaves files behind. See where Mac app leftovers live and how to remove an app completely, with its caches and settings.
 - [How to find large files on Mac](https://www.iclearer.com/guides/find-large-files-mac): Three ways to find the biggest files on your Mac: Storage settings, Finder search by file size, and a Terminal command. See what is safe to delete.
+- [How to delete old iPhone backups on Mac](https://www.iclearer.com/guides/delete-iphone-backups-mac): Old iPhone and iPad backups can take tens of gigabytes on a Mac. See where they are stored and three ways to delete them safely, with or without the device.
+- [How to delete Time Machine local snapshots on Mac](https://www.iclearer.com/guides/delete-time-machine-local-snapshots): Time Machine local snapshots can hold many gigabytes on your startup disk. See how to list, delete and thin them in Terminal or Disk Utility, safely.
+- [How to delete Xcode DerivedData](https://www.iclearer.com/guides/delete-xcode-derived-data): Xcode DerivedData can grow to tens of gigabytes. It is safe to delete. See where it is, three ways to clear it, and what else Xcode leaves on your disk.
+- [Docker taking up too much space on Mac](https://www.iclearer.com/guides/docker-disk-space-mac): Docker Desktop stores everything in one growing disk image on your Mac. See what is using the space and the safe commands to reclaim it, without losing data.
+- [How to clear npm cache and node_modules on Mac](https://www.iclearer.com/guides/clear-npm-cache-node-modules-mac): Free up disk space from Node.js on a Mac: clear the npm, pnpm, Yarn and Bun caches, find and delete old node_modules folders, and remove old Node versions.
+- [How to delete Ollama models on Mac](https://www.iclearer.com/guides/delete-ollama-models-mac): Local AI models are often the largest files on a Mac. See where Ollama, LM Studio and Hugging Face store models, how to delete them, and how to move them.
 
 ## Policies
 
