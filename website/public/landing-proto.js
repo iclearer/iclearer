@@ -29,8 +29,6 @@
   var TABS = [
     ["Clean"],
     ["Overview", "#5fa6da"], ["Clean", "#5fb4e0", "13.5 GB"], ["Storage Map", "#58c193"], ["Large & Old Files", "#f0b24a"], ["Apps", "#8aa0c4"], ["Builders", "#5b6b7d", "33.2 GB"],
-    ["Mac health"],
-    ["Startup Items", "#f19a8e"], ["Privacy Check", "#9a8ae0"],
     ["Activity"],
     ["History", "#5fd0c8"]
   ];
@@ -93,7 +91,7 @@
     else if (per == "Monthly") { p.innerHTML = "$" + v.toFixed(2) + "<small> / month</small>"; n.textContent = "Billed monthly. Cancel anytime."; }
     else { p.innerHTML = "$" + v.toFixed(2); n.textContent = "One-time purchase for version 1. Version 2 is a discounted upgrade."; }
     var seats = [1, 2, 5][mc] || 1;
-    var l = ["Unlimited cleanup", "Item names, details and exact locations", "Full Storage Map, large files and Quick Look", "App uninstaller with leftovers", "Builders pack for developers and AI tools", "History with restore and a never-touch list", "Startup items and privacy check", "Bug and safety fixes", "Use on " + seats + " Mac" + (seats === 1 ? "" : "s") + " (each Mac is linked to your key)"];
+    var l = ["Unlimited cleanup", "Item names, details and exact locations", "Full Storage Map, large files and Quick Look", "App uninstaller with leftovers", "Builders pack for developers and AI tools", "History with restore and a never-touch list", "Bug and safety fixes", "Use on " + seats + " Mac" + (seats === 1 ? "" : "s") + " (each Mac is linked to your key)"];
     if (per != "One-time") l.push("Priority support, scheduled scans and menu bar alerts (1.1)");
     $("pl").innerHTML = l.map(function (x) { return "<li>" + x + "</li>"; }).join("");
   }

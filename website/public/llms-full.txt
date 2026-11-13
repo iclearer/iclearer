@@ -100,6 +100,10 @@ Unlimited scans that show what was found by category, with sizes and Safe or Ask
 
 Yes. We use it for your license, receipts and security notices. We only send updates and news about new products if you opt in, and you can unsubscribe anytime.
 
+### Does iClearer scan for malware?
+
+No. iClearer frees up space. It isn’t an antivirus and doesn’t scan for malware or viruses.
+
 ---
 
 # Mac storage full? How to free up space safely

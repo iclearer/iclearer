@@ -44,10 +44,15 @@ function feedbackHeadline(text: string): string {
   return first.length > 42 ? first.slice(0, 40).trimEnd() + "…" : first + ".";
 }
 
+// Feedback is shown as soon as it is submitted, so swearing is kept off the page here.
+// The submission itself stays in the database.
+const PROFANITY = /\b(?:mother)?(?:fuck|shit|bitch|cunt|asshole|bullshit|wank|bastard)\w*/i;
+
 function mergeFeedback(remote: IclearerFeedback[]): IclearerFeedback[] {
   const seen = new Set<string>();
   const merged: IclearerFeedback[] = [];
   for (const item of [...remote, ...SEED_FEEDBACK]) {
+    if (PROFANITY.test(item.text) || PROFANITY.test(item.name)) continue;
     const key = `${item.name.trim().toLowerCase()}|${item.text.trim().toLowerCase()}`;
     if (seen.has(key)) continue;
     seen.add(key);
